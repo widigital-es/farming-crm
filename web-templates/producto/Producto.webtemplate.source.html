@@ -5,6 +5,7 @@
   <entity name="wi_productobasefabricante">
     <attribute name="wi_productobasefabricanteid" />
     <attribute name="wi_nombreproducto" />
+    <attribute name="wi_descripcion" />
     <attribute name="wi_fabricante" />
     <order attribute="wi_nombreproducto" />
     {% if fid %}
@@ -30,8 +31,8 @@
           <a class="cfg-card" href="#"
              data-id="{{ p.wi_productobasefabricanteid }}" data-label="{{ p.wi_nombreproducto | escape }}"
              onclick="cfgPickProducto(this); return false;">
-            <div class="cfg-card-img" style="background:#fff;border-bottom:1px solid #e0e3e9;">
-              <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ p.wi_fabricante.name | escape }}/{{ p.wi_nombreproducto | escape }}/{{ p.wi_nombreproducto | escape }}.png"
+            <div class="cfg-card-img" style="background:#fff;border:1px solid #e0e3e9;">
+              <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ p.wi_fabricante.name | replace: ' ', '%20' }}/{{ p.wi_nombreproducto | replace: ' ', '%20' }}/{{ p.wi_nombreproducto | replace: ' ', '%20' }}.png"
                    alt="{{ p.wi_nombreproducto | escape }}"
                    style="width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
@@ -39,6 +40,7 @@
             </div>
             <div class="cfg-card-body">
               <div class="cfg-card-title">{{ p.wi_nombreproducto | escape }}</div>
+              <div class="cfg-card-desc">{{ p.wi_descripcion | escape }}</div>
               <span class="cfg-btn cfg-btn-primary" style="padding:0.45rem 1rem;font-size:0.85rem;">Seleccionar</span>
             </div>
           </a>
