@@ -30,7 +30,7 @@
           <a class="cfg-card" href="#"
              data-id="{{ p.wi_productobasefabricanteid }}" data-label="{{ p.wi_nombreproducto | escape }}"
              onclick="cfgPickProducto(this); return false;">
-            <div class="cfg-card-img" style="background:#fff;">
+            <div class="cfg-card-img" style="background:#fff;border-bottom:1px solid #e0e3e9;">
               <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ p.wi_fabricante.name | escape }}/{{ p.wi_nombreproducto | escape }}/{{ p.wi_nombreproducto | escape }}.png"
                    alt="{{ p.wi_nombreproducto | escape }}"
                    style="width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;"
