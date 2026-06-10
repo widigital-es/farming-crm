@@ -24,7 +24,7 @@
             <div class="cfg-card-img" style="position:relative;background:#fff;height:180px;">
               <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ f.wi_fabricante | replace: ' ', '%20' }}/{{ f.wi_fabricante | replace: ' ', '%20' }}%20fondo.png"
                    alt="" aria-hidden="true"
-                   style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;"
+                   style="position:absolute;top:0;left:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;opacity:0.3;"
                    onerror="this.style.display='none'" />
               <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ f.wi_fabricante | replace: ' ', '%20' }}/{{ f.wi_fabricante | replace: ' ', '%20' }}%20logo.png"
                    alt="{{ f.wi_fabricante | escape }}"
