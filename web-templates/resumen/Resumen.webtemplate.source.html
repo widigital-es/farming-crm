@@ -97,7 +97,7 @@
   function setBusy(b) { actionBtns().forEach(function (btn) { if (btn) btn.disabled = b; }); }
 
   function lineHtml(step, name, price) {
-    var p = (price != null && Number(price) > 0) ? window.CFG.fmt(price) : '';
+    var p = (price != null) ? window.CFG.fmt(price) : '';
     return '<div class="rsm-line"><div class="rsm-line-info"><div class="rsm-line-step">' + esc(step) +
            '</div><div class="rsm-line-name">' + esc(name) + '</div></div>' +
            '<div class="rsm-line-price">' + p + '</div></div>';

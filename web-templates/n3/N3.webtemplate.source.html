@@ -4,9 +4,9 @@
 <fetch>
   <entity name="wi_n3">
     <attribute name="wi_n3id" />
+    <attribute name="wi_delta" />
     <link-entity name="wi_catalogoconfig" from="wi_catalogoconfigid" to="wi_catalogoconfig" alias="cat" link-type="outer">
       <attribute name="wi_nombreaccesorio" />
-      <attribute name="wi_pvpcalculado" />
       <order attribute="wi_nombreaccesorio" />
     </link-entity>
     {% if n2id %}
@@ -33,7 +33,7 @@
             {% for r in items.results.entities %}
             <label class="cfg-opt">
               <input type="radio" name="cfgsel" value="{{ r.wi_n3id }}"
-                     data-label="{{ r['cat.wi_nombreaccesorio'] | escape }}" data-price="{{ r['cat.wi_pvpcalculado'] }}"
+                     data-label="{{ r['cat.wi_nombreaccesorio'] | escape }}" data-price="{{ r.wi_delta }}"
                      onclick="cfgSelect(this)" />
               <span class="cfg-opt-name">{{ r['cat.wi_nombreaccesorio'] | escape }}</span>
               <span class="cfg-opt-dots"></span>
@@ -75,7 +75,7 @@
     document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
       var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
       var pr = Number(inp.getAttribute('data-price') || 0);
-      ps.textContent = pr > 0 ? window.CFG.fmt(pr) : '—';
+      ps.textContent = window.CFG.fmt(pr);
     });
     var saved = window.CFG.get()[STEP_KEY];
     if (saved) {

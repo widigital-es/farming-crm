@@ -4,9 +4,9 @@
 <fetch>
   <entity name="wi_opcionales">
     <attribute name="wi_opcionalesid" />
+    <attribute name="wi_precioopcionales" />
     <link-entity name="wi_catalogoconfig" from="wi_catalogoconfigid" to="wi_catalogoconfiguracion" alias="cat" link-type="outer">
       <attribute name="wi_nombreaccesorio" />
-      <attribute name="wi_pvpcalculado" />
       <order attribute="wi_nombreaccesorio" />
     </link-entity>
     {% if n4id %}
@@ -33,7 +33,7 @@
             {% for r in items.results.entities %}
             <label class="cfg-opt">
               <input type="checkbox" class="opc-check" value="{{ r.wi_opcionalesid }}"
-                     data-label="{{ r['cat.wi_nombreaccesorio'] | escape }}" data-price="{{ r['cat.wi_pvpcalculado'] }}"
+                     data-label="{{ r['cat.wi_nombreaccesorio'] | escape }}" data-price="{{ r.wi_precioopcionales }}"
                      onchange="refreshOpc()" />
               <span class="cfg-opt-name">{{ r['cat.wi_nombreaccesorio'] | escape }}</span>
               <span class="cfg-opt-dots"></span>
@@ -68,7 +68,7 @@
     document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
       var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
       var pr = Number(inp.getAttribute('data-price') || 0);
-      ps.textContent = pr > 0 ? window.CFG.fmt(pr) : '—';
+      ps.textContent = window.CFG.fmt(pr);
     });
     // preselect from saved state
     var saved = window.CFG.get().opcionales || [];

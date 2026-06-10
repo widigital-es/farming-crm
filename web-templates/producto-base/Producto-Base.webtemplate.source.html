@@ -74,7 +74,7 @@
     document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
       var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
       var pr = Number(inp.getAttribute('data-price') || 0);
-      ps.textContent = pr > 0 ? window.CFG.fmt(pr) : '—';
+      ps.textContent = window.CFG.fmt(pr);
     });
     var saved = window.CFG.get()[STEP_KEY];
     if (saved) {

@@ -6,7 +6,7 @@
   function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
 
   function valLine(name, price) {
-    var p = (price != null && Number(price) > 0) ? window.CFG.fmt(price) : '';
+    var p = (price != null) ? window.CFG.fmt(price) : '';
     return '<div class="cfg-sum-v"><span class="nm">' + esc(name) + '</span><span class="dots"></span><span class="pr">' + p + '</span></div>';
   }
   function row(label, name, price) {
