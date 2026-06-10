@@ -1,5 +1,10 @@
 {% assign defaultlang = settings['LanguageLocale/Code'] | default: 'en-us' %}
 {% assign homeurl = website.adx_partialurl %}
+<style>
+  /* Let the logo fill the full header height (remove navbar vertical padding) */
+  .static-top.navbar { padding-top: 0 !important; padding-bottom: 0 !important; }
+  .static-top .navbar-brand, .static-top .navbar-header { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+</style>
 <div class=' navbar-expand-xl navbar navbar-dark static-top' style="flex-wrap:wrap;" role='banner'>
   <div class='skip-to-content'>
     <a href='#mainContent'>{{ resx.Skip_To_Content | default: 'Skip to main content' }}</a>
