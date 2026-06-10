@@ -4,6 +4,23 @@
   /* Let the logo fill the full header height (remove navbar vertical padding) */
   .static-top.navbar { padding-top: 0 !important; padding-bottom: 0 !important; }
   .static-top .navbar-brand, .static-top .navbar-header { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+
+  /* Nav option hover: no orange background, no underline — just bold */
+  .static-top.navbar .menu-bar > .navbar-nav > li > a:hover,
+  .static-top.navbar .menu-bar > .navbar-nav > li > a:focus,
+  .static-top.navbar .menu-bar > .navbar-nav > li > a:focus-visible,
+  .navbar-dark .navbar-nav > li > a:hover,
+  .navbar-dark .navbar-nav > li > a:focus,
+  .navbar-dark .navbar-nav > li > a:focus-visible,
+  .navbar-dark .navbar-nav > li.dropdown > a:hover,
+  .navbar-dark .navbar-nav > li.dropdown > a:focus,
+  .navbar-dark .navbar-nav a.show,
+  .navbar-dark .navbar-nav a.dropdown-toggle.show {
+    background-color: transparent !important;
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+  }
 </style>
 <div class=' navbar-expand-xl navbar navbar-dark static-top' style="flex-wrap:wrap;" role='banner'>
   <div class='skip-to-content'>
