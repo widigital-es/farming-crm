@@ -84,6 +84,9 @@
   var FASE_PRESUPUESTO = 1;
   var FASE_PEDIDO = 2;
 
+  // Account of the logged-in portal user (contact's Company Name / parentcustomerid); empty if anonymous or no account
+  var CUENTA_ID = '{{ user.parentcustomerid.id }}';
+
   function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
 
   function showStatus(msg, kind) {
@@ -179,6 +182,7 @@
         'wi_fase': fase
       };
       if (comentario) oppPayload.wi_comentarios = comentario;
+      if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
       return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
         var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
         if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
