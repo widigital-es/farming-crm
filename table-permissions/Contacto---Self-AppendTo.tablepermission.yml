@@ -1,0 +1,17 @@
+adx_accountrelationship:
+adx_append: false
+adx_appendto: true
+adx_contactrelationship:
+adx_create: false
+adx_delete: false
+adx_entitylogicalname: contact
+adx_entityname: Contacto - Self (AppendTo)
+adx_entitypermission_webrole:
+- 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+- 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+adx_entitypermissionid: e54c90b2-9c74-4eda-b894-f9827bfa8a18
+adx_parententitypermission:
+adx_parentrelationship:
+adx_read: true
+adx_scope: 756150004
+adx_write: false
