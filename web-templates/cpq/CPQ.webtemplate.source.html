@@ -1,15 +1,9 @@
-{% assign accountid = user.parentcustomerid.id | default: '00000000-0000-0000-0000-000000000000' %}
 {% fetchxml fabricantes %}
-<fetch distinct="true">
+<fetch>
   <entity name="wi_fabricante">
     <attribute name="wi_fabricanteid" />
     <attribute name="wi_fabricante" />
     <order attribute="wi_fabricante" />
-    <link-entity name="wi_cuentafabricante" from="wi_fabricante" to="wi_fabricanteid" alias="cf" link-type="inner">
-      <filter type="and">
-        <condition attribute="wi_cuenta" operator="eq" value="{{ accountid | xml_escape }}" />
-      </filter>
-    </link-entity>
   </entity>
 </fetch>
 {% endfetchxml %}
