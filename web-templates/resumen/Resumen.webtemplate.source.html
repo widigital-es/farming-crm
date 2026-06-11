@@ -86,6 +86,8 @@
 
   // Account of the logged-in portal user (contact's Company Name / parentcustomerid); empty if anonymous or no account
   var CUENTA_ID = '{{ user.parentcustomerid.id }}';
+  // The logged-in portal user is the contact itself; empty if anonymous
+  var CONTACTO_ID = '{{ user.id }}';
 
   function esc(t) { var d = document.createElement('div'); d.textContent = (t == null ? '' : t); return d.innerHTML; }
 
@@ -183,6 +185,7 @@
       };
       if (comentario) oppPayload.wi_comentarios = comentario;
       if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
+      if (CONTACTO_ID) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
       return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
         var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
         if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
