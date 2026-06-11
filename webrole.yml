@@ -1,11 +1,19 @@
 - adx_anonymoususersrole: false
   adx_authenticatedusersrole: false
+  adx_name: Gerente
+  adx_webroleid: 0f27d376-7c65-f111-a826-7ced8d2c7134
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: false
   adx_name: Administradores
   adx_webroleid: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
 - adx_anonymoususersrole: false
   adx_authenticatedusersrole: true
   adx_name: Usuarios autenticados
   adx_webroleid: 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: false
+  adx_name: Comercial
+  adx_webroleid: e539c174-7c65-f111-a826-000d3adbda78
 - adx_anonymoususersrole: true
   adx_authenticatedusersrole: false
   adx_name: Usuarios anónimos
