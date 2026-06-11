@@ -5,14 +5,12 @@ adx_delete: false
 adx_entitylogicalname: wi_productlineitems
 adx_entityname: Oportunidad - Line items - Global Access
 adx_entitypermission_webrole:
-- 0f27d376-7c65-f111-a826-7ced8d2c7134
 - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
 - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+- f7c87623-6b23-4ea0-9008-14e0bc0d388d
 adx_entitypermissionid: 09cf29e6-1dfa-4b13-938f-968cac8bf384
 adx_parententitypermission: e68442b3-7821-4460-aa43-91898242c42e
 adx_parentrelationship: wi_productlineitems_Oportunidad_wi_oportunidadfarming
 adx_read: true
 adx_scope: 756150003
 adx_write: true
-statecode: 1
-statuscode: 2
