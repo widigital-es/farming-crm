@@ -1,7 +1,6 @@
 adx_accountrelationship: wi_cuentafabricante_Cuenta_account
 adx_append: true
 adx_appendto: true
-adx_contactrelationship: 
 adx_create: true
 adx_delete: false
 adx_entitylogicalname: wi_cuentafabricante
@@ -12,7 +11,6 @@ adx_entitypermission_webrole:
 - f7c87623-6b23-4ea0-9008-14e0bc0d388d
 adx_entitypermissionid: b9607158-7f35-4cac-80ee-ec096569a3f6
 adx_parententitypermission: 
-adx_parentrelationship: 
 adx_read: true
 adx_scope: 756150002
 adx_write: true

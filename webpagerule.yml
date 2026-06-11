@@ -12,7 +12,6 @@
 - adx_name: Restrict Read on Oportunidades
   adx_right: 2
   adx_scope: 1
-  adx_webpageaccesscontrolrule_webrole: []
   adx_webpageaccesscontrolruleid: eaa26315-420e-1685-894b-346f0fb8fa2e
   adx_webpageid: 48d3eb85-a348-7c23-07d5-af362e829b3c
   statecode: 1

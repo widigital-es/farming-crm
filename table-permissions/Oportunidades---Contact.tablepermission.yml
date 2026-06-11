@@ -1,4 +1,3 @@
-adx_accountrelationship: 
 adx_append: true
 adx_appendto: true
 adx_contactrelationship: wi_oportunidadfarming_Comercial_contact
@@ -12,7 +11,8 @@ adx_entitypermission_webrole:
 - e539c174-7c65-f111-a826-000d3adbda78
 adx_entitypermissionid: 8568bf28-a756-4dd6-8d4b-0dc3e03938a7
 adx_parententitypermission: 
-adx_parentrelationship: 
 adx_read: true
 adx_scope: 756150001
 adx_write: true
+statecode: 1
+statuscode: 2

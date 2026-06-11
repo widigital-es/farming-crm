@@ -182,7 +182,7 @@ adx_entitylist:
 adx_entitypermission:
 - RecordId: 09cf29e6-1dfa-4b13-938f-968cac8bf384
   DisplayName: Oportunidad - Line items - Global Access
-  CheckSum: d14ef00611edf3c05d6be1499cee22c39669be317ad5c900006445a8e46216c5
+  CheckSum: 7503d6cf1f9750cd94e03d8f1149951c7ad68503ef6b838696e510653effa9ff
   IsDeleted: false
 - RecordId: 16817099-d64d-4753-8c13-01bd0f14aff3
   DisplayName: Fabricante - Global Access
@@ -230,7 +230,7 @@ adx_entitypermission:
   IsDeleted: false
 - RecordId: 8568bf28-a756-4dd6-8d4b-0dc3e03938a7
   DisplayName: Oportunidades - Contact
-  CheckSum: 44b851a5d0d16143757665b1b3593b291fa274d02217abd371fe0a595b10681f
+  CheckSum: 6f31a43826abcee0d63667f603dab5fa7b18ce752fa1d2324236e5e4dfbf98aa
   IsDeleted: false
 - RecordId: 8671c7fa-6e5e-40ef-9a80-a77b5aa448f9
   DisplayName: N2 - Global Access
@@ -244,9 +244,13 @@ adx_entitypermission:
   DisplayName: Cuenta Fabricante - Account Access
   CheckSum: 18105517598337dd689e84d3380e92d927be576e2991076fad8666181ede7736
   IsDeleted: false
+- RecordId: e54c90b2-9c74-4eda-b894-f9827bfa8a18
+  DisplayName: Contacto - Global (AppendTo)
+  CheckSum: 0caa133484463d6b489830abe5a77b02f598fe473c3383261c4f118a65dd6ec1
+  IsDeleted: false
 - RecordId: e68442b3-7821-4460-aa43-91898242c42e
   DisplayName: Oportunidades - Acc
-  CheckSum: a9317b0adff96ebacca35ef99dc49e5b365dc59d3b11ddb6fa098e649aaa71f0
+  CheckSum: 70e5b3c3159c33c3beea3c025623e40695ff8a180ec827d5b7912e43f8be3a3f
   IsDeleted: false
 - RecordId: f928cac7-3386-4d9f-abbe-841ea9befe91
   DisplayName: N1 - Global Access
@@ -316,6 +320,10 @@ adx_entitypermission_webrole:
 - RecordId: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
   DisplayName: $RELATIONSHIP$adx_entitypermission:b9607158-7f35-4cac-80ee-ec096569a3f6:adx_webrole
   CheckSum: 8dec0dcf3aa65ac521ff42213c1e0c5d2659a07ecc3b89014bc3154258eaaecd
+  IsDeleted: false
+- RecordId: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  DisplayName: $RELATIONSHIP$adx_entitypermission:e54c90b2-9c74-4eda-b894-f9827bfa8a18:adx_webrole
+  CheckSum: 0f81a85d221c950a67eb43040645a4ebad83a9dc7dd63c8740fa0bb58d478b90
   IsDeleted: false
 - RecordId: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
   DisplayName: $RELATIONSHIP$adx_entitypermission:f928cac7-3386-4d9f-abbe-841ea9befe91:adx_webrole
@@ -1307,81 +1315,81 @@ adx_webtemplate:
   CheckSum: 0ddb22343e43b70e572f92c9d63c5266188499ecbc642fa01bfaa0921a72b714
   IsDeleted: false
 annotation:
-- RecordId: 000f98a2-7a65-f111-a826-000d3add8d2c
-  DisplayName: PWALogo.png
-  CheckSum: 4895271019da7b1034957a53d92b04ca0723f7d8bcc640019c4b439c28cc6afa
-  IsDeleted: false
-- RecordId: 040f98a2-7a65-f111-a826-000d3add8d2c
-  DisplayName: Graph-1.png
-  CheckSum: 8b0e8dd6b69045f594d832283e7b258b309d2575ab65e7c9bbce02664ef7e683
-  IsDeleted: false
-- RecordId: 3da7ab9c-7a65-f111-a826-7ced8d2c7134
-  DisplayName: Circle-3.png
-  CheckSum: a9696ce1823dab64bd752d6bf78f9bc04b88d4db97ad9e5647b0d744f43dee06
-  IsDeleted: false
-- RecordId: 3ea7ab9c-7a65-f111-a826-7ced8d2c7134
-  DisplayName: Circle-1.png
-  CheckSum: dee5583989fceb97bd71b1563c3283195bc59943da37b801a2abe65e5343dd40
-  IsDeleted: false
-- RecordId: 3fa7ab9c-7a65-f111-a826-7ced8d2c7134
-  DisplayName: Circle-2.png
-  CheckSum: 4f638deffa436a216d8b7f916fd5e8ce70ad77a9395459aace82abe7396ad486
-  IsDeleted: false
-- RecordId: 40a7ab9c-7a65-f111-a826-7ced8d2c7134
-  DisplayName: theme.css
-  CheckSum: 6e2d4b6cecda9c5d128237a3e50b637acc3fb7de112d93d5d4d47559f921b9e6
-  IsDeleted: false
 - RecordId: 41a7ab9c-7a65-f111-a826-7ced8d2c7134
   DisplayName: portalbasictheme.css
   CheckSum: eae6c10007dd61d9855b885dbc94144f9718266293eea1e3b447d0c15100c8b2
   IsDeleted: false
-- RecordId: 7739faa2-7a65-f111-a826-7ced8d2c7134
-  DisplayName: Geometric-4.png
-  CheckSum: 3bf7f7d6d54bf1b5e67c3dee4bfe36a926db5267ef3f9bbb78f34df74d146702
-  IsDeleted: false
-- RecordId: 7839faa2-7a65-f111-a826-7ced8d2c7134
-  DisplayName: Logo-sm-64.png
-  CheckSum: 62aa6c9b7e629e1ece1aa6e6ebe738af8b27e3df35550d818022d88e24760301
-  IsDeleted: false
-- RecordId: 7939faa2-7a65-f111-a826-7ced8d2c7134
-  DisplayName: PWAManifest.json
-  CheckSum: b76b20db91c9ad88e4e5f76a5b2cde1d8051e2bc8d22fd87ad4344a2b451af65
-  IsDeleted: false
-- RecordId: 7c2b269c-7a65-f111-a826-000d3add8d2c
-  DisplayName: Cat-PC.png
-  CheckSum: d674526977bffebbe26549c9b7ac7609cb5aa3390cf64a63f092599057d889bb
-  IsDeleted: false
-- RecordId: 7d2b269c-7a65-f111-a826-000d3add8d2c
-  DisplayName: Video 1.mp4
-  CheckSum: b5e0c05c78013efbfba49aebaed1a2a2f00e4718b6db2b00ddc8c680b375f73a
-  IsDeleted: false
-- RecordId: 7e2b269c-7a65-f111-a826-000d3add8d2c
-  DisplayName: bootstrap.min.css
-  CheckSum: 4e35662c26b974e8b1625c2f77f453991985f7cfae7e697e99652756cd4023ef
-  IsDeleted: false
-- RecordId: dbf8b99e-7a65-f111-a826-000d3adbda78
-  DisplayName: ORANGE%20(1)
-  CheckSum: 21e9902aab237d738bbeb9867c6782cccc04b2ffac9f20e929dcec826e39d7fc
-  IsDeleted: false
-- RecordId: ddf8b99e-7a65-f111-a826-000d3adbda78
+- RecordId: 4e579f9c-aa65-f111-a826-7ced8d2c7134
   DisplayName: images.jpg
-  CheckSum: 01d2851a819ebd743677221d9e7ed4f425ce6c715762a68dc16781de872908d0
+  CheckSum: 245bcfb8d84e40339e76b7b3a6079613098c2814d800a61ca2674d02cf05cba9
   IsDeleted: false
-- RecordId: f10e98a2-7a65-f111-a826-000d3add8d2c
+- RecordId: 5040189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: ORANGE%20(1)
+  CheckSum: e8c98bdacd01281c1d7fcf6f7b55c73858934951c48ebedb848da8061e9ee8cc
+  IsDeleted: false
+- RecordId: 50579f9c-aa65-f111-a826-7ced8d2c7134
   DisplayName: Geometric-2.png
-  CheckSum: b49ef8058d3ae321384cba72549a731ddb6dd3291a4fc1011f7c61f7928cffa2
+  CheckSum: 27a495dfc2d28bcfb5b6fc7684a13ffc16134c7dcd89ecb9b8809f9ddf7d6315
   IsDeleted: false
-- RecordId: f20e98a2-7a65-f111-a826-000d3add8d2c
-  DisplayName: robots.txt
-  CheckSum: 8fb7238b8175562d90081289ad54193142061528bdb951a30b328a150e1a18a7
+- RecordId: 5140189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Video 1.mp4
+  CheckSum: 21ee16e8e3556971839aabbba6f35d796a7181c6f5f971eb2fd020b35d7aa3f8
   IsDeleted: false
-- RecordId: f50e98a2-7a65-f111-a826-000d3add8d2c
-  DisplayName: Site-mockup-1.png
-  CheckSum: 9b362a11b1ff63757327ce0a661f2e60b618276a4ce844c478a8d71db8238e42
-  IsDeleted: false
-- RecordId: ff0e98a2-7a65-f111-a826-000d3add8d2c
+- RecordId: 51579f9c-aa65-f111-a826-7ced8d2c7134
   DisplayName: OfflinePage.png
-  CheckSum: 55d003fafc7dcfa57ff1d9b3a4fb02170a82667e8735f170d3f7b6765e798ca8
+  CheckSum: 93f14548680d80c57ee74dba6cb9b4d90573e6a1488f5b85335ee436a6a8449b
+  IsDeleted: false
+- RecordId: 52579f9c-aa65-f111-a826-7ced8d2c7134
+  DisplayName: robots.txt
+  CheckSum: 2c9a2e59c7215d5f2df156e8310bca33622980150f2599ecc8ce231dbe4585dc
+  IsDeleted: false
+- RecordId: 53579f9c-aa65-f111-a826-7ced8d2c7134
+  DisplayName: PWAManifest.json
+  CheckSum: 8d0b77cae85fb38ea6e0f668ef7a872591d733ee8eed5225f6570416ccb122bd
+  IsDeleted: false
+- RecordId: 5440189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Logo-sm-64.png
+  CheckSum: 14ac7eae97d37b04428a266963c19bbd62807a30d5f15fbbc8694a943aee65c4
+  IsDeleted: false
+- RecordId: 54579f9c-aa65-f111-a826-7ced8d2c7134
+  DisplayName: Site-mockup-1.png
+  CheckSum: ce8b0a074c5109967d81b70cf39ac7165ebdcdda7bfb608925a0eda794da8f9e
+  IsDeleted: false
+- RecordId: 55579f9c-aa65-f111-a826-7ced8d2c7134
+  DisplayName: Circle-2.png
+  CheckSum: acb68e8560f31f001be3e565198bca733ca3eb839aee1a66d7d3ce6d542993cc
+  IsDeleted: false
+- RecordId: 5740189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: PWALogo.png
+  CheckSum: 080ed73972a4de59de87ac290ef55fb9493c32f174947feb90159280b43f8536
+  IsDeleted: false
+- RecordId: 5840189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Geometric-4.png
+  CheckSum: a0ca9f27371b0b0464da260e25e65eaf735810925e6ad0badf472fa2c685968d
+  IsDeleted: false
+- RecordId: 5a40189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Circle-3.png
+  CheckSum: 787567ad838266bfe7748fea06935a8f999ab8b20cb621bbac916d2848f98710
+  IsDeleted: false
+- RecordId: 5c40189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Cat-PC.png
+  CheckSum: 74503751a9f428e3d68fec16b870f703f73aaae7fc0c45f20a521236451aecd1
+  IsDeleted: false
+- RecordId: 5e40189c-aa65-f111-a826-000d3add8d2c
+  DisplayName: Circle-1.png
+  CheckSum: ee670dffa34017965e371595fcf362e6dea14649d61f30dafb0695722c12b687
+  IsDeleted: false
+- RecordId: c8627f9e-aa65-f111-a826-000d3adbda78
+  DisplayName: Graph-1.png
+  CheckSum: 281b9bdd5628ad657e853a92f609a12e00a965034515584eebd16319a5cf27f0
+  IsDeleted: false
+- RecordId: c9627f9e-aa65-f111-a826-000d3adbda78
+  DisplayName: theme.css
+  CheckSum: c88dcd1a2823116ac019808c8db61eca57345390ae7214741d12968c000f5679
+  IsDeleted: false
+- RecordId: ca627f9e-aa65-f111-a826-000d3adbda78
+  DisplayName: bootstrap.min.css
+  CheckSum: cff6522501968635a91de8a61b301cf113c11403bb35cd426a45e0c6960cebb5
   IsDeleted: false
 mspp_uxcomponent:
 - RecordId: b4cf3c38-b4d0-4824-99d3-b5346019dbf2

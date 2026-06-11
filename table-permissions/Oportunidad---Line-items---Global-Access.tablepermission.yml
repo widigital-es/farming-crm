@@ -1,7 +1,5 @@
-adx_accountrelationship: 
 adx_append: true
 adx_appendto: true
-adx_contactrelationship: 
 adx_create: true
 adx_delete: false
 adx_entitylogicalname: wi_productlineitems
@@ -16,3 +14,5 @@ adx_parentrelationship: wi_productlineitems_Oportunidad_wi_oportunidadfarming
 adx_read: true
 adx_scope: 756150003
 adx_write: true
+statecode: 1
+statuscode: 2
