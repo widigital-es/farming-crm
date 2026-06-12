@@ -1,0 +1,19 @@
+adx_accountrelationship: 
+adx_append: true
+adx_appendto: true
+adx_contactrelationship: 
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: contact
+adx_entityname: Contaxt - Append
+adx_entitypermission_webrole:
+- 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+- 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+- 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+- ee9c57b3-3b66-f111-a826-000d3add8d2c
+adx_entitypermissionid: 85b3a144-ec95-48df-9a59-73b63491106a
+adx_parententitypermission: 
+adx_parentrelationship: 
+adx_read: true
+adx_scope: 756150000
+adx_write: true

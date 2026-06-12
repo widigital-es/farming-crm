@@ -192,6 +192,10 @@ adx_entitypermission:
   DisplayName: Cuentas activas - Global Access
   CheckSum: a95f9137e519e3dd706466304574f7d24343ded333e7fc87632958875ec65d9d
   IsDeleted: false
+- RecordId: 2da5606a-6782-4128-ac36-4d76c137d889
+  DisplayName: Oportunidades - append
+  CheckSum: 270920b9e074dceb39866e0a0f9613649440e14cdef06ea7b6b9b07b28fb232b
+  IsDeleted: false
 - RecordId: 2e8ef831-cfcf-438d-998f-5169c4734947
   DisplayName: Producto base fabricante - Global Access
   CheckSum: da8af47a50b66bc11dae4f8dcf58f6fd31852712aeac33f57a70fa32d9bf4fda
@@ -224,6 +228,10 @@ adx_entitypermission:
   DisplayName: Cuentas activas - Global Access_Attachment
   CheckSum: ae9eee667ca6ee546f3b1e7fb779d5cb6256f16376f750186e235785a97a3dc0
   IsDeleted: false
+- RecordId: 85b3a144-ec95-48df-9a59-73b63491106a
+  DisplayName: Contaxt - Append
+  CheckSum: 296aed14b43362f2d57977e54853e4efd1f63143ba2b2def106460d5f0f9ddf0
+  IsDeleted: false
 - RecordId: 8671c7fa-6e5e-40ef-9a80-a77b5aa448f9
   DisplayName: N2 - Global Access
   CheckSum: 3c0d3b0360fe653ca0b808f4aa80655f54a11c0042efa0768c0f798ca0932e14
@@ -241,6 +249,14 @@ adx_entitypermission:
   CheckSum: 8438d2e21deac45ff9b8b546b5de2dd3724e3637b0f4892730a76d550d30e606
   IsDeleted: false
 adx_entitypermission_webrole:
+- RecordId: 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  DisplayName: $RELATIONSHIP$adx_entitypermission:2da5606a-6782-4128-ac36-4d76c137d889:adx_webrole
+  CheckSum: 85ace24647c66a57470c47200e0832db472834c6a8ce432dd0cfd00afc9a6da5
+  IsDeleted: false
+- RecordId: 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  DisplayName: $RELATIONSHIP$adx_entitypermission:85b3a144-ec95-48df-9a59-73b63491106a:adx_webrole
+  CheckSum: aa3fcb339e27074d51242cf1a31085a115d373120239d083091c714eb7ad468b
+  IsDeleted: false
 - RecordId: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
   DisplayName: $RELATIONSHIP$adx_entitypermission:09cf29e6-1dfa-4b13-938f-968cac8bf384:adx_webrole
   CheckSum: 63f7256a77170c0f9514df82fde3b5a7774ef1ed1762fe3e3208f7ef95aa3005
@@ -1057,6 +1073,10 @@ adx_webpageaccesscontrolrule_webrole:
   CheckSum: 22cb7ad1eae8d34db84b7d6c1fd63e86a1e2eddefa5291d280d9c99d38861264
   IsDeleted: false
 adx_webrole:
+- RecordId: 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  DisplayName: Comercial
+  CheckSum: de95338882184d03bb9d21226b2c142eba14a1cf07c363eb5d862007c94b55be
+  IsDeleted: false
 - RecordId: 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
   DisplayName: Administradores
   CheckSum: 27da30646cdbc9c410f05a46d699722cc2a00c11c7e87fd9a95d3727c71c0927
@@ -1064,6 +1084,10 @@ adx_webrole:
 - RecordId: 9606c7f3-861d-4c1f-a30d-1b3991b9de12
   DisplayName: Usuarios autenticados
   CheckSum: 9ae5eacc9ada4cb82ac7d6d3ec11794d3f80c52b63a4c3907117a7423a4547f3
+  IsDeleted: false
+- RecordId: ee9c57b3-3b66-f111-a826-000d3add8d2c
+  DisplayName: Gerente
+  CheckSum: f25ab0434fcb108e171b8bbd449d64cbd12bf849aeb006c56122d5aab97241a2
   IsDeleted: false
 - RecordId: f7c87623-6b23-4ea0-9008-14e0bc0d388d
   DisplayName: Usuarios anónimos
@@ -1172,11 +1196,11 @@ adx_webtemplate:
   IsDeleted: false
 - RecordId: 62183fb8-cb1c-4b96-b066-b69fd7004c24
   DisplayName: Resumen
-  CheckSum: 568fe94e6d577f67de4dd5b4b36e9cfd0d32d647e5dff83313acb91812c38375
+  CheckSum: 473afc039364e086c90094dae693a8f4fb2954be1607e4576cf8ad658ea13ab8
   IsDeleted: false
 - RecordId: 663d37a2-0749-4db6-9d9d-ba993cc72a6f
   DisplayName: CPQ
-  CheckSum: d0b29fcfc8c8808c82c417a36883e7c3b88e012982a052f4a849d35b866533c6
+  CheckSum: 89468bb9a71c143bb49b9d7f4af881df50798c0e9b0b1ab905067afc72eeed88
   IsDeleted: false
 - RecordId: 66ce821c-8585-4c6e-ae2f-f59827ef9e6a
   DisplayName: Side Navigation
