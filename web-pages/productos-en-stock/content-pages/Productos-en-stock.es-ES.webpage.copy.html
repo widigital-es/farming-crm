@@ -63,7 +63,7 @@
         {% for s in stock.results.entities %}
         <div class="stk-card"
              data-fab="{{ s.wi_fabricante.name | escape }}"
-             data-search="{{ s.wi_productobase.name | escape }} {{ s.wi_name | escape }} {{ s.wi_familia.name | default: s.wi_familia | escape }} {{ s.wi_fabricante.name | escape }} {{ s.wi_almacen.name | default: s.wi_almacen | escape }}">
+             data-search="{{ s.wi_productobase.name | escape }} {{ s.wi_name | escape }} {{ s.wi_familia.name | default: s.wi_familia | escape }} {{ s.wi_fabricante.name | escape }} {{ s.wi_almacen.label | escape }}">
           <div class="stk-card-img">
             <img class="stk-bg" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ s.wi_fabricante.name | replace: ' ', '%20' }}/{{ s.wi_fabricante.name | replace: ' ', '%20' }}%20fondo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
             <img class="stk-logo" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ s.wi_fabricante.name | replace: ' ', '%20' }}/{{ s.wi_fabricante.name | replace: ' ', '%20' }}%20logo.png" alt="{{ s.wi_fabricante.name | escape }}" onerror="this.style.display='none'" />
@@ -74,7 +74,7 @@
               <div class="stk-char"><span class="k">Familia</span><span class="v">{{ s.wi_familia.name | default: s.wi_familia | escape }}</span></div>
               <div class="stk-char"><span class="k">Nombre</span><span class="v">{{ s.wi_name | escape }}</span></div>
               <div class="stk-char"><span class="k">Fabricante</span><span class="v">{{ s.wi_fabricante.name | escape }}</span></div>
-              <div class="stk-char"><span class="k">Almacén</span><span class="v">{{ s.wi_almacen.name | default: s.wi_almacen | escape }}</span></div>
+              <div class="stk-char"><span class="k">Almacén</span><span class="v">{{ s.wi_almacen.label | escape }}</span></div>
               <div class="stk-char precio"><span class="k">Precio</span><span class="v stk-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</span></div>
             </div>
           </div>
@@ -95,50 +95,3 @@
     </aside>
   </div>
 </div>
-
-<script>
-(function () {
-  function fmtEur(v) {
-    var n = parseFloat(v);
-    if (isNaN(n)) n = 0;
-    var parts = n.toFixed(2).split('.');
-    var intp = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return (parts[1] === '00' ? intp : intp + ',' + parts[1]) + ' €';
-  }
-
-  function cards() { return Array.prototype.slice.call(document.querySelectorAll('#stkGrid .stk-card')); }
-
-  window.stkFilter = function () {
-    var q = (document.getElementById('stkSearch').value || '').toLowerCase().trim();
-    var checked = Array.prototype.slice.call(document.querySelectorAll('#stkFabFilters input:checked')).map(function (c) { return c.value; });
-    var visible = 0;
-    cards().forEach(function (card) {
-      var matchesSearch = !q || (card.getAttribute('data-search') || '').toLowerCase().indexOf(q) > -1;
-      var matchesFab = checked.length === 0 || checked.indexOf(card.getAttribute('data-fab') || '') > -1;
-      var show = matchesSearch && matchesFab;
-      card.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-    var empty = document.getElementById('stkEmpty');
-    if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
-  };
-
-  document.addEventListener('DOMContentLoaded', function () {
-    // format prices
-    document.querySelectorAll('.stk-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
-    // build unique Fabricante filters from the cards
-    var fabs = {};
-    cards().forEach(function (c) { var f = (c.getAttribute('data-fab') || '').trim(); if (f) fabs[f] = true; });
-    var box = document.getElementById('stkFabFilters');
-    if (box) {
-      Object.keys(fabs).sort().forEach(function (f) {
-        var id = 'fab_' + f.replace(/[^a-z0-9]/gi, '_');
-        var lbl = document.createElement('label');
-        lbl.innerHTML = '<input type="checkbox" value="' + f.replace(/"/g, '&quot;') + '" onchange="stkFilter()"> ' + f;
-        box.appendChild(lbl);
-      });
-      if (!Object.keys(fabs).length) { box.innerHTML = '<span style="color:#9aa3b2;font-size:0.85rem;">—</span>'; }
-    }
-  });
-})();
-</script>
