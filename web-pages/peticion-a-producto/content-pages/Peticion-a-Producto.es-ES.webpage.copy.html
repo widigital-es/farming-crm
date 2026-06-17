@@ -1,3 +1,97 @@
-<div class="row sectionBlockLayout text-start" style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
-  <div class="container" style="display: flex; flex-wrap: wrap;"><div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px; padding: 16px; margin: 60px 0px;">{% include 'entity_list' key: 'Peticiones a Producto activo' isNLSearchEnabled:'true' %}</div></div>
+{% fetchxml peticiones %}
+<fetch count="250">
+  <entity name="wi_peticionaproducto">
+    <attribute name="wi_peticionaproductoid" />
+    <attribute name="wi_idpeticion" />
+    <attribute name="wi_titulo" />
+    <attribute name="wi_estado" />
+    <attribute name="wi_tipo" />
+    <attribute name="wi_cuenta" />
+    <attribute name="createdon" />
+    <order attribute="wi_idpeticion" />
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+<style>
+  .pp-wrap { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  .pp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+  .pp-title { font-size: 2.4rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
+  .pp-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+
+  .pp-filter { position: relative; }
+  .pp-filter select { -webkit-appearance: none; -moz-appearance: none; appearance: none; min-width: 200px; padding: 0.62rem 2.4rem 0.62rem 1rem; border: 1px solid #d4d8e0; border-radius: 10px; background: #fff; color: #45506a; font-size: 0.95rem; cursor: pointer; }
+  .pp-filter::after { content: ''; position: absolute; right: 1rem; top: 50%; width: 9px; height: 9px; border-right: 2px solid #8a93a6; border-bottom: 2px solid #8a93a6; transform: translateY(-65%) rotate(45deg); pointer-events: none; }
+  .pp-filter select:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
+
+  .pp-search { position: relative; }
+  .pp-search input { width: 280px; max-width: 100%; box-sizing: border-box; padding: 0.62rem 1rem 0.62rem 2.5rem; border: 1px solid #d4d8e0; border-radius: 10px; font-size: 0.95rem; color: #1f2a44; }
+  .pp-search input:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
+  .pp-search::before { content: ''; position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; background: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/Search%20(1).svg') no-repeat center / contain; opacity: 0.55; }
+
+  .pp-new { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.4rem; border-radius: 10px; background: #009FD9; color: #fff !important; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; border: 1px solid #009FD9; transition: background 0.15s ease; }
+  .pp-new:hover { background: #0080B5; border-color: #0080B5; color: #fff !important; }
+
+  .pp-list { display: flex; flex-direction: column; gap: 1rem; }
+  .pp-card { display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.1fr; align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; }
+  .pp-code { font-size: 1.35rem; font-weight: 700; color: #15233b; line-height: 1.1; }
+  .pp-estado { color: #45506a; font-size: 0.95rem; margin-top: 0.35rem; }
+  .pp-detalle { display: inline-block; margin-top: 0.45rem; color: #009FD9 !important; font-size: 0.95rem; text-decoration: underline !important; }
+  .pp-val { color: #1f2a44; font-size: 1rem; }
+  .pp-lbl { color: #9aa3b2; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.3rem; }
+  .pp-empty { color: #9aa3b2; font-size: 1rem; padding: 2.5rem 0; text-align: center; }
+
+  @media (max-width: 820px) {
+    .pp-card { grid-template-columns: 1fr 1fr; row-gap: 1rem; }
+    .pp-title { font-size: 1.9rem; }
+    .pp-search input { width: 100%; }
+  }
+</style>
+
+<div class="pp-wrap">
+  <div class="pp-top">
+    <h1 class="pp-title">Peticiones a producto</h1>
+    <div class="pp-controls">
+      <div class="pp-filter">
+        <select id="ppEstado" onchange="ppFilter()">
+          <option value="">Filtrar por Estado</option>
+        </select>
+      </div>
+      <div class="pp-search">
+        <input type="text" id="ppSearch" placeholder="Buscar" oninput="ppFilter()" />
+      </div>
+      <a class="pp-new" href="/Nueva-Peticion-a-Producto">Nueva petición</a>
+    </div>
+  </div>
+
+  {% if peticiones.results.entities.size > 0 %}
+  <div class="pp-list" id="ppList">
+    {% for p in peticiones.results.entities %}
+    <div class="pp-card"
+         data-estado="{{ p.wi_estado.label | escape }}"
+         data-search="{{ p.wi_idpeticion | escape }} {{ p.wi_titulo | escape }} {{ p.wi_tipo.label | escape }} {{ p.wi_cuenta.name | escape }} {{ p.wi_estado.label | escape }}">
+      <div class="pp-col pp-col-id">
+        <div class="pp-code">{{ p.wi_idpeticion | default: '—' | escape }}</div>
+        <div class="pp-estado">{{ p.wi_estado.label | default: '—' | escape }}</div>
+        <a class="pp-detalle" href="/Detalle-Peticion-a-Producto?id={{ p.wi_peticionaproductoid }}">Ver detalle</a>
+      </div>
+      <div class="pp-col">
+        <div class="pp-val">{{ p.wi_tipo.label | default: '—' | escape }}</div>
+        <div class="pp-lbl">TIPO</div>
+      </div>
+      <div class="pp-col">
+        <div class="pp-val">{{ p.wi_cuenta.name | default: '—' | escape }}</div>
+        <div class="pp-lbl">CUENTA</div>
+      </div>
+      <div class="pp-col">
+        <div class="pp-val">{{ p.createdon | date: 'dd/MM/yyyy' }}</div>
+        <div class="pp-lbl">FECHA DE PETICIÓN</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p id="ppEmpty" class="pp-empty" style="display:none;">No hay peticiones que coincidan con la búsqueda.</p>
+  {% else %}
+  <p class="pp-empty">No hay peticiones a producto.</p>
+  {% endif %}
 </div>
