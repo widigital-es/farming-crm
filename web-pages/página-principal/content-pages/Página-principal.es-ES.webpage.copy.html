@@ -2,20 +2,23 @@
   /* ===== Home (Inicio) redesign ===== */
   .home-wrap { font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
 
-  /* Hero band */
+  /* Hero band — full-bleed: breaks out of .home-wrap to the full viewport width */
   .home-hero {
     position: relative;
-    border-radius: 16px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     overflow: hidden;
     min-height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin: 1.75rem 0 2rem;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
     background-image: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/atardecer-farming-agricola.jpg');
     background-size: cover;
-    background-position: center 60%;
+    background-position: center;
   }
   /* Subtle dark overlay only for title legibility */
   .home-hero::before {
