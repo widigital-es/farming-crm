@@ -1,9 +1,19 @@
 - adx_displayimageonly: false
+  adx_displayorder: 2
+  adx_displaypagechildlinks: false
+  adx_name: Gestión Comercial
+  adx_openinnewwindow: false
+  adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
+  adx_robotsfollowlink: true
+  adx_weblinkid: f85c7b59-8957-445a-89b8-01118e089eb4
+  adx_weblinksetid: 43cce965-142d-4344-b98f-b94b45816eee
+- adx_displayimageonly: false
   adx_displayorder: 4
   adx_displaypagechildlinks: false
   adx_name: Oportunidades
   adx_openinnewwindow: false
   adx_pageid: 48d3eb85-a348-7c23-07d5-af362e829b3c
+  adx_parentweblinkid: f85c7b59-8957-445a-89b8-01118e089eb4
   adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
   adx_robotsfollowlink: true
   adx_weblinkid: 0bbb6476-6988-bfa9-f84c-206bd61c1c07
@@ -99,9 +109,10 @@
 - adx_displayimageonly: false
   adx_displayorder: 22
   adx_displaypagechildlinks: false
-  adx_name: CPQ
+  adx_name: Configurador
   adx_openinnewwindow: false
   adx_pageid: 77892594-2f16-42c9-9932-71815ec43cf8
+  adx_parentweblinkid: f85c7b59-8957-445a-89b8-01118e089eb4
   adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
   adx_robotsfollowlink: true
   adx_weblinkid: 8431ec97-d39e-334d-132f-0d4019996ebf
@@ -138,6 +149,7 @@
   adx_name: Productos en stock
   adx_openinnewwindow: false
   adx_pageid: f720e95d-c035-4467-bc07-3aa5f4ae3e09
+  adx_parentweblinkid: f85c7b59-8957-445a-89b8-01118e089eb4
   adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
   adx_robotsfollowlink: true
   adx_weblinkid: a3062f09-c782-47d7-afa0-9fbf6408014e

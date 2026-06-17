@@ -5,7 +5,15 @@
   .static-top.navbar { padding-top: 0 !important; padding-bottom: 0 !important; }
   .static-top .navbar-brand, .static-top .navbar-header { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
 
-  /* Nav option hover: no orange background, no underline — just bold */
+  /* Nav options: one consistent semibold weight at rest AND when selected,
+     so the text never reflows / moves (motionless) when hovered or focused */
+  .static-top.navbar .menu-bar > .navbar-nav > li > a,
+  .navbar-dark .navbar-nav > li > a {
+    font-weight: 600 !important;
+  }
+
+  /* Selected / hover emphasis without moving the text: a subtle text-shadow
+     gives a softer "bold" cue instead of jumping to a heavier weight */
   .static-top.navbar .menu-bar > .navbar-nav > li > a:hover,
   .static-top.navbar .menu-bar > .navbar-nav > li > a:focus,
   .static-top.navbar .menu-bar > .navbar-nav > li > a:focus-visible,
@@ -19,7 +27,8 @@
     background-color: transparent !important;
     color: #FFFFFF !important;
     text-decoration: none !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
+    text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor !important;
   }
 </style>
 <div class=' navbar-expand-xl navbar navbar-dark static-top' style="flex-wrap:wrap;" role='banner'>
@@ -101,7 +110,7 @@
                 </a>
                 {% if sublinks.size > 0 %}
                   <ul class='dropdown-menu dropdown-menu-end'>
-                    {% if link.name %}
+                    {% if link.name and link.url %}
                       <li>
                         <a
                           aria-label='{{ link.name | escape }}'
