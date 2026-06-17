@@ -148,18 +148,7 @@
                 {% endif %}
               </li>
             {% endfor %}
-            {% assign search_enabled = settings['Search/Enabled'] | boolean | default: true %}
-            {% if search_enabled %}
-              <li class=' nav-item divider-vertical' aria-hidden='true'></li>
-              <li class=' nav-item dropdown'>
-                <a id='search' class=' nav-link navbar-icon' href='#' data-bs-toggle='dropdown' role='button' aria-expanded='false' aria-label='{{ snippets["Header/Search/ToolTip"] | default:resx["Search_DefaultText"] | escape }}'>
-                  <span class='glyphicon fa-solid fa-magnifying-glass'></span>
-                </a>
-                <div class='dropdown-menu dropdown-search dropdown-menu-end'>
-                  {% include 'Search', search_id: 'q' %}
-                </div>
-              </li>
-            {% endif %}
+            {% comment %} Header search removed per request {% endcomment %}
             <li class=' nav-item divider-vertical' aria-hidden='true'></li>
             {% if website.languages.size > 1 %}
               <li class=' nav-item dropdown'>
