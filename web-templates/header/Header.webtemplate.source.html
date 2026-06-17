@@ -30,6 +30,54 @@
     font-weight: 600 !important;
     text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor !important;
   }
+
+  /* Dropdown menus (Gestión Comercial, profile, language): a clean white panel
+     that "drops in", with a translucent brand-blue highlight on the option you
+     are about to select, larger text, and no underlines */
+  .navbar-dark .navbar-nav .show.dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16) !important;
+    padding: 6px !important;
+    margin-top: 8px !important;
+    animation: ppDropIn 0.18s ease-out;
+  }
+  .navbar-dark .navbar-nav .show.dropdown-menu > li > a,
+  .navbar-dark .navbar-nav .show.dropdown-menu .dropdown-item {
+    color: #2A2C2E !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    padding: 10px 18px !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .navbar-dark .navbar-nav .show.dropdown-menu > li > a:hover,
+  .navbar-dark .navbar-nav .show.dropdown-menu > li > a:focus,
+  .navbar-dark .navbar-nav .show.dropdown-menu > li > a:focus-visible,
+  .navbar-dark .navbar-nav .show.dropdown-menu .dropdown-item:hover,
+  .navbar-dark .navbar-nav .show.dropdown-menu .dropdown-item:focus,
+  .navbar-dark .navbar-nav .show.dropdown-menu > .active > a {
+    background-color: rgba(0, 159, 217, 0.14) !important;
+    color: #2A2C2E !important;
+    text-decoration: none !important;
+  }
+  @keyframes ppDropIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Keep the mobile menu button visible now that the accent is blue-on-blue */
+  .navbar-dark .navbar-toggler {
+    background-color: transparent !important;
+    border-color: #ffffff !important;
+  }
+  .navbar-dark .navbar-toggler:hover,
+  .navbar-dark .navbar-toggler:focus {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
 </style>
 <div class=' navbar-expand-xl navbar navbar-dark static-top' style="flex-wrap:wrap;" role='banner'>
   <div class='skip-to-content'>
