@@ -1,10 +1,67 @@
-/* ===== Perfil (profile) page — page-scoped spacing =====
+/* ===== Perfil (profile) page — page-scoped spacing & typography =====
    Injected only on the Perfil page, so this does not affect forms elsewhere.
-   Sole purpose: add breathing room below the "Actualizar" submit button so it
-   is not flush against the footer. No top margins (those previously clipped /
-   hid profile fields) and nothing that alters the spacing between the form's
-   "Next" button and the question below it. */
+   No top margins (those previously clipped / hid profile fields) and nothing
+   that alters the spacing between the form's "Next" button and the question
+   below it. The page body (the "Su informacion" profile form, the "Novedades"
+   marketing-options panel, and the contact-options form) is rendered by the
+   built-in Profile.aspx handler from Dataverse config, so we can only restyle
+   the markup it produces — we cannot add/remove fields from here. */
 
+/* Keep the breathing room below the "Actualizar" submit button so it is not
+   flush against the footer. (Preserved — do not remove.) */
 .crmEntityFormView .actions {
   margin-bottom: 3rem;
+}
+
+/* ----- Consistent heading / section-title typography -----
+   The ASPX profile page renders "Su informacion", "Novedades" and the
+   contact-options question with a mix of heading elements (h1-h6, <legend>,
+   panel/section titles), which gave them inconsistent sizes and a serif-ish
+   look. Normalize them all to Space Grotesk with one consistent scale. */
+.page-heading h1,
+.page-heading h2,
+#content_container h1,
+#content_container h2,
+#content_container h3,
+.crmEntityFormView h1,
+.crmEntityFormView h2,
+.crmEntityFormView h3,
+.crmEntityFormView legend,
+.crmEntityFormView .section-title,
+fieldset > legend,
+legend {
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1a2b4a;
+  margin: 0 0 1rem;
+  border: none; /* some themes underline <legend>; drop it for consistency */
+}
+
+/* Sub-section / cell headings one notch down, same family. */
+.crmEntityFormView h4,
+.crmEntityFormView h5,
+.crmEntityFormView h6,
+.crmEntityFormView .tab-title {
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a2b4a;
+  margin: 0 0 0.6rem;
+}
+
+/* Field labels and inputs: same family, consistent size. */
+.crmEntityFormView label,
+.crmEntityFormView .control-label,
+.crmEntityFormView .info {
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.crmEntityFormView input,
+.crmEntityFormView select,
+.crmEntityFormView textarea {
+  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-size: 0.95rem;
 }
