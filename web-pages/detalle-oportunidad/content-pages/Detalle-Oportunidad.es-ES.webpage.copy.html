@@ -1,3 +1,325 @@
-<div class="row sectionBlockLayout text-start" style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
-  <div class="container" style="display: flex; flex-wrap: wrap;"><div class="col-lg-12 columnBlockLayout" style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px; padding: 16px; margin: 60px 0px;">{% entityform name: 'Detalle Oportunidad Portal' %}</div></div>
+{% assign oid = request.params.id %}
+
+{% fetchxml opp %}
+<fetch top="1">
+  <entity name="wi_oportunidadfarming">
+    <attribute name="wi_oportunidadfarmingid" />
+    <attribute name="wi_idoportunidad" />
+    <attribute name="wi_fase" />
+    <attribute name="wi_cuenta" />
+    <attribute name="wi_productobase" />
+    <attribute name="wi_productobasef" />
+    <attribute name="wi_municipio" />
+    <attribute name="wi_preciofinal" />
+    <attribute name="wi_precioproductobase" />
+    <attribute name="wi_preciolineitems" />
+    <attribute name="wi_comentarios" />
+    <attribute name="createdon" />
+    {% if oid %}
+    <filter type="and">
+      <condition attribute="wi_oportunidadfarmingid" operator="eq" value="{{ oid | xml_escape }}" />
+    </filter>
+    {% endif %}
+    <link-entity name="wi_productobasefarming" from="wi_productobasefarmingid" to="wi_productobasef" link-type="outer" alias="pbf">
+      <attribute name="wi_nombreproducto" />
+      <attribute name="wi_descripcion" />
+      <link-entity name="wi_productobasefabricante" from="wi_productobasefabricanteid" to="wi_productobasefabricante" link-type="outer" alias="fab">
+        <attribute name="wi_productobasefabricanteid" />
+        <attribute name="wi_nombreproducto" />
+        <attribute name="wi_referenciafabricante" />
+        <attribute name="wi_descripcion" />
+        <attribute name="wi_fabricante" />
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% assign o = opp.results.entities.first %}
+
+{% fetchxml lineas %}
+<fetch>
+  <entity name="wi_productlineitems">
+    <attribute name="wi_productlineitemsid" />
+    <attribute name="wi_nivel" />
+    <attribute name="wi_precio" />
+    <order attribute="wi_nivel" />
+    {% if oid %}
+    <filter type="and">
+      <condition attribute="wi_oportunidad" operator="eq" value="{{ oid | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+
+{% comment %}
+  Resolve the manufacturer (wi_fabricante) name from the product's fabricante
+  record. Aliased lookups in fetchxml Liquid don't reliably expose '.name', so
+  we re-query the wi_productobasefabricante record by its id (first-class entity,
+  where '.name' on a lookup works — same pattern as the Producto-Base template).
+{% endcomment %}
+{% assign fabid = o['fab.wi_productobasefabricanteid'] %}
+{% fetchxml fabq %}
+<fetch top="1">
+  <entity name="wi_productobasefabricante">
+    <attribute name="wi_productobasefabricanteid" />
+    <attribute name="wi_nombreproducto" />
+    <attribute name="wi_fabricante" />
+    {% if fabid %}
+    <filter type="and">
+      <condition attribute="wi_productobasefabricanteid" operator="eq" value="{{ fabid | xml_escape }}" />
+    </filter>
+    {% endif %}
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% assign fabrec = fabq.results.entities.first %}
+
+<style>
+  .do-wrap { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem 1rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; }
+
+  /* breadcrumb */
+  .do-bc { font-size: 0.9rem; color: #9aa3b2; margin: 0 0 1.4rem; }
+  .do-bc a { color: #9aa3b2 !important; text-decoration: none !important; }
+  .do-bc a:hover { color: #009FD9 !important; }
+  .do-bc .sep { margin: 0 0.4rem; }
+  .do-bc .cur { color: #45506a; }
+
+  /* title row */
+  .do-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
+  .do-title { font-size: 2.2rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
+
+  /* pill buttons */
+  .do-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
+  .do-btn-primary { background: #009FD9; color: #fff !important; border: 2px solid #5BC2EC; }
+  .do-btn-primary:hover { background: #0080B5; border-color: #5BC2EC; color: #fff !important; }
+  .do-btn-ghost { background: #fff; color: #009FD9 !important; border: 1px solid #b3e3f5; }
+  .do-btn-ghost:hover { background: #f0fafe; border-color: #009FD9; color: #009FD9 !important; }
+
+  /* summary bar */
+  .do-summary { display: grid; grid-template-columns: repeat(6, 1fr); align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; margin-bottom: 2.2rem; }
+  .do-summary .val { color: #15233b; font-size: 1.05rem; font-weight: 700; line-height: 1.2; word-break: break-word; }
+  .do-summary .lbl { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.35rem; }
+
+  /* section heading + actions */
+  .do-secrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }
+  .do-sectitle { font-size: 1.45rem; font-weight: 700; color: #15233b; margin: 0; }
+  .do-secactions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+
+  /* two-column body */
+  .do-cols { display: flex; gap: 1.6rem; align-items: flex-start; }
+  .do-left { flex: 1 1 auto; min-width: 0; }
+  .do-right { flex: 0 0 400px; width: 400px; }
+  @media (max-width: 960px) { .do-cols { flex-direction: column; } .do-right { width: 100%; flex-basis: auto; } }
+
+  .do-card { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.5rem 1.6rem; margin-bottom: 1.6rem; }
+
+  /* product block */
+  .do-prod { display: flex; gap: 1.5rem; align-items: flex-start; }
+  .do-prod-img { flex: 0 0 230px; max-width: 230px; border: 1px solid #eef0f3; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; min-height: 170px; }
+  .do-prod-img img { width: 100%; height: auto; display: block; object-fit: contain; }
+  .do-prod-ph { font-size: 2.4rem; color: #c2c8d2; }
+  .do-prod-ph-hidden { display: none; }
+  .do-prod-info { flex: 1 1 auto; min-width: 0; }
+  .do-prod-title { font-size: 1.3rem; font-weight: 700; color: #15233b; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.01em; }
+  .do-meta { margin: 0 0 0.85rem; }
+  .do-meta .k { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .do-meta .v { color: #1f2a44; font-size: 1rem; font-weight: 600; margin-top: 0.15rem; }
+  @media (max-width: 560px) { .do-prod { flex-direction: column; } .do-prod-img { flex-basis: auto; max-width: 100%; width: 100%; } }
+
+  .do-desc-title { font-size: 1.05rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; }
+  .do-desc { font-size: 0.93rem; color: #45506a; line-height: 1.6; }
+  .do-desc p { margin: 0 0 0.7rem; }
+
+  .do-com-title { font-size: 1.15rem; font-weight: 700; color: #15233b; margin: 0 0 0.8rem; }
+  .do-com { font-size: 0.95rem; color: #45506a; line-height: 1.6; white-space: pre-wrap; }
+  .do-com-empty { color: #9aa3b2; font-style: italic; }
+
+  /* config panel (right) */
+  .do-cfg { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); overflow: hidden; }
+  .do-cfg-head { padding: 1.1rem 1.5rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: #009FD9; }
+  .do-cfg-lines { padding: 0.2rem 1.5rem; }
+  .do-cfg-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1rem 0; border-bottom: 1px solid #f0f2f5; }
+  .do-cfg-line:last-child { border-bottom: none; }
+  .do-cfg-info { flex: 1 1 auto; min-width: 0; }
+  .do-cfg-step { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #9aa3b2; }
+  .do-cfg-name { font-size: 1.02rem; font-weight: 600; color: #1f2a44; margin-top: 0.12rem; word-break: break-word; }
+  .do-cfg-price { flex: 0 0 auto; font-size: 1rem; font-weight: 700; color: #15233b; white-space: nowrap; }
+  .do-cfg-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.5rem; background: #f6fbfe; border-top: 2px solid #15233b; }
+  .do-cfg-total .t-lbl { font-size: 1rem; font-weight: 800; color: #15233b; text-transform: uppercase; letter-spacing: 0.04em; }
+  .do-cfg-total .t-amt { font-size: 1.7rem; font-weight: 800; color: #009FD9; }
+  .do-cfg-empty { color: #9aa3b2; font-size: 0.95rem; padding: 1.6rem 1.5rem; text-align: center; }
+
+  .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
+
+  /* ---- Información de sistema: keep only the system-info section + Enviar ---- */
+  /* The 'Detalle Oportunidad Portal' entityform (entity wi_oportunidadfarming) renders one
+     tab "Datos" with 4 sections: General, COMENTARIOS, CONFIGURACIÓN DE PRODUCTO (subgrid)
+     and INFORMACIÓN DE SISTEMA. We render our own summary above and hide the first three
+     sections, leaving only INFORMACIÓN DE SISTEMA (createdby/createdon/modifiedby/modifiedon)
+     and the Enviar submit button, exactly as they render today. */
+  #do-sysform table.section { display: none; }
+  /* reveal only the system-info section. "null_section_3" is its name in the
+     form definition; the :has() rules are resilient fallbacks in case the
+     auto-generated data-name differs at render time. */
+  #do-sysform table.section[data-name="null_section_3"],
+  #do-sysform table.section:has(#createdon),
+  #do-sysform table.section:has([id="modifiedon"]),
+  #do-sysform table.section:has(td[data-name="createdon"]) { display: table !important; }
+  /* hide the empty tab title if present */
+  #do-sysform .crmEntityFormView > .tab > .tab-title:empty,
+  #do-sysform .crmEntityFormView .tab-title:empty { display: none; }
+  /* spacing below the Enviar button so it is not flush with the footer */
+  #do-sysform .crmEntityFormView .actions { margin-bottom: 3rem; }
+  /* a heading above the system-info form */
+  .do-sysheading { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 2.4rem 0 1rem; }
+</style>
+
+{% if o %}
+{% assign fabname = fabrec.wi_fabricante.name | default: '' %}
+{% assign prodfam = fabrec.wi_nombreproducto | default: o['fab.wi_nombreproducto'] | default: '' %}
+{% assign modelo = o['pbf.wi_nombreproducto'] | default: '' %}
+{% assign desc = o['pbf.wi_descripcion'] | default: o['fab.wi_descripcion'] %}
+
+<div class="do-wrap">
+  <nav class="do-bc">
+    <a href="/Oportunidades">Mis oportunidades</a>
+    <span class="sep">/</span>
+    <span class="cur">Resumen de la oportunidad</span>
+  </nav>
+
+  <div class="do-top">
+    <h1 class="do-title">Resumen de la oportunidad</h1>
+    <a class="do-btn do-btn-primary" href="/cpq">Nueva oportunidad</a>
+  </div>
+
+  <div class="do-summary">
+    <div class="col">
+      <div class="val">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
+      <div class="lbl">Oportunidad</div>
+    </div>
+    <div class="col">
+      <div class="val">{{ o.wi_fase.label | default: '—' | escape }}</div>
+      <div class="lbl">Estado</div>
+    </div>
+    <div class="col">
+      <div class="val">{{ o.wi_cuenta.name | default: '—' | escape }}</div>
+      <div class="lbl">Cuenta</div>
+    </div>
+    <div class="col">
+      <div class="val">{{ modelo | default: '—' | escape }}</div>
+      <div class="lbl">Producto</div>
+    </div>
+    <div class="col">
+      <div class="val">{{ o.createdon | date: 'dd/MM/yyyy' }}</div>
+      <div class="lbl">Fecha de pedido</div>
+    </div>
+    <div class="col">
+      <div class="val do-precio" data-v="{{ o.wi_preciofinal }}">{{ o.wi_preciofinal }}</div>
+      <div class="lbl">Precio total</div>
+    </div>
+  </div>
+
+  <div class="do-secrow">
+    <h2 class="do-sectitle">Detalle del pedido</h2>
+    <div class="do-secactions">
+      <a class="do-btn do-btn-ghost" href="/Oportunidades">Cancelar</a>
+      <a class="do-btn do-btn-primary" href="/cpq">Editar oportunidad</a>
+    </div>
+  </div>
+
+  <div class="do-cols">
+    <div class="do-left">
+      <div class="do-card">
+        <div class="do-prod">
+          <div class="do-prod-img">
+            {% if fabname != '' and prodfam != '' %}
+            <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fabname | replace: ' ', '%20' }}/{{ prodfam | replace: ' ', '%20' }}/{{ prodfam | replace: ' ', '%20' }}.png"
+                 alt="{{ modelo | escape }}"
+                 onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='/_api/wi_productobasefabricantes({{ o['fab.wi_productobasefabricanteid'] }})/wi_imagenproducto/$value';}else{this.style.display='none';var ph=this.parentNode.querySelector('.do-prod-ph');if(ph){ph.style.display='block';}}" />
+            <span class="do-prod-ph do-prod-ph-hidden" aria-hidden="true">&#9881;</span>
+            {% else %}
+            <span class="do-prod-ph" aria-hidden="true">&#9881;</span>
+            {% endif %}
+          </div>
+          <div class="do-prod-info">
+            <h3 class="do-prod-title">{{ modelo | default: 'Producto' | escape }}</h3>
+            <div class="do-meta">
+              <div class="k">Fabricante</div>
+              <div class="v">{{ fabname | default: '—' | escape }}</div>
+            </div>
+            <div class="do-meta">
+              <div class="k">Producto</div>
+              <div class="v">{{ prodfam | default: '—' | escape }}</div>
+            </div>
+            <div class="do-meta">
+              <div class="k">Modelo</div>
+              <div class="v">{{ modelo | default: '—' | escape }}</div>
+            </div>
+          </div>
+        </div>
+        {% if desc and desc != '' %}
+        <div style="margin-top:1.4rem;border-top:1px solid #f0f2f5;padding-top:1.3rem;">
+          <h4 class="do-desc-title">Descripción</h4>
+          <div class="do-desc">{{ desc | escape | newline_to_br }}</div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="do-card">
+        <h3 class="do-com-title">Comentarios realizados para el pedido</h3>
+        {% if o.wi_comentarios and o.wi_comentarios != '' %}
+        <div class="do-com">{{ o.wi_comentarios | escape }}</div>
+        {% else %}
+        <div class="do-com do-com-empty">No se añadieron comentarios a este pedido.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="do-right">
+      <div class="do-cfg">
+        <div class="do-cfg-head">Resumen de la configuración del producto</div>
+        <div class="do-cfg-lines" id="doCfgLines">
+          {% comment %} PRODUCTO base price comes from the opportunity (wi_precioproductobase / wi_productobasef). {% endcomment %}
+          <div class="do-cfg-line">
+            <div class="do-cfg-info">
+              <div class="do-cfg-step">Producto</div>
+              <div class="do-cfg-name">{{ modelo | default: 'Producto base' | escape }}</div>
+            </div>
+            <div class="do-cfg-price do-precio" data-v="{{ o.wi_precioproductobase }}">{{ o.wi_precioproductobase }}</div>
+          </div>
+          {% for l in lineas.results.entities %}
+          <div class="do-cfg-line" data-nivel="{{ l.wi_nivel | escape }}">
+            <div class="do-cfg-info">
+              <div class="do-cfg-step do-cfg-step-raw">{{ l.wi_nivel | default: '' | escape }}</div>
+              <div class="do-cfg-name do-cfg-name-raw">{{ l.wi_nivel | default: '' | escape }}</div>
+            </div>
+            <div class="do-cfg-price do-precio" data-v="{{ l.wi_precio }}">{{ l.wi_precio }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="do-cfg-total">
+          <span class="t-lbl">Precio</span>
+          <span class="t-amt do-precio" data-v="{{ o.wi_preciofinal }}">{{ o.wi_preciofinal }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="do-sysheading">Información de sistema</h2>
+  <div id="do-sysform">
+    {% entityform name: 'Detalle Oportunidad Portal' %}
+  </div>
 </div>
+
+{% else %}
+<div class="do-wrap">
+  <nav class="do-bc">
+    <a href="/Oportunidades">Mis oportunidades</a>
+    <span class="sep">/</span>
+    <span class="cur">Resumen de la oportunidad</span>
+  </nav>
+  <div class="do-notfound">No se ha encontrado la oportunidad solicitada.</div>
+</div>
+{% endif %}
