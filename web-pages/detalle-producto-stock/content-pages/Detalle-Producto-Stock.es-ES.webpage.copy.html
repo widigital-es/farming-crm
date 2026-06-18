@@ -15,6 +15,13 @@
       <condition attribute="wi_stockid" operator="eq" value="{{ sid | xml_escape }}" />
     </filter>
     {% endif %}
+    <link-entity name="wi_productobasefarming" from="wi_productobasefarmingid" to="wi_productobase" link-type="outer" alias="pbf">
+      <attribute name="wi_nombreproducto" />
+      <attribute name="wi_descripcion" />
+      <link-entity name="wi_productobasefabricante" from="wi_productobasefabricanteid" to="wi_productobasefabricante" link-type="outer" alias="fab">
+        <attribute name="wi_descripcion" />
+      </link-entity>
+    </link-entity>
   </entity>
 </fetch>
 {% endfetchxml %}
@@ -32,85 +39,145 @@
   .dp-bc .cur { color: #45506a; }
 
   /* title row */
-  .dp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
+  .dp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.8rem; }
   .dp-title { font-size: 2.2rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
 
   /* pill buttons */
   .dp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
+  .dp-btn-primary { background: #009FD9; color: #fff !important; border: 2px solid #5BC2EC; }
+  .dp-btn-primary:hover { background: #0080B5; border-color: #5BC2EC; color: #fff !important; }
   .dp-btn-ghost { background: #fff; color: #009FD9 !important; border: 1px solid #b3e3f5; }
   .dp-btn-ghost:hover { background: #f0fafe; border-color: #009FD9; color: #009FD9 !important; }
 
-  /* product card (single Configurador-step look) */
-  .dp-card { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.6rem 1.7rem; }
-  .dp-prod { display: flex; gap: 1.8rem; align-items: flex-start; }
-  .dp-prod-img { position: relative; flex: 0 0 280px; max-width: 280px; min-height: 210px; border: 1px solid #eef0f3; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
+  /* two-column body */
+  .dp-cols { display: flex; gap: 1.6rem; align-items: flex-start; }
+  .dp-left { flex: 1 1 auto; min-width: 0; }
+  .dp-right { flex: 0 0 400px; width: 400px; }
+  @media (max-width: 960px) { .dp-cols { flex-direction: column; } .dp-right { width: 100%; flex-basis: auto; } }
+
+  .dp-card { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.5rem 1.6rem; margin-bottom: 1.6rem; }
+
+  /* product block (image + characteristics) */
+  .dp-prod { display: flex; gap: 1.5rem; align-items: flex-start; }
+  .dp-prod-img { position: relative; flex: 0 0 230px; max-width: 230px; min-height: 170px; border: 1px solid #eef0f3; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
   .dp-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.28; }
   .dp-logo { position: relative; z-index: 1; max-width: 72%; max-height: 64%; object-fit: contain; mix-blend-mode: multiply; }
-  .dp-prod-ph { position: relative; z-index: 1; font-size: 2.6rem; color: #c2c8d2; }
+  .dp-prod-ph { position: relative; z-index: 1; font-size: 2.4rem; color: #c2c8d2; }
   .dp-prod-info { flex: 1 1 auto; min-width: 0; }
-  .dp-prod-title { font-size: 1.4rem; font-weight: 700; color: #15233b; margin: 0 0 1.3rem; text-transform: uppercase; letter-spacing: 0.01em; }
-  @media (max-width: 640px) { .dp-prod { flex-direction: column; } .dp-prod-img { flex-basis: auto; max-width: 100%; width: 100%; } }
+  .dp-prod-title { font-size: 1.3rem; font-weight: 700; color: #15233b; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.01em; }
+  @media (max-width: 560px) { .dp-prod { flex-direction: column; } .dp-prod-img { flex-basis: auto; max-width: 100%; width: 100%; } }
 
-  /* characteristics grid */
-  .dp-chars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 2rem; }
+  /* characteristics meta */
+  .dp-meta { margin: 0 0 0.85rem; }
   .dp-meta .k { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-  .dp-meta .v { color: #1f2a44; font-size: 1.05rem; font-weight: 600; margin-top: 0.18rem; word-break: break-word; }
-  .dp-meta.precio .v { color: #009FD9; font-weight: 800; font-size: 1.25rem; }
-  @media (max-width: 520px) { .dp-chars { grid-template-columns: 1fr; } }
+  .dp-meta .v { color: #1f2a44; font-size: 1rem; font-weight: 600; margin-top: 0.15rem; word-break: break-word; }
+
+  .dp-chars-title { font-size: 1.05rem; font-weight: 700; color: #15233b; margin: 0 0 1rem; }
+
+  .dp-desc-title { font-size: 1.05rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; }
+  .dp-desc { font-size: 0.93rem; color: #45506a; line-height: 1.6; }
+  .dp-desc p { margin: 0 0 0.7rem; }
+
+  /* config panel (right) */
+  .dp-cfg { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); overflow: hidden; }
+  .dp-cfg-head { padding: 1.1rem 1.5rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: #009FD9; }
+  .dp-cfg-lines { padding: 0.2rem 1.5rem; }
+  .dp-cfg-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1rem 0; border-bottom: 1px solid #f0f2f5; }
+  .dp-cfg-line:last-child { border-bottom: none; }
+  .dp-cfg-info { flex: 1 1 auto; min-width: 0; }
+  .dp-cfg-step { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #9aa3b2; }
+  .dp-cfg-name { font-size: 1.02rem; font-weight: 600; color: #1f2a44; margin-top: 0.12rem; word-break: break-word; }
+  .dp-cfg-price { flex: 0 0 auto; font-size: 1rem; font-weight: 700; color: #15233b; white-space: nowrap; }
+  .dp-cfg-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.5rem; background: #f6fbfe; border-top: 2px solid #15233b; }
+  .dp-cfg-total .t-lbl { font-size: 1rem; font-weight: 800; color: #15233b; text-transform: uppercase; letter-spacing: 0.04em; }
+  .dp-cfg-total .t-amt { font-size: 1.7rem; font-weight: 800; color: #009FD9; }
+
+  /* bottom action row */
+  .dp-actions { display: flex; justify-content: flex-end; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.4rem; }
 
   .dp-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
 </style>
 
 {% if s %}
 {% assign fab = s.wi_fabricante.name %}
+{% assign base = s.wi_productobase.name | default: s['pbf.wi_nombreproducto'] %}
+{% assign desc = s['pbf.wi_descripcion'] | default: s['fab.wi_descripcion'] %}
 
 <div class="dp-wrap">
   <nav class="dp-bc">
     <a href="/productos-en-stock">Productos en stock</a>
     <span class="sep">/</span>
-    <span class="cur">Detalle</span>
+    <span class="cur">Detalle del producto</span>
   </nav>
 
   <div class="dp-top">
-    <h1 class="dp-title">{{ s.wi_productobase.name | default: 'Detalle del producto' | escape }}</h1>
-    <a class="dp-btn dp-btn-ghost" href="/productos-en-stock">Volver</a>
+    <h1 class="dp-title">{{ base | default: 'Detalle del producto' | escape }}</h1>
   </div>
 
-  <div class="dp-card">
-    <div class="dp-prod">
-      <div class="dp-prod-img">
-        {% if fab and fab != '' %}
-        <img class="dp-bg" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20fondo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
-        <img class="dp-logo" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20logo.png" alt="{{ fab | escape }}" onerror="this.style.display='none';var ph=this.parentNode.querySelector('.dp-prod-ph');if(ph){ph.style.display='block';}" />
-        <span class="dp-prod-ph" aria-hidden="true" style="display:none;">&#9881;</span>
-        {% else %}
-        <span class="dp-prod-ph" aria-hidden="true">&#9881;</span>
-        {% endif %}
-      </div>
-      <div class="dp-prod-info">
-        <h2 class="dp-prod-title">{{ s.wi_productobase.name | default: 'Producto' | escape }}</h2>
-        <div class="dp-chars">
-          <div class="dp-meta">
-            <div class="k">Familia</div>
-            <div class="v">{{ s.wi_familia.name | default: s.wi_familia | default: '—' | escape }}</div>
+  <div class="dp-cols">
+    <div class="dp-left">
+      <div class="dp-card">
+        <div class="dp-prod">
+          <div class="dp-prod-img">
+            {% if fab and fab != '' %}
+            <img class="dp-bg" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20fondo.png" alt="" aria-hidden="true" onerror="this.style.display='none'" />
+            <img class="dp-logo" src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ fab | replace: ' ', '%20' }}/{{ fab | replace: ' ', '%20' }}%20logo.png" alt="{{ fab | escape }}" onerror="this.style.display='none';var ph=this.parentNode.querySelector('.dp-prod-ph');if(ph){ph.style.display='block';}" />
+            <span class="dp-prod-ph" aria-hidden="true" style="display:none;">&#9881;</span>
+            {% else %}
+            <span class="dp-prod-ph" aria-hidden="true">&#9881;</span>
+            {% endif %}
           </div>
-          <div class="dp-meta">
-            <div class="k">Nombre</div>
-            <div class="v">{{ s.wi_name | default: '—' | escape }}</div>
-          </div>
-          <div class="dp-meta">
-            <div class="k">Fabricante</div>
-            <div class="v">{{ s.wi_fabricante.name | default: '—' | escape }}</div>
-          </div>
-          <div class="dp-meta">
-            <div class="k">Almacén</div>
-            <div class="v">{{ s.wi_almacen.label | default: '—' | escape }}</div>
-          </div>
-          <div class="dp-meta precio">
-            <div class="k">Precio</div>
-            <div class="v dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+          <div class="dp-prod-info">
+            <h2 class="dp-prod-title">{{ base | default: 'Producto' | escape }}</h2>
+            <h3 class="dp-chars-title">Características</h3>
+            <div class="dp-meta">
+              <div class="k">Familia</div>
+              <div class="v">{{ s.wi_familia.name | default: s.wi_familia | default: '—' | escape }}</div>
+            </div>
+            <div class="dp-meta">
+              <div class="k">Nombre</div>
+              <div class="v">{{ s.wi_name | default: '—' | escape }}</div>
+            </div>
+            <div class="dp-meta">
+              <div class="k">Fabricante</div>
+              <div class="v">{{ s.wi_fabricante.name | default: '—' | escape }}</div>
+            </div>
+            <div class="dp-meta">
+              <div class="k">Almacén</div>
+              <div class="v">{{ s.wi_almacen.label | default: '—' | escape }}</div>
+            </div>
           </div>
         </div>
+        {% if desc and desc != '' %}
+        <div style="margin-top:1.4rem;border-top:1px solid #f0f2f5;padding-top:1.3rem;">
+          <h4 class="dp-desc-title">Descripción</h4>
+          <div class="dp-desc">{{ desc | escape | newline_to_br }}</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="dp-right">
+      <div class="dp-cfg">
+        <div class="dp-cfg-head">Resumen de la configuración del producto</div>
+        <div class="dp-cfg-lines">
+          <div class="dp-cfg-line">
+            <div class="dp-cfg-info">
+              <div class="dp-cfg-step">Producto</div>
+              <div class="dp-cfg-name">{{ base | default: 'Producto base' | escape }}</div>
+            </div>
+            <div class="dp-cfg-price dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</div>
+          </div>
+        </div>
+        <div class="dp-cfg-total">
+          <span class="t-lbl">Precio</span>
+          <span class="t-amt dp-precio" data-v="{{ s.wi_precio }}">{{ s.wi_precio }}</span>
+        </div>
+      </div>
+
+      <div class="dp-actions">
+        <a class="dp-btn dp-btn-ghost" href="/productos-en-stock">Atrás</a>
+        <a class="dp-btn dp-btn-primary" href="#" onclick="return false;">Solicitar stock</a>
       </div>
     </div>
   </div>
@@ -121,7 +188,7 @@
   <nav class="dp-bc">
     <a href="/productos-en-stock">Productos en stock</a>
     <span class="sep">/</span>
-    <span class="cur">Detalle</span>
+    <span class="cur">Detalle del producto</span>
   </nav>
   <div class="dp-notfound">No se ha encontrado el producto solicitado.</div>
 </div>
