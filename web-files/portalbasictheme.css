@@ -408,10 +408,14 @@ button[disabled] {
 
 .form-control {
   background-color: #FFFFFF !important;
-  color: #000000; }
+  color: #000000; 
+  box-shadow: 0 0 0 2px #f8f9fa;
+}
 
 input {
-  background-color: #FFFFFF; }
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px #f8f9fa;
+}
 
 .bootstrap-datetimepicker-widget {
   background-color: #FFFFFF; }
@@ -826,7 +830,7 @@ button, input, select, textarea, optgroup,
 /* ===== Standard button style (matches the Configurador buttons): rounded + Space Grotesk ===== */
 .btn-primary, .btn-default, .btn-secondary, .button1, .button2 {
   border-radius: 10px !important;
-  border-width: 1px !important;
+  border-width: 2px !important;
   border-style: solid !important;
   font-weight: 700 !important;
   padding: 0.6rem 1.4rem !important;
@@ -835,13 +839,13 @@ button, input, select, textarea, optgroup,
 /* Primary (filled blue) */
 .btn-primary, .button1 {
   background-color: #009FD9 !important;
-  border-color: #009FD9 !important;
+  border-color: #5BC2EC !important;
   color: #ffffff !important;
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
 .button1:hover, .button1:focus, .button1:active, .button1.active {
   background-color: #0080B5 !important;
-  border-color: #0080B5 !important;
+  border-color: #5BC2EC !important;
   color: #ffffff !important;
 }
 /* Secondary / ghost (white, blue text, light-blue border) */
