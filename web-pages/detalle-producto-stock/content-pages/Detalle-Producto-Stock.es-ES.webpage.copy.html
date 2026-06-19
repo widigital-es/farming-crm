@@ -91,12 +91,12 @@
   .dp-cfg-total .t-amt { font-size: 1.7rem; font-weight: 800; color: #009FD9; }
 
   /* bottom action row */
-  .dp-actions { display: flex; justify-content: flex-end; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .dp-actions { display: flex; justify-content: flex-end; gap: 0.8rem; flex-wrap: wrap; margin-top: 40px; }
 
   .dp-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
 
   /* status message under the config panel */
-  .dp-status { margin: 0 0 0.9rem; padding: 0.8rem 1rem; border-radius: 10px; font-size: 0.92rem; font-weight: 600; line-height: 1.4; }
+  .dp-status { margin: 40px 0 40px; padding: 0.8rem 1rem; border-radius: 10px; font-size: 0.92rem; font-weight: 600; line-height: 1.4; }
   .dp-status.ok { background: #e8f8ef; color: #1c7a47; border: 1px solid #b7e6cb; }
   .dp-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
   .dp-status:not(.ok):not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
@@ -203,19 +203,15 @@
       <div id="dpStatus" class="dp-status" style="display:none;"></div>
       <div class="dp-actions">
         <a class="dp-btn dp-btn-ghost" href="/productos-en-stock">Atrás</a>
-        <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary">Solicitar stock</button>
+        <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary"
+                data-stock-id="{{ s.wi_stockid }}"
+                data-precio="{{ s.wi_precio }}"
+                data-cuenta="{{ user.parentcustomerid.id }}"
+                data-contacto="{{ user.id }}">Solicitar stock</button>
       </div>
     </div>
   </div>
 </div>
-
-{% comment %} Stamped values consumed by the page custom JS (Solicitar stock). {% endcomment %}
-<script>
-  var CUENTA_ID = '{{ user.parentcustomerid.id }}';
-  var CONTACTO_ID = '{{ user.id }}';
-  var STOCK_ID = '{{ s.wi_stockid }}';
-  var STOCK_PRECIO = '{{ s.wi_precio }}';
-</script>
 
 {% else %}
 <div class="dp-wrap">

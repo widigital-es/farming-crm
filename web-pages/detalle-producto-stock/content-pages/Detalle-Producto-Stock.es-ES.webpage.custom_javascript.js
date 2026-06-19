@@ -9,11 +9,12 @@
   // Estado de la solicitud de stock: first / "nueva"-like value = 101 (Solicitud de Stock).
   var ESTADO_NUEVA = 101;
 
-  // Stamped by the page copy (empty if anonymous / missing).
-  var cuentaId = (typeof CUENTA_ID !== 'undefined') ? CUENTA_ID : '';
-  var contactoId = (typeof CONTACTO_ID !== 'undefined') ? CONTACTO_ID : '';
-  var stockId = (typeof STOCK_ID !== 'undefined') ? STOCK_ID : '';
-  var stockPrecioRaw = (typeof STOCK_PRECIO !== 'undefined') ? STOCK_PRECIO : '';
+  // Liquid-stamped values are read from the #dpSolicitar button's data-* attributes
+  // (set in dpInit), so they work for portal users — inline page-copy <script> does not run.
+  var cuentaId = '';
+  var contactoId = '';
+  var stockId = '';
+  var stockPrecioRaw = '';
 
   function fmtEur(v) {
     var n = parseFloat(v);
@@ -103,7 +104,14 @@
       el.textContent = fmtEur(el.getAttribute('data-v'));
     });
     var btn = document.getElementById('dpSolicitar');
-    if (btn) btn.addEventListener('click', solicitarStock);
+    if (btn) {
+      // Read the Liquid-stamped values from the button's data-* attributes.
+      cuentaId = btn.getAttribute('data-cuenta') || '';
+      contactoId = btn.getAttribute('data-contacto') || '';
+      stockId = btn.getAttribute('data-stock-id') || '';
+      stockPrecioRaw = btn.getAttribute('data-precio') || '';
+      btn.addEventListener('click', solicitarStock);
+    }
   }
 
   if (document.readyState !== 'loading') { dpInit(); }
