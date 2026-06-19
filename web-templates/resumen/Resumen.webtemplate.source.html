@@ -5,6 +5,9 @@
     {% include 'Configurador Stepper' current: 'resumen' %}
 
     <div class="rsm-wrap">
+      <div class="rsm-back-row">
+        <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
+      </div>
       <h2 class="cfg-h2">Resumen del pedido</h2>
       <p class="rsm-sub">Revisa tu configuración antes de confirmar el pedido.</p>
       <div id="cfgStatus" class="cfg-status" style="display:none;"></div>
@@ -25,9 +28,8 @@
       </div>
 
       <div class="rsm-actions">
-        <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
-        <button type="button" id="rsmPresupuesto" class="rsm-cta rsm-cta-alt" onclick="crearPresupuesto()">Crear Presupuesto</button>
-        <button type="button" id="rsmCrear" class="rsm-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
+        <button type="button" id="rsmPresupuesto" class="cfg-btn cfg-btn-ghost rsm-ghost-cta" onclick="crearPresupuesto()">Crear Presupuesto</button>
+        <button type="button" id="rsmCrear" class="cfg-btn cfg-btn-ghost rsm-ghost-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
         <button type="button" id="rsmNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
       </div>
     </div>
@@ -60,18 +62,15 @@
   }
   .rsm-comment-box:focus { outline: none; border-color: #2aa9e0; box-shadow: 0 0 0 3px rgba(42,169,224,0.15); }
 
+  /* ---- back button (top, above title) ---- */
+  .rsm-back-row { margin-bottom: 1rem; }
+
   /* ---- actions ---- */
   .rsm-actions { display: flex; gap: 0.9rem; align-items: center; margin-top: 1.6rem; flex-wrap: wrap; }
-  .rsm-cta {
-    flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    padding: 1rem 1.6rem; border: none; border-radius: 12px; background: #2aa9e0; color: #fff;
-    font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(42,169,224,0.4);
-    transition: background 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
-  }
-  .rsm-cta:hover:not(:disabled) { background: #1f93c7; transform: translateY(-2px); }
-  .rsm-cta:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
-  .rsm-cta-alt { background: #fff; color: #2aa9e0; border: 2px solid #2aa9e0; box-shadow: none; }
-  .rsm-cta-alt:hover:not(:disabled) { background: #f0faff; transform: translateY(-2px); }
+  /* Bottom CTAs share the Atrás ghost look (.cfg-btn-ghost) but keep the larger
+     action-row sizing so they fill the row like the previous CTAs. */
+  .rsm-ghost-cta { flex: 1 1 auto; justify-content: center; padding: 1rem 1.6rem; font-size: 1.1rem; }
+  .rsm-ghost-cta:disabled { opacity: 0.5; cursor: not-allowed; }
   .rsm-empty { color: #9aa3b2; font-size: 1rem; padding: 2rem 1.6rem; text-align: center; }
 </style>
 
