@@ -15,6 +15,7 @@
     <attribute name="wi_preciolineitems" />
     <attribute name="wi_comentarios" />
     <attribute name="createdon" />
+    <attribute name="modifiedon" />
     {% if oid %}
     <filter type="and">
       <condition attribute="wi_oportunidadfarmingid" operator="eq" value="{{ oid | xml_escape }}" />
@@ -152,39 +153,6 @@
   .do-cfg-empty { color: #9aa3b2; font-size: 0.95rem; padding: 1.6rem 1.5rem; text-align: center; }
 
   .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
-
-  /* ---- Información de sistema: keep only the system-info section + Enviar ---- */
-  /* The 'Detalle Oportunidad Portal' entityform (entity wi_oportunidadfarming) renders one
-     tab "Datos" with 4 sections: General, COMENTARIOS, CONFIGURACIÓN DE PRODUCTO (subgrid)
-     and INFORMACIÓN DE SISTEMA. We render our own summary above and hide the first three
-     sections, leaving only INFORMACIÓN DE SISTEMA (createdby/createdon/modifiedby/modifiedon)
-     and the Enviar submit button, exactly as they render today. */
-  #do-sysform table.section { display: none; }
-  /* reveal only the system-info section. "null_section_3" is its name in the
-     form definition; the :has() rules are resilient fallbacks in case the
-     auto-generated data-name differs at render time. */
-  #do-sysform table.section[data-name="null_section_3"],
-  #do-sysform table.section:has(#createdon),
-  #do-sysform table.section:has([id="modifiedon"]),
-  #do-sysform table.section:has(td[data-name="createdon"]) { display: table !important; }
-  /* Hide every section/tab TITLE rendered by the entityform. The hidden
-     sections (General, COMENTARIOS, CONFIGURACIÓN DE PRODUCTO) and the tab
-     each render their heading in an element ABOVE the field tables — these are
-     what showed as the stray empty "Información de sistema", "COMENTARIOS" and
-     "CONFIGURACIÓN DE PRODUCTO" labels. The visible "Información de sistema"
-     heading is supplied by our own .do-sysheading above, so we hide ALL of the
-     form's own titles (including the system-info section's caption) to avoid a
-     duplicate, keeping only the fields + Enviar button. */
-  #do-sysform .tab-title,
-  #do-sysform .tab-subtitle,
-  #do-sysform .section-title,
-  #do-sysform table.section > caption,
-  #do-sysform table.section > thead,
-  #do-sysform table.section > tbody > tr > td.section-title { display: none !important; }
-  /* spacing below the Enviar button so it is not flush with the footer */
-  #do-sysform .crmEntityFormView .actions { margin-bottom: 3rem; }
-  /* a heading above the system-info form */
-  .do-sysheading { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 2.4rem 0 1rem; }
 </style>
 
 {% if o %}
@@ -223,7 +191,7 @@
       <div class="lbl">Producto</div>
     </div>
     <div class="col">
-      <div class="val">{{ o.createdon | date: 'dd/MM/yyyy' }}</div>
+      <div class="val">{{ o.modifiedon | date: 'dd/MM/yyyy' }}</div>
       <div class="lbl">Fecha de pedido</div>
     </div>
     <div class="col">
@@ -236,7 +204,10 @@
     <h2 class="do-sectitle">Detalle del pedido</h2>
     <div class="do-secactions">
       <a class="do-btn do-btn-ghost" href="/Oportunidades">Cancelar</a>
-      <a class="do-btn do-btn-primary" href="/cpq">Editar oportunidad</a>
+      {% comment %} Editar only for Presupuesto / Borrador (wi_fase == 1). {% endcomment %}
+      {% if o.wi_fase.value == 1 %}
+      <a class="do-btn do-btn-primary" href="/cpq?edit={{ o.wi_oportunidadfarmingid }}">Editar oportunidad</a>
+      {% endif %}
     </div>
   </div>
 
@@ -316,11 +287,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <h2 class="do-sysheading">Información de sistema</h2>
-  <div id="do-sysform">
-    {% entityform name: 'Detalle Oportunidad Portal' %}
   </div>
 </div>
 
