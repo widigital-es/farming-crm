@@ -34,6 +34,99 @@
   function setOpcionales(arr) { var s = get(); s.opcionales = arr; save(s); }
   function clearAll() { sessionStorage.removeItem(KEY); document.dispatchEvent(new Event('cfg:changed')); }
 
+  // ---- EDIT MODE -----------------------------------------------------------
+  // When the user clicks "Editar oportunidad" on a Borrador (wi_fase==1) opp,
+  // we arrive with ?edit=<oppId>. We fetch the opp + its line items and rebuild
+  // the CFG state so Resumen reflects the existing setup, and stash the opp id
+  // (inside the state, under __editId) so the save handlers PATCH that opp
+  // instead of POSTing a new one. clear()/nuevoPedido() wipes __editId too.
+  function editId() { var s = get(); return s.__editId || null; }
+  function setEditId(id) { var s = get(); if (id) { s.__editId = id; } else { delete s.__editId; } save(s); }
+
+  // Parse a line item's wi_nivel ("Nivel N | label" / "Opcional | label").
+  function parseNivel(raw) {
+    if (!raw) return null;
+    var i = raw.indexOf('|');
+    var head = (i > -1 ? raw.substring(0, i) : raw).trim().toLowerCase();
+    var label = (i > -1 ? raw.substring(i + 1) : '').trim();
+    var key = null;
+    if (head.indexOf('nivel 1') === 0 || head === 'n1') key = 'n1';
+    else if (head.indexOf('nivel 2') === 0 || head === 'n2') key = 'n2';
+    else if (head.indexOf('nivel 3') === 0 || head === 'n3') key = 'n3';
+    else if (head.indexOf('nivel 4') === 0 || head === 'n4') key = 'n4';
+    else if (head.indexOf('opcional') === 0) key = 'opcional';
+    return key ? { key: key, label: label } : null;
+  }
+
+  function apiGet(url) {
+    return fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'OData-MaxVersion': '4.0', 'OData-Version': '4.0' }
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + txt);
+        return txt ? JSON.parse(txt) : {};
+      });
+    });
+  }
+
+  // Fetch the opportunity + its line items and rebuild CFG state. Returns a
+  // promise. Reconstructs: productobase (id from wi_productobasef, price from
+  // wi_precioproductobase, label from related model), n1-n4 + opcionales
+  // ({label, price} parsed from each line item's wi_nivel; the original option
+  // record ids are NOT stored on the opp/lines, so they cannot be restored —
+  // the stepper pages won't re-check, but Resumen + the save reconcile only
+  // need {label, price}). Also restores wi_comentarios and the model name.
+  function loadEdit(oppId) {
+    if (!oppId) return Promise.resolve(null);
+    var base = '/_api/wi_oportunidadfarmings(' + oppId + ')';
+    var oppUrl = base + '?$select=wi_oportunidadfarmingid,wi_precioproductobase,wi_comentarios,wi_fase' +
+                 '&$expand=wi_ProductoBaseF($select=wi_productobasefarmingid,wi_nombreproducto,wi_pvp)';
+    var linesUrl = '/_api/wi_productlineitemses?$select=wi_nivel,wi_precio' +
+                   '&$filter=_wi_oportunidad_value eq ' + oppId + '&$orderby=wi_nivel';
+    return Promise.all([apiGet(oppUrl), apiGet(linesUrl)]).then(function (r) {
+      var opp = r[0] || {}, lines = (r[1] && r[1].value) || [];
+      var s = {};
+      var pbf = opp.wi_ProductoBaseF;
+      if (pbf) {
+        s.productobase = {
+          id: pbf.wi_productobasefarmingid,
+          label: pbf.wi_nombreproducto || '',
+          price: Number(opp.wi_precioproductobase != null ? opp.wi_precioproductobase : (pbf.wi_pvp || 0))
+        };
+      } else if (opp.wi_precioproductobase != null) {
+        // model lookup empty but a base price exists — keep the price so totals match
+        s.productobase = { id: '', label: '', price: Number(opp.wi_precioproductobase) };
+      }
+      var opc = [];
+      lines.forEach(function (ln) {
+        var p = parseNivel(ln.wi_nivel);
+        if (!p) return;
+        var price = Number(ln.wi_precio || 0);
+        if (p.key === 'opcional') { opc.push({ id: '', label: p.label, price: price }); }
+        else { s[p.key] = { id: '', label: p.label, price: price }; }
+      });
+      if (opc.length) s.opcionales = opc;
+      s.__editId = oppId;
+      if (opp.wi_comentarios) s.__comentarios = opp.wi_comentarios;
+      save(s);
+      return s;
+    });
+  }
+
+  // On any configurador page, if ?edit=<id> is present and we haven't loaded
+  // that opp yet, fetch + rebuild before the page renders. Dispatches
+  // cfg:changed when done so Resumen (and the stepper) re-render.
+  function bootstrapEdit() {
+    var m = location.search.match(/[?&]edit=([^&]+)/);
+    if (!m) return;
+    var oppId = decodeURIComponent(m[1]).replace(/[{}]/g, '');
+    if (editId() === oppId) return; // already loaded this opp into state
+    loadEdit(oppId).catch(function (e) {
+      try { console.error('Configurador edit load failed:', e); } catch (x) {}
+    });
+  }
+
   function priceOf(v) { return v && v.price ? Number(v.price) : 0; }
   function total() {
     var s = get(), t = 0;
@@ -61,8 +154,12 @@
   window.CFG = {
     STEPS: STEPS, LABEL: LABEL, PAGE: PAGE,
     get: get, setStep: setStep, setOpcionales: setOpcionales, clear: clearAll,
-    total: total, fmt: fmt, urlFor: urlFor, priceOf: priceOf
+    total: total, fmt: fmt, urlFor: urlFor, priceOf: priceOf,
+    editId: editId, setEditId: setEditId, loadEdit: loadEdit
   };
+
+  // Pre-load existing opportunity state when arriving via ?edit=<oppId>.
+  bootstrapEdit();
 })();
 </script>
 

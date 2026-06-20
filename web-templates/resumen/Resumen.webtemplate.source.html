@@ -124,8 +124,27 @@
     }
     box.innerHTML = any ? html : '<div class="rsm-empty">Aún no has seleccionado nada. Vuelve al configurador.</div>';
     document.getElementById('rsmTotal').textContent = window.CFG.fmt(window.CFG.total());
-    // enable actions only when a model is chosen
-    setBusy(!(s.productobase && s.productobase.id));
+
+    var isEdit = !!(window.CFG.editId && window.CFG.editId());
+    // enable actions when a model is chosen, OR always in edit mode (the opp
+    // already exists; allow re-saving even if the model lookup wasn't restored)
+    setBusy(!isEdit && !(s.productobase && s.productobase.id));
+
+    // Edit-mode UI: reflect that we are editing an existing opportunity and
+    // relabel the primary action. Pre-fill the comment box from the opp once.
+    if (isEdit) {
+      var sub = document.querySelector('.rsm-sub');
+      if (sub) sub.textContent = 'Editando una oportunidad existente. Los cambios actualizarán el mismo pedido.';
+      var crearBtn = document.getElementById('rsmCrear');
+      if (crearBtn) crearBtn.textContent = 'Solicitar Pedido';
+      var presupBtn = document.getElementById('rsmPresupuesto');
+      if (presupBtn) presupBtn.textContent = 'Guardar Borrador';
+      var ta = document.getElementById('rsmComentario');
+      if (ta && !ta.dataset.prefilled && s.__comentarios) {
+        ta.value = s.__comentarios;
+        ta.dataset.prefilled = '1';
+      }
+    }
   }
 
   function nuevoPedido() {
@@ -163,58 +182,158 @@
     });
   }
 
-  // Shared creation logic. `fase` sets the wi_fase choice value on the opportunity.
+  function apiPatch(set, id, payload, token) {
+    return fetch('/_api/' + set + '(' + id + ')', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json', 'Accept': 'application/json',
+        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        '__RequestVerificationToken': token || ''
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' (PATCH) en ' + set + ': ' + txt);
+        return txt ? JSON.parse(txt) : {};
+      });
+    });
+  }
+
+  function apiDelete(set, id, token) {
+    return fetch('/_api/' + set + '(' + id + ')', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json', 'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        '__RequestVerificationToken': token || ''
+      }
+    }).then(function (res) {
+      if (!res.ok && res.status !== 204) {
+        return res.text().then(function (txt) { throw new Error('HTTP ' + res.status + ' (DELETE) en ' + set + ': ' + txt); });
+      }
+    });
+  }
+
+  function apiGet(url) {
+    return fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'OData-MaxVersion': '4.0', 'OData-Version': '4.0' }
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' (GET): ' + txt);
+        return txt ? JSON.parse(txt) : {};
+      });
+    });
+  }
+
+  // Build the [{ nivel, precio }] line-item set from the current CFG state.
+  function buildLines(s) {
+    var lines = [];
+    [['n1', 'Nivel 1'], ['n2', 'Nivel 2'], ['n3', 'Nivel 3'], ['n4', 'Nivel 4']].forEach(function (p) {
+      var v = s[p[0]];
+      if (v) lines.push({ nivel: p[1] + ' | ' + v.label, precio: Number(v.price || 0) });
+    });
+    (s.opcionales || []).forEach(function (o) {
+      lines.push({ nivel: 'Opcional | ' + o.label, precio: Number(o.price || 0) });
+    });
+    return lines;
+  }
+
+  // Create chained line items under an opportunity reference.
+  function createLines(lines, oppRef, token) {
+    var chain = Promise.resolve();
+    lines.forEach(function (ln) {
+      chain = chain.then(function () {
+        return apiCreate(SET_LINE, {
+          'wi_Oportunidad@odata.bind': oppRef, 'wi_nivel': ln.nivel, 'wi_precio': ln.precio
+        }, token);
+      });
+    });
+    return chain;
+  }
+
+  // CREATE path: POST a new opportunity + its line items.
+  function crearNueva(fase, s, comentario, token) {
+    showStatus('Creando oportunidad...');
+    var oppPayload = {
+      'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
+      'wi_fase': fase
+    };
+    if (comentario) oppPayload.wi_comentarios = comentario;
+    if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
+    if (CONTACTO_ID) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
+    return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
+      var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
+      if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
+      showStatus('Oportunidad creada. Creando líneas...');
+      var lines = buildLines(s);
+      return createLines(lines, '/' + SET_OPP + '(' + oppId + ')', token).then(function () { return lines.length; });
+    });
+  }
+
+  // EDIT path: PATCH the existing opportunity, then reconcile its line items
+  // (delete the current set, create the new one). No new opportunity is made.
+  function actualizarExistente(fase, s, comentario, token, oppId) {
+    showStatus('Actualizando oportunidad...');
+    // Mirror the create payload exactly (the create path does NOT set
+    // wi_precioproductobase / wi_preciofinal / wi_preciolineitems — those are
+    // populated server-side from wi_ProductoBaseF + the line items — so we
+    // don't set them here either, to avoid clobbering that recalculation).
+    var oppPayload = { 'wi_fase': fase };
+    if (s.productobase && s.productobase.id) {
+      oppPayload['wi_ProductoBaseF@odata.bind'] = '/' + SET_PBF + '(' + s.productobase.id + ')';
+    }
+    oppPayload.wi_comentarios = comentario || null;
+    return apiPatch(SET_OPP, oppId, oppPayload, token).then(function () {
+      showStatus('Oportunidad actualizada. Reconciliando líneas...');
+      // Fetch the opp's current line items so we can delete them before re-creating.
+      var url = '/_api/' + SET_LINE + '?$select=wi_productlineitemsid&$filter=_wi_oportunidad_value eq ' + oppId;
+      return apiGet(url);
+    }).then(function (data) {
+      var existing = (data && data.value) || [];
+      var chain = Promise.resolve();
+      existing.forEach(function (row) {
+        chain = chain.then(function () { return apiDelete(SET_LINE, row.wi_productlineitemsid, token); });
+      });
+      return chain;
+    }).then(function () {
+      var lines = buildLines(s);
+      return createLines(lines, '/' + SET_OPP + '(' + oppId + ')', token).then(function () { return lines.length; });
+    });
+  }
+
+  // Shared save logic. `fase` sets the wi_fase choice value on the opportunity.
+  // In edit mode (CFG.editId() set) we PATCH+reconcile instead of POSTing new.
   function crear(fase) {
     var s = window.CFG.get();
-    if (!s.productobase || !s.productobase.id) {
+    var oppId = window.CFG.editId ? window.CFG.editId() : null;
+    var isEdit = !!oppId;
+    if (!isEdit && (!s.productobase || !s.productobase.id)) {
       showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
       return;
     }
-    if (!confirm('¿Crear la oportunidad y las líneas del pedido?')) return;
+    var confirmMsg = isEdit
+      ? '¿Actualizar esta oportunidad y sus líneas?'
+      : '¿Crear la oportunidad y las líneas del pedido?';
+    if (!confirm(confirmMsg)) return;
 
     setBusy(true);
-    showStatus('Creando oportunidad...');
     var comentario = (document.getElementById('rsmComentario').value || '').trim();
 
     getToken().then(function (token) {
-      var oppPayload = {
-        'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
-        'wi_fase': fase
-      };
-      if (comentario) oppPayload.wi_comentarios = comentario;
-      if (CUENTA_ID) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
-      if (CONTACTO_ID) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
-      return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
-        var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
-        if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
-        showStatus('Oportunidad creada. Creando líneas...');
-
-        var ref = '/' + SET_OPP + '(' + oppId + ')';
-        var lines = [];
-        [['n1', 'Nivel 1'], ['n2', 'Nivel 2'], ['n3', 'Nivel 3'], ['n4', 'Nivel 4']].forEach(function (p) {
-          var v = s[p[0]];
-          if (v) lines.push({ nivel: p[1] + ' | ' + v.label, precio: Number(v.price || 0) });
-        });
-        (s.opcionales || []).forEach(function (o) {
-          lines.push({ nivel: 'Opcional | ' + o.label, precio: Number(o.price || 0) });
-        });
-
-        var chain = Promise.resolve();
-        lines.forEach(function (ln) {
-          chain = chain.then(function () {
-            return apiCreate(SET_LINE, {
-              'wi_Oportunidad@odata.bind': ref, 'wi_nivel': ln.nivel, 'wi_precio': ln.precio
-            }, token);
-          });
-        });
-        return chain.then(function () { return lines.length; });
-      });
+      return isEdit
+        ? actualizarExistente(fase, s, comentario, token, oppId)
+        : crearNueva(fase, s, comentario, token);
     }).then(function (count) {
-      showStatus('✅ Oportunidad y ' + count + ' líneas creadas correctamente.', 'ok');
-      // hide both create buttons to avoid double-submit; offer a fresh start
+      var msg = isEdit
+        ? '✅ Oportunidad actualizada con ' + count + ' líneas.'
+        : '✅ Oportunidad y ' + count + ' líneas creadas correctamente.';
+      showStatus(msg, 'ok');
+      // hide both action buttons to avoid double-submit; offer a fresh start
       document.getElementById('rsmCrear').style.display = 'none';
       document.getElementById('rsmPresupuesto').style.display = 'none';
       document.getElementById('rsmNuevo').style.display = 'inline-flex';
+      // Edit done: clear the edit flag so a later "Nuevo pedido" starts clean.
+      if (isEdit && window.CFG.setEditId) window.CFG.setEditId(null);
     }).catch(function (err) {
       showStatus('❌ ' + err.message, 'err');
       setBusy(false);

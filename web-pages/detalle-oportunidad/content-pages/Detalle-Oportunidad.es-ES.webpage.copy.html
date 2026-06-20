@@ -204,9 +204,10 @@
     <h2 class="do-sectitle">Detalle del pedido</h2>
     <div class="do-secactions">
       <a class="do-btn do-btn-ghost" href="/Oportunidades">Cancelar</a>
-      {% comment %} Editar only for Presupuesto / Borrador (wi_fase == 1). {% endcomment %}
+      {% comment %} Editar only for Presupuesto / Borrador (wi_fase == 1). Lands on the
+         Resumen step with the existing config pre-loaded (see Configurador Core edit mode). {% endcomment %}
       {% if o.wi_fase.value == 1 %}
-      <a class="do-btn do-btn-primary" href="/cpq?edit={{ o.wi_oportunidadfarmingid }}">Editar oportunidad</a>
+      <a class="do-btn do-btn-primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar oportunidad</a>
       {% endif %}
     </div>
   </div>

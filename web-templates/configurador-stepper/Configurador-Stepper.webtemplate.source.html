@@ -12,11 +12,17 @@
 <script>
 (function () {
   if (!window.CFG) return;
-  document.querySelectorAll('.cfg-steps .cfg-step').forEach(function (el) {
-    if (el.classList.contains('is-current')) return;
-    var url = window.CFG.urlFor(el.getAttribute('data-step'));
-    if (url) { el.setAttribute('href', url); }
-    else { el.classList.add('is-disabled'); }
-  });
+  function wire() {
+    document.querySelectorAll('.cfg-steps .cfg-step').forEach(function (el) {
+      if (el.classList.contains('is-current')) return;
+      var url = window.CFG.urlFor(el.getAttribute('data-step'));
+      if (url) { el.setAttribute('href', url); el.classList.remove('is-disabled'); }
+      else { el.classList.add('is-disabled'); }
+    });
+  }
+  wire();
+  // Re-wire when state changes (e.g. after async edit-mode pre-load) so the
+  // reachable steps light up once the configuration is restored.
+  document.addEventListener('cfg:changed', wire);
 })();
 </script>
