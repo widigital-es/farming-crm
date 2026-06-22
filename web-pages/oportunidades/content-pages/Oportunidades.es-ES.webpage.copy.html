@@ -25,6 +25,7 @@
     <attribute name="createdon" />
     <order attribute="createdon" descending="true" />
     <link-entity name="wi_stock" from="wi_stockid" to="wi_productostock" link-type="outer" alias="stk">
+      <attribute name="wi_stockid" />
       <attribute name="wi_name" />
       <link-entity name="wi_productobasefarming" from="wi_productobasefarmingid" to="wi_productobase" link-type="outer" alias="pbf">
         <attribute name="wi_nombreproducto" />
@@ -180,11 +181,15 @@
     {% if solicitudes.results.entities.size > 0 %}
     <div class="pp-list" id="solList">
       {% for r in solicitudes.results.entities %}
-      {% assign prod = r['stk.wi_name'] | default: r['pbf.wi_nombreproducto'] %}
+      {% assign prod = r['pbf.wi_nombreproducto'] | default: r['stk.wi_name'] %}
       <div class="pp-card"
            data-search="{{ r.wi_idpedido | escape }} {{ r.wi_estadodelasolicitud.label | escape }} {{ prod | escape }}">
         <div class="pp-col pp-col-id">
           <div class="pp-code">{{ r.wi_idpedido | default: '—' | escape }}</div>
+          {% assign stockid = r['stk.wi_stockid'] %}
+          {% if stockid and stockid != '' %}
+          <a class="pp-detalle" href="/detalle-producto-stock?id={{ stockid }}">Ver detalle</a>
+          {% endif %}
         </div>
         <div class="pp-col">
           <div class="pp-val">{{ prod | default: '—' | escape }}</div>
