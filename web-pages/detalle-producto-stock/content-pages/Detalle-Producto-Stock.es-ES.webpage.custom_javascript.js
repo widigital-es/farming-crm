@@ -63,9 +63,43 @@
     });
   }
 
+  // ---- confirmation modal helpers ----
+  var lastFocused = null;
+
+  function openModal() {
+    var overlay = document.getElementById('dpModal');
+    if (!overlay) { runCreate(); return; } // fallback if markup missing
+    lastFocused = document.activeElement;
+    overlay.classList.remove('dp-hidden');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.addEventListener('keydown', onModalKeydown);
+    var card = overlay.querySelector('.dp-modal');
+    if (card) card.focus();
+  }
+
+  function closeModal() {
+    var overlay = document.getElementById('dpModal');
+    if (!overlay) return;
+    overlay.classList.add('dp-hidden');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onModalKeydown);
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  function onModalKeydown(e) {
+    if (e.key === 'Escape' || e.keyCode === 27) { closeModal(); }
+  }
+
+  // Opens the custom confirmation modal instead of the native confirm().
   function solicitarStock() {
     if (!stockId) { showStatus('No se ha podido identificar el producto en stock.', 'err'); return; }
-    if (!confirm('¿Solicitar este producto en stock?')) return;
+    openModal();
+  }
+
+  // Runs the existing create logic (unchanged payloads/endpoints/redirect).
+  function runCreate() {
+    closeModal();
+    if (!stockId) { showStatus('No se ha podido identificar el producto en stock.', 'err'); return; }
 
     var btn = document.getElementById('dpSolicitar');
     if (btn) btn.disabled = true;
@@ -111,6 +145,19 @@
       stockId = btn.getAttribute('data-stock-id') || '';
       stockPrecioRaw = btn.getAttribute('data-precio') || '';
       btn.addEventListener('click', solicitarStock);
+    }
+
+    // Wire the custom confirmation modal.
+    var confirmBtn = document.getElementById('dpModalConfirm');
+    if (confirmBtn) confirmBtn.addEventListener('click', runCreate);
+    var cancelBtn = document.getElementById('dpModalCancel');
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    var overlay = document.getElementById('dpModal');
+    if (overlay) {
+      // Backdrop click (outside the card) cancels.
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+      });
     }
   }
 

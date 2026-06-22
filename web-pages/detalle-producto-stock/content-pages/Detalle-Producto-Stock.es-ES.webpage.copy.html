@@ -101,6 +101,15 @@
   .dp-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
   .dp-status:not(.ok):not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
   .dp-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* confirmation modal */
+  .dp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+  .dp-modal-overlay.dp-hidden { display: none; }
+  .dp-modal { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,35,59,0.28); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; animation: dpModalIn 0.18s ease-out; }
+  @keyframes dpModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .dp-modal-title { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+  .dp-modal-body { font-size: 0.95rem; color: #45506a; line-height: 1.5; margin: 0 0 1.5rem; }
+  .dp-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
 </style>
 
 {% if s %}
@@ -209,6 +218,17 @@
                 data-cuenta="{{ user.parentcustomerid.id }}"
                 data-contacto="{{ user.id }}">Solicitar stock</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="dpModal" class="dp-modal-overlay dp-hidden" role="dialog" aria-modal="true" aria-labelledby="dpModalTitle" aria-hidden="true">
+  <div class="dp-modal" tabindex="-1">
+    <h3 id="dpModalTitle" class="dp-modal-title">¿Solicitar este producto en stock?</h3>
+    <p class="dp-modal-body">Se creará una oportunidad y una solicitud de pedido de stock para este producto.</p>
+    <div class="dp-modal-actions">
+      <button type="button" id="dpModalCancel" class="dp-btn dp-btn-ghost">Cancelar</button>
+      <button type="button" id="dpModalConfirm" class="dp-btn dp-btn-primary">Solicitar</button>
     </div>
   </div>
 </div>
