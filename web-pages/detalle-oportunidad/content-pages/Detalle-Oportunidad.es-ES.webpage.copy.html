@@ -153,6 +153,19 @@
   .do-cfg-empty { color: #9aa3b2; font-size: 0.95rem; padding: 1.6rem 1.5rem; text-align: center; }
 
   .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
+
+  /* confirmation modal (mirrors the stock page pattern) */
+  .do-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+  .do-modal-overlay.do-hidden { display: none; }
+  .do-modal { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,35,59,0.28); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; animation: doModalIn 0.18s ease-out; }
+  @keyframes doModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .do-modal-title { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+  .do-modal-body { font-size: 0.95rem; color: #45506a; line-height: 1.5; margin: 0 0 1.5rem; }
+  .do-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
+  .do-modal-status { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
+  .do-modal-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
+  .do-modal-status:not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
+  .do-btn-primary:disabled, .do-btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 
 {% if o %}
@@ -203,10 +216,13 @@
   <div class="do-secrow">
     <h2 class="do-sectitle">Detalle del pedido</h2>
     <div class="do-secactions">
-      <a class="do-btn do-btn-ghost" href="/Oportunidades">Cancelar</a>
-      {% comment %} Editar only for Presupuesto / Borrador (wi_fase == 1). Lands on the
-         Resumen step with the existing config pre-loaded (see Configurador Core edit mode). {% endcomment %}
+      {% comment %} Eliminar Borrador + Editar only for Presupuesto / Borrador (wi_fase == 1).
+         "Eliminar Borrador" opens a confirmation modal that PATCHes wi_fase to
+         "Rechazado cliente" (= 6) — a status change, NOT a record delete.
+         Editar lands on the Resumen step with the existing config pre-loaded. {% endcomment %}
       {% if o.wi_fase.value == 1 %}
+      <button type="button" id="doEliminar" class="do-btn do-btn-ghost"
+              data-opp-id="{{ o.wi_oportunidadfarmingid }}">Eliminar Borrador</button>
       <a class="do-btn do-btn-primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar oportunidad</a>
       {% endif %}
     </div>
@@ -290,6 +306,20 @@
     </div>
   </div>
 </div>
+
+{% if o.wi_fase.value == 1 %}
+<div id="doModal" class="do-modal-overlay do-hidden" role="dialog" aria-modal="true" aria-labelledby="doModalTitle" aria-hidden="true">
+  <div class="do-modal" tabindex="-1">
+    <h3 id="doModalTitle" class="do-modal-title">¿Eliminar este borrador?</h3>
+    <p class="do-modal-body">La oportunidad se marcará como rechazada por el cliente. No se eliminará el registro.</p>
+    <div id="doModalStatus" class="do-modal-status" style="display:none;"></div>
+    <div class="do-modal-actions">
+      <button type="button" id="doModalNo" class="do-btn do-btn-ghost">No</button>
+      <button type="button" id="doModalSi" class="do-btn do-btn-primary">Sí</button>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 {% else %}
 <div class="do-wrap">

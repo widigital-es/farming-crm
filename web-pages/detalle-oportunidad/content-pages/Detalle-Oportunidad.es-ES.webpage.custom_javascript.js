@@ -28,6 +28,116 @@
     return name || '—';
   }
 
+  // ---- "Eliminar Borrador" → mark opportunity as "Rechazado cliente" ----
+  // wi_fase option-set value for "Rechazado cliente" (confirmed via modelbuilder
+  // on wi_oportunidadfarming). This is a STATUS CHANGE (PATCH), never a delete.
+  var SET_OPP = 'wi_oportunidadfarmings';
+  var FASE_RECHAZADO_CLIENTE = 6;
+  var oppId = '';
+  var lastFocused = null;
+
+  // Portal request-verification token (same approach as Resumen / stock page).
+  function getToken() {
+    return new Promise(function (resolve) {
+      if (window.shell && typeof shell.getTokenDeferred === 'function') {
+        shell.getTokenDeferred().done(function (t) { resolve(t); }).fail(function () { resolve(null); });
+      } else {
+        var input = document.querySelector("[name='__RequestVerificationToken']");
+        resolve(input ? input.value : null);
+      }
+    });
+  }
+
+  // Mirrors Resumen's apiPatch headers exactly.
+  function apiPatch(set, id, payload, token) {
+    return fetch('/_api/' + set + '(' + id + ')', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json', 'Accept': 'application/json',
+        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        '__RequestVerificationToken': token || ''
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' (PATCH) en ' + set + ': ' + txt);
+        return txt ? JSON.parse(txt) : {};
+      });
+    });
+  }
+
+  function showModalStatus(msg, kind) {
+    var el = document.getElementById('doModalStatus');
+    if (!el) return;
+    el.style.display = 'block';
+    el.className = 'do-modal-status ' + (kind || '');
+    el.textContent = msg;
+  }
+
+  function openModal() {
+    var overlay = document.getElementById('doModal');
+    if (!overlay) return;
+    lastFocused = document.activeElement;
+    overlay.classList.remove('do-hidden');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.addEventListener('keydown', onModalKeydown);
+    var card = overlay.querySelector('.do-modal');
+    if (card) card.focus();
+  }
+
+  function closeModal() {
+    var overlay = document.getElementById('doModal');
+    if (!overlay) return;
+    overlay.classList.add('do-hidden');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onModalKeydown);
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  function onModalKeydown(e) {
+    if (e.key === 'Escape' || e.keyCode === 27) { closeModal(); }
+  }
+
+  // "Sí": PATCH wi_fase = Rechazado cliente, then reload so the new estado shows
+  // and the conditional buttons (Editar / Eliminar Borrador) disappear.
+  function confirmEliminar() {
+    if (!oppId) { showModalStatus('No se ha podido identificar la oportunidad.', 'err'); return; }
+    var siBtn = document.getElementById('doModalSi');
+    var noBtn = document.getElementById('doModalNo');
+    if (siBtn) siBtn.disabled = true;
+    if (noBtn) noBtn.disabled = true;
+    showModalStatus('Actualizando estado...');
+
+    getToken().then(function (token) {
+      return apiPatch(SET_OPP, oppId, { 'wi_fase': FASE_RECHAZADO_CLIENTE }, token);
+    }).then(function () {
+      showModalStatus('Estado actualizado. Recargando...');
+      location.reload();
+    }).catch(function (err) {
+      showModalStatus('No se ha podido actualizar el estado: ' + err.message, 'err');
+      if (siBtn) siBtn.disabled = false;
+      if (noBtn) noBtn.disabled = false;
+    });
+  }
+
+  function initEliminar() {
+    var btn = document.getElementById('doEliminar');
+    if (!btn) return; // not a Borrador → button not rendered
+    oppId = btn.getAttribute('data-opp-id') || '';
+    btn.addEventListener('click', openModal);
+
+    var siBtn = document.getElementById('doModalSi');
+    if (siBtn) siBtn.addEventListener('click', confirmEliminar);
+    var noBtn = document.getElementById('doModalNo');
+    if (noBtn) noBtn.addEventListener('click', closeModal);
+    var overlay = document.getElementById('doModal');
+    if (overlay) {
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+      });
+    }
+  }
+
   function init() {
     // Format every price token rendered with a raw data-v value.
     document.querySelectorAll('.do-precio').forEach(function (el) {
@@ -42,6 +152,8 @@
       if (stepEl) stepEl.textContent = stepLabel(raw);
       if (nameEl) nameEl.textContent = lineName(raw);
     });
+
+    initEliminar();
   }
 
   if (document.readyState !== 'loading') { init(); }
