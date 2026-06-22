@@ -55,6 +55,11 @@
     background: transparent !important;
     border: none !important;
     width: 100% !important;
+    /* Comentario and the next field ("Tipo") live in SEPARATE form sections,
+       so the per-tbody grid row-gap never spaces them apart. Give each section
+       the same bottom gap as the standard field gap so consecutive sections
+       (e.g. the gap below the Comentario box) match the within-section spacing. */
+    margin-bottom: 2.75rem;
   }
 
   /* Hide CRM section/tab heading chrome that isn't in the mockup. */

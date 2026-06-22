@@ -10,7 +10,6 @@
       </div>
       <h2 class="cfg-h2">Resumen del pedido</h2>
       <p class="rsm-sub">Revisa tu configuración antes de confirmar el pedido.</p>
-      <div id="cfgStatus" class="cfg-status" style="display:none;"></div>
 
       <div class="rsm-card">
         <div class="rsm-head">Detalle de la configuración</div>
@@ -20,6 +19,9 @@
           <span class="rsm-total-amt" id="rsmTotal">—</span>
         </div>
       </div>
+
+      <!-- Status/notification renders BELOW the summary card (was above it). -->
+      <div id="cfgStatus" class="cfg-status" style="display:none;"></div>
 
       <div class="rsm-comment">
         <label class="rsm-comment-label" for="rsmComentario">¿Desea añadir algún comentario a su pedido?</label>
@@ -32,6 +34,20 @@
         <button type="button" id="rsmCrear" class="cfg-btn cfg-btn-primary rsm-ghost-cta" onclick="solicitarPedido()">Solicitar Pedido</button>
         <button type="button" id="rsmNuevo" class="cfg-btn cfg-btn-primary" style="display:none;" onclick="nuevoPedido()">Nuevo pedido</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation modal (mirrors the stock / Detalle-Oportunidad modal pattern).
+     Replaces the native confirm() for both save actions (Solicitar Pedido /
+     Crear Borrador). The question text is set dynamically from rsmModal(). -->
+<div id="rsmModal" class="rsm-modal-overlay rsm-hidden" role="dialog" aria-modal="true" aria-labelledby="rsmModalTitle" aria-hidden="true">
+  <div class="rsm-modal" tabindex="-1">
+    <h3 id="rsmModalTitle" class="rsm-modal-title">Confirmar pedido</h3>
+    <p id="rsmModalBody" class="rsm-modal-body"></p>
+    <div class="rsm-modal-actions">
+      <button type="button" id="rsmModalNo" class="cfg-btn cfg-btn-ghost">Cancelar</button>
+      <button type="button" id="rsmModalSi" class="cfg-btn cfg-btn-primary">Confirmar</button>
     </div>
   </div>
 </div>
@@ -51,6 +67,10 @@
   .rsm-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.6rem; background: #f6fbfe; border-top: 2px solid #1f2a44; }
   .rsm-total > span:first-child { font-size: 1.05rem; font-weight: 800; color: #1a2b4a; text-transform: uppercase; letter-spacing: 0.04em; }
   .rsm-total-amt { font-size: 1.9rem; font-weight: 800; color: #2aa9e0; }
+
+  /* Status/notification sits directly below the summary card (moved down from
+     above the card). Give it a top gap so it separates from the card when shown. */
+  #cfgStatus { margin-top: 1.25rem; }
 
   /* ---- comment box ---- */
   .rsm-comment { margin-top: 1.5rem; }
@@ -72,6 +92,16 @@
   .rsm-ghost-cta { flex: 1 1 auto; justify-content: center; padding: 1rem 1.6rem; font-size: 1.1rem; }
   .rsm-ghost-cta:disabled { opacity: 0.5; cursor: not-allowed; }
   .rsm-empty { color: #9aa3b2; font-size: 1rem; padding: 2rem 1.6rem; text-align: center; }
+
+  /* ---- confirmation modal (mirrors stock / Detalle-Oportunidad pattern) ---- */
+  .rsm-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+  .rsm-modal-overlay.rsm-hidden { display: none; }
+  .rsm-modal { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,35,59,0.28); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; color: #15233b; animation: rsmModalIn 0.18s ease-out; }
+  @keyframes rsmModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .rsm-modal-title { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+  .rsm-modal-body { font-size: 0.95rem; color: #45506a; line-height: 1.5; margin: 0 0 1.5rem; }
+  .rsm-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
+  .rsm-modal-actions .cfg-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 
 <script>
@@ -301,21 +331,60 @@
     });
   }
 
-  // Shared save logic. `fase` sets the wi_fase choice value on the opportunity.
-  // In edit mode (CFG.editId() set) we PATCH+reconcile instead of POSTing new.
-  function crear(fase) {
-    var s = window.CFG.get();
-    var oppId = window.CFG.editId ? window.CFG.editId() : null;
-    var isEdit = !!oppId;
-    if (!isEdit && (!s.productobase || !s.productobase.id)) {
-      showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
+  // ---- Confirmation modal (replaces the native confirm()) ----
+  var modalLastFocused = null;
+  var modalOnConfirm = null;
+
+  function modalKeydown(e) {
+    if (e.key === 'Escape' || e.keyCode === 27) closeModal();
+  }
+
+  function openModal(message, onConfirm) {
+    var overlay = document.getElementById('rsmModal');
+    if (!overlay) { // fail-safe: if markup missing, run directly
+      if (typeof onConfirm === 'function') onConfirm();
       return;
     }
-    var confirmMsg = isEdit
-      ? '¿Actualizar esta oportunidad y sus líneas?'
-      : '¿Crear la oportunidad y las líneas del pedido?';
-    if (!confirm(confirmMsg)) return;
+    document.getElementById('rsmModalBody').textContent = message;
+    modalOnConfirm = onConfirm;
+    modalLastFocused = document.activeElement;
+    overlay.classList.remove('rsm-hidden');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.addEventListener('keydown', modalKeydown);
+    var card = overlay.querySelector('.rsm-modal');
+    if (card) card.focus();
+  }
 
+  function closeModal() {
+    var overlay = document.getElementById('rsmModal');
+    if (!overlay) return;
+    overlay.classList.add('rsm-hidden');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', modalKeydown);
+    modalOnConfirm = null;
+    if (modalLastFocused && typeof modalLastFocused.focus === 'function') modalLastFocused.focus();
+  }
+
+  function initModal() {
+    var si = document.getElementById('rsmModalSi');
+    if (si) si.addEventListener('click', function () {
+      var fn = modalOnConfirm;
+      closeModal();
+      if (typeof fn === 'function') fn();
+    });
+    var no = document.getElementById('rsmModalNo');
+    if (no) no.addEventListener('click', closeModal);
+    var overlay = document.getElementById('rsmModal');
+    if (overlay) overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+  }
+
+  // Shared save logic. `fase` sets the wi_fase choice value on the opportunity.
+  // In edit mode (CFG.editId() set) we PATCH+reconcile instead of POSTing new.
+  // The confirmation step is handled by the custom modal in crear(); this runs
+  // only after the user confirms.
+  function ejecutarCrear(fase, s, isEdit, oppId) {
     setBusy(true);
     var comentario = (document.getElementById('rsmComentario').value || '').trim();
 
@@ -347,9 +416,29 @@
     });
   }
 
+  // Validate, then ask for confirmation via the custom modal. On confirm we run
+  // the unchanged create/PATCH logic (ejecutarCrear); on cancel/backdrop/Escape
+  // nothing happens. (Replaces the previous native confirm().)
+  function crear(fase) {
+    var s = window.CFG.get();
+    var oppId = window.CFG.editId ? window.CFG.editId() : null;
+    var isEdit = !!oppId;
+    if (!isEdit && (!s.productobase || !s.productobase.id)) {
+      showStatus('Falta seleccionar el modelo (Producto Base).', 'err');
+      return;
+    }
+    var confirmMsg = isEdit
+      ? '¿Actualizar esta oportunidad y sus líneas?'
+      : '¿Crear la oportunidad y las líneas del pedido?';
+    openModal(confirmMsg, function () {
+      ejecutarCrear(fase, s, isEdit, oppId);
+    });
+  }
+
   function solicitarPedido() { crear(FASE_PEDIDO); }       // Fase = Solicitud de pedido (2)
   function crearPresupuesto() { crear(FASE_PRESUPUESTO); } // Fase = Presupuesto / Borrador (1)
 
+  initModal();
   document.addEventListener('cfg:changed', render);
   document.addEventListener('DOMContentLoaded', render);
   render();
