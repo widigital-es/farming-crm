@@ -167,8 +167,16 @@
   function urlFor(key) {
     if (key === 'fabricante') return PAGE.fabricante;
     var s = get();
-    // resumen reads everything from sessionStorage; reachable once a model is chosen
-    if (key === 'resumen') { return (s.productobase && s.productobase.id) ? PAGE.resumen : null; }
+    // resumen reads everything from sessionStorage; reachable only once the user
+    // has reached its immediate predecessor step 'opcionales' (the last config
+    // step). 'opcionales reached' == its parent step n4 is selected (same gate
+    // as urlFor('opcionales')); we do NOT require an opcional checkbox selection
+    // since opcionales is optional, so Siguiente from Opcionales still reaches
+    // Resumen, but from earlier steps (e.g. Paso 2) Resumen stays locked.
+    if (key === 'resumen') {
+      var ro = REACH.opcionales; // { parent: 'n4', param: 'n4' }
+      return (s[ro.parent] && s[ro.parent].id) ? PAGE.resumen : null;
+    }
     var r = REACH[key];
     if (!r || !s[r.parent] || !s[r.parent].id) return null;
     return PAGE[key] + '?' + r.param + '=' + s[r.parent].id;
