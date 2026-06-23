@@ -35,6 +35,27 @@
 </fetch>
 {% endfetchxml %}
 
+{% comment %} Own page heading: resolve THIS page's current NAME dynamically so a
+   studio rename propagates here automatically. We look the page up by its stable
+   root GUID (immune to partial-URL / title churn) and read adx_name -- which is
+   what the studio rename actually changed ("Mis Pedidos"); adx_title was left as
+   the legacy "Oportunidades". Falls back to adx_title, then a hardcoded label.
+   Same mechanism used by the home card and the Detalle breadcrumb. Using
+   {{ page.adx_name }} would resolve to the content record's legacy name. {% endcomment %}
+{% fetchxml oppPage %}
+<fetch top="1">
+  <entity name="adx_webpage">
+    <attribute name="adx_name" />
+    <attribute name="adx_title" />
+    <filter type="and">
+      <condition attribute="adx_webpageid" operator="eq" value="48d3eb85-a348-7c23-07d5-af362e829b3c" />
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% assign oppPageRec = oppPage.results.entities.first %}
+{% assign pageName = oppPageRec.adx_name | default: oppPageRec.adx_title | default: 'Mis Pedidos' %}
+
 <style>
   .pp-wrap { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1rem 4rem; font-family: 'Space Grotesk', sans-serif; }
   .pp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
@@ -76,7 +97,7 @@
   .pp-lbl { color: #9aa3b2; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.3rem; }
   .pp-empty { color: #9aa3b2; font-size: 1rem; padding: 2.5rem 0; text-align: center; }
 
-  /* ---- two-tab bar (Oportunidades realizadas / Solicitudes de stock) ---- */
+  /* ---- two-tab bar (Mis Pedidos realizados / Solicitudes de stock) ---- */
   /* Shared row: tabs on the left, the active tab's controls on the right,
      all vertically centered so the controls line up with the tab height. */
   .pp-tabbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.75rem; }
@@ -98,25 +119,21 @@
 
 <div class="pp-wrap">
   <div class="pp-top">
-    {% comment %} Own page heading: use this page's NAME (adx_name) so a studio
-       rename shows here automatically. The rename set adx_name = "Mis Pedidos"
-       but left adx_title as the legacy "Oportunidades", so we read adx_name and
-       fall back to the title, then a hardcoded label. {% endcomment %}
-    <h1 class="pp-title">{{ page.adx_name | default: page.title | default: 'Mis pedidos' | escape }}</h1>
+    <h1 class="pp-title">{{ pageName | escape }}</h1>
     <div class="pp-actions">
       <a class="pp-btn pp-ghost" href="/productos-en-stock">Productos en stock</a>
-      <a class="pp-btn pp-new" href="/cpq">Nueva oportunidad</a>
+      <a class="pp-btn pp-new" href="/cpq">Nuevo pedido</a>
     </div>
   </div>
 
   <!-- Shared row: tabs left, the active tab's filter/search controls right -->
   <div class="pp-tabbar">
     <div class="pp-tabs" role="tablist">
-      <button type="button" class="pp-tab active" id="ppTabOpp" role="tab" aria-selected="true" data-panel="ppPanelOpp" data-controls="ppCtrlsOpp">Oportunidades realizadas</button>
+      <button type="button" class="pp-tab active" id="ppTabOpp" role="tab" aria-selected="true" data-panel="ppPanelOpp" data-controls="ppCtrlsOpp">{{ pageName | escape }} realizados</button>
       <button type="button" class="pp-tab" id="ppTabSol" role="tab" aria-selected="false" data-panel="ppPanelSol" data-controls="ppCtrlsSol">Solicitudes de stock</button>
     </div>
     <div class="pp-tabctrls">
-      <!-- Oportunidades realizadas: filter + search -->
+      <!-- Mis Pedidos realizados: filter + search -->
       <div class="pp-tabctrls-group" id="ppCtrlsOpp">
         <div class="pp-controls" style="justify-content: flex-end;">
           <div class="pp-filter" id="ppFilterWrap">
@@ -142,7 +159,7 @@
     </div>
   </div>
 
-  <!-- ===== Panel 1: Oportunidades realizadas ===== -->
+  <!-- ===== Panel 1: Mis Pedidos realizados ===== -->
   <div class="pp-panel" id="ppPanelOpp" role="tabpanel" aria-labelledby="ppTabOpp">
   {% if oportunidades.results.entities.size > 0 %}
   <div class="pp-list" id="ppList">
@@ -174,9 +191,9 @@
     </div>
     {% endfor %}
   </div>
-  <p id="ppEmpty" class="pp-empty" style="display:none;">No hay oportunidades que coincidan con la búsqueda.</p>
+  <p id="ppEmpty" class="pp-empty" style="display:none;">No hay pedidos que coincidan con la búsqueda.</p>
   {% else %}
-  <p class="pp-empty">No hay oportunidades realizadas.</p>
+  <p class="pp-empty">No hay pedidos realizados.</p>
   {% endif %}
   </div><!-- /ppPanelOpp -->
 
