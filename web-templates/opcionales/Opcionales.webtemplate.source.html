@@ -47,8 +47,9 @@
         {% endif %}
         <div class="cfg-nav">
           <button type="button" class="cfg-btn cfg-btn-ghost" onclick="history.back()">Atrás</button>
-          <button type="button" class="cfg-btn cfg-btn-primary" onclick="location.href='/resumen'">Ver resumen</button>
+          <button type="button" id="cfgVerResumen" class="cfg-btn cfg-btn-primary" onclick="goResumen()">Ver resumen</button>
         </div>
+        <p id="cfgOpcMsg" class="cfg-sum-empty" style="display:none; margin-top:0.6rem;">Selecciona al menos un opcional para continuar.</p>
       </main>
       <aside class="cfg-side">{% include 'Resumen Pedido' %}</aside>
     </div>
@@ -56,19 +57,49 @@
 </div>
 
 <script>
+  // True when this Opcionales step actually offers selectable options. When
+  // there are none, "Ver resumen" proceeds straight through (nothing to pick).
+  function opcHasOptions() { return document.querySelectorAll('.opc-check').length > 0; }
+  function opcAnyChecked() { return document.querySelectorAll('.opc-check:checked').length > 0; }
+
   function refreshOpc() {
     var arr = [];
     document.querySelectorAll('.opc-check:checked').forEach(function (cb) {
       arr.push({ id: cb.value, label: cb.getAttribute('data-label'), price: Number(cb.getAttribute('data-price') || 0) });
     });
     window.CFG.setOpcionales(arr);
+    syncVerResumen();
+  }
+
+  // Enable "Ver resumen" only when a selection requirement is met: if options
+  // exist, at least one must be checked ("No Aplica", if present in the list,
+  // counts like any other checkbox). If there are no options, the button stays
+  // enabled. Also hides the inline hint once the requirement is satisfied.
+  function syncVerResumen() {
+    var btn = document.getElementById('cfgVerResumen');
+    var msg = document.getElementById('cfgOpcMsg');
+    if (!btn) return;
+    var ok = !opcHasOptions() || opcAnyChecked();
+    btn.disabled = !ok;
+    if (ok && msg) msg.style.display = 'none';
+  }
+
+  // Click handler for "Ver resumen": gate on selection (block + show hint if
+  // options exist but none chosen), then set the __opcReached flag (which is
+  // what unlocks Resumen for back-nav) and navigate. The flag is set HERE, on
+  // the explicit Siguiente action -- NOT on page load -- so Resumen stays
+  // locked while the user is still on Opcionales with nothing selected.
+  function goResumen() {
+    if (opcHasOptions() && !opcAnyChecked()) {
+      var msg = document.getElementById('cfgOpcMsg');
+      if (msg) msg.style.display = 'block';
+      return;
+    }
+    window.CFG.markOpcReached();
+    location.href = '/resumen';
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    // Landing on the Opcionales step unlocks Resumen (no checkbox required).
-    // Sets state.__opcReached, persists to sessionStorage, fires cfg:changed so
-    // the stepper re-renders and the Resumen tab becomes clickable.
-    window.CFG.markOpcReached();
     document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
       var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
       var pr = Number(inp.getAttribute('data-price') || 0);
@@ -80,5 +111,7 @@
     document.querySelectorAll('.opc-check').forEach(function (cb) {
       if (ids.indexOf(cb.value) > -1) cb.checked = true;
     });
+    // Set initial enabled/disabled state of "Ver resumen".
+    syncVerResumen();
   });
 </script>
