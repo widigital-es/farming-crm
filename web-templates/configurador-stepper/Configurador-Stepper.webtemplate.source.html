@@ -12,12 +12,30 @@
 <script>
 (function () {
   if (!window.CFG) return;
+  // Strict step-by-step navigation: a step is clickable ONLY if it is the
+  // current step or already reached (CFG.urlFor returns a URL for it). Steps
+  // not yet reached (e.g. Resumen from step 1, or any step ahead of the
+  // furthest reached one) render as a non-clickable greyed label: we strip the
+  // href so the <a> is not navigable and add .is-disabled (cursor:default,
+  // pointer-events:none). Re-runs on every cfg:changed so steps lock/unlock as
+  // the user progresses or as edit-mode pre-load restores the configuration.
   function wire() {
     document.querySelectorAll('.cfg-steps .cfg-step').forEach(function (el) {
-      if (el.classList.contains('is-current')) return;
+      if (el.classList.contains('is-current')) {
+        el.removeAttribute('href');
+        el.classList.remove('is-disabled');
+        return;
+      }
       var url = window.CFG.urlFor(el.getAttribute('data-step'));
-      if (url) { el.setAttribute('href', url); el.classList.remove('is-disabled'); }
-      else { el.classList.add('is-disabled'); }
+      if (url) {
+        // Reached/completed -> navigable link.
+        el.setAttribute('href', url);
+        el.classList.remove('is-disabled');
+      } else {
+        // Not yet reached -> non-clickable greyed label.
+        el.removeAttribute('href');
+        el.classList.add('is-disabled');
+      }
     });
   }
   wire();
