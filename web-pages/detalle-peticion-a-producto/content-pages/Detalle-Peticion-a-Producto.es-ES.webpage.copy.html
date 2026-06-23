@@ -1,11 +1,10 @@
 <style>
   /* ============================================================
-     Detalle Peticion a Producto — page-scoped restyle.
+     Detalle Peticion a Producto -- page-scoped restyle.
      Everything below is scoped under .ppp-wrap (the page heading
      block) or .ppp-form (the wrapper around the entityform), so it
-     does not affect entityforms on other pages.
-     The form itself is still the entityform tag (entity
-     wi_peticionaproducto) — we only restyle the markup it renders.
+     does not affect entityforms on other pages. We only restyle the
+     markup the entityform renders; bindings are untouched.
      ============================================================ */
 
   .ppp-wrap {
@@ -40,7 +39,6 @@
   .ppp-form {
     max-width: 1180px;
     margin: 0 auto;
-    /* ~24px top gap between the intro paragraph and the first field. */
     padding: 1.5rem 1rem 4rem;
     font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
   }
@@ -55,10 +53,8 @@
     background: transparent !important;
     border: none !important;
     width: 100% !important;
-    /* Comentario and the next field ("Tipo") live in SEPARATE form sections,
-       so the per-tbody grid row-gap never spaces them apart. Give each section
-       the same bottom gap as the standard field gap so consecutive sections
-       (e.g. the gap below the Comentario box) match the within-section spacing. */
+    /* Match section spacing to the in-grid field gap so consecutive
+       sections breathe the same as fields within a section. */
     margin-bottom: 2.75rem;
   }
 
@@ -69,15 +65,11 @@
     display: none !important;
   }
 
-  /* Lay the field rows of each section into a responsive 2-col grid.
-     Standard Power Pages markup renders one <tr> per form row and one
-     <td class="cell"> per field. We flatten that table to a grid so the
-     fields sit side-by-side regardless of the Dataverse column layout. */
+  /* Flatten each section's field table into a responsive 2-col grid:
+     one tr per row, one td.cell per field, flowed side-by-side. */
   .ppp-form .crmEntityFormView .section > table > tbody {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    /* Generous row gap (~44px) between field groups + ~26px column gap.
-       This airier spacing is the standard for forms on this site. */
     gap: 2.75rem 1.6rem;
   }
   .ppp-form .crmEntityFormView .section > table > tbody > tr {
@@ -94,10 +86,9 @@
     display: none !important;
   }
 
-  /* Label above each field. */
+  /* Label above each field (~10px gap to its input). */
   .ppp-form .crmEntityFormView .info {
     display: block;
-    /* ~10px gap between a label and its own input. */
     margin: 0 0 0.65rem;
     padding: 0;
     float: none !important;
@@ -111,7 +102,6 @@
     font-weight: 700;
     color: #15233b;
   }
-  /* Required asterisk in brand-neutral red (theme already colors it). */
 
   /* The control container (Power Pages wraps the control in .control). */
   .ppp-form .crmEntityFormView .control {
@@ -119,7 +109,7 @@
     float: none !important;
   }
 
-  /* Inputs / selects / textareas — rounded, padded, brand focus ring. */
+  /* Inputs / selects / textareas -- rounded, padded, brand focus ring. */
   .ppp-form .crmEntityFormView input[type="text"],
   .ppp-form .crmEntityFormView input[type="email"],
   .ppp-form .crmEntityFormView input[type="tel"],
@@ -158,14 +148,14 @@
     resize: vertical;
   }
 
-  /* Comentario should span the full width (full row in the 2-col grid).
-     Targets the cell that contains the wi_comentario control by id. */
+  /* Comentario spans the full grid row (full width). Targeted by the
+     wi_comentario control id. Tipo + Asunto naturally fill the 2 cols. */
   .ppp-form .crmEntityFormView td.cell:has(#wi_comentario),
   .ppp-form .crmEntityFormView td.cell:has([id$="wi_comentario"]) {
     grid-column: 1 / -1;
   }
 
-  /* Submit button → site primary pill. */
+  /* Submit button -> site primary pill. */
   .ppp-form .crmEntityFormView .actions {
     margin-top: 2rem;
     text-align: left;
