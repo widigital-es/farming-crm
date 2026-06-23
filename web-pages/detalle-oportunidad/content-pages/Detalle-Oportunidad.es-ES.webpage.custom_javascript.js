@@ -13,10 +13,10 @@
   function stepLabel(raw) {
     if (!raw) return 'Configuración';
     var head = raw.split('|')[0].trim().toLowerCase();
-    if (head.indexOf('nivel 1') === 0 || head === 'n1') return 'Nivel 1';
-    if (head.indexOf('nivel 2') === 0 || head === 'n2') return 'Nivel 2';
-    if (head.indexOf('nivel 3') === 0 || head === 'n3') return 'Nivel 3';
-    if (head.indexOf('nivel 4') === 0 || head === 'n4') return 'Nivel 4';
+    if (head.indexOf('nivel 1') === 0 || head === 'n1') return 'Paso 1';
+    if (head.indexOf('nivel 2') === 0 || head === 'n2') return 'Paso 2';
+    if (head.indexOf('nivel 3') === 0 || head === 'n3') return 'Paso 3';
+    if (head.indexOf('nivel 4') === 0 || head === 'n4') return 'Paso 4';
     if (head.indexOf('opcional') === 0) return 'Opcional';
     return raw.split('|')[0].trim() || 'Configuración';
   }
