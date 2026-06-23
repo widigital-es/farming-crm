@@ -53,28 +53,40 @@
     background: transparent !important;
     border: none !important;
     width: 100% !important;
-    /* Match section spacing to the in-grid field gap so consecutive
-       sections breathe the same as fields within a section. */
-    margin-bottom: 2.75rem;
   }
 
-  /* Hide CRM section/tab heading chrome that isn't in the mockup. */
-  .ppp-form .crmEntityFormView .tab > .tab-title,
-  .ppp-form .crmEntityFormView .section > .section-title,
-  .ppp-form .crmEntityFormView legend {
-    display: none !important;
-  }
-
-  /* Flatten each section's field table into a responsive 2-col grid:
-     one tr per row, one td.cell per field, flowed side-by-side. */
-  .ppp-form .crmEntityFormView .section > table > tbody {
+  /* The Dataverse form puts Tipo / Asunto / Comentario in SEPARATE sections,
+     so a per-section grid scatters them. Instead, make the WHOLE form one grid
+     and collapse every structural wrapper (tab, section, table, tbody, tr) to
+     display:contents so all td.cell fields become direct children of this one
+     grid and flow in source order regardless of how the form is sectioned. */
+  .ppp-form .crmEntityFormView {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     gap: 2.75rem 1.6rem;
   }
-  .ppp-form .crmEntityFormView .section > table > tbody > tr {
+  .ppp-form .crmEntityFormView .tab,
+  .ppp-form .crmEntityFormView .tab-column,
+  .ppp-form .crmEntityFormView .section,
+  .ppp-form .crmEntityFormView .section > table,
+  .ppp-form .crmEntityFormView .section > table > tbody,
+  .ppp-form .crmEntityFormView .section > table > tbody > tr,
+  .ppp-form .crmEntityFormView table,
+  .ppp-form .crmEntityFormView tbody,
+  .ppp-form .crmEntityFormView tr {
     display: contents !important;
   }
+
+  /* Hide CRM section/tab heading chrome that isn't in the mockup. */
+  .ppp-form .crmEntityFormView .tab > .tab-title,
+  .ppp-form .crmEntityFormView .tab-title,
+  .ppp-form .crmEntityFormView .section > .section-title,
+  .ppp-form .crmEntityFormView .section-title,
+  .ppp-form .crmEntityFormView legend {
+    display: none !important;
+  }
+
+  /* Each field cell becomes a grid item. */
   .ppp-form .crmEntityFormView td.cell {
     display: block !important;
     width: auto !important;
@@ -155,8 +167,9 @@
     grid-column: 1 / -1;
   }
 
-  /* Submit button -> site primary pill. */
+  /* Submit button -> site primary pill. Actions row spans the full grid. */
   .ppp-form .crmEntityFormView .actions {
+    grid-column: 1 / -1;
     margin-top: 2rem;
     text-align: left;
   }
@@ -193,7 +206,7 @@
   }
 
   @media (max-width: 760px) {
-    .ppp-form .crmEntityFormView .section > table > tbody {
+    .ppp-form .crmEntityFormView {
       grid-template-columns: 1fr;
     }
     .ppp-title { font-size: 1.95rem; }
