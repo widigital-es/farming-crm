@@ -101,7 +101,7 @@
   // "Sí": PATCH wi_fase = Rechazado cliente, then reload so the new estado shows
   // and the conditional buttons (Editar / Eliminar Borrador) disappear.
   function confirmEliminar() {
-    if (!oppId) { showModalStatus('No se ha podido identificar la oportunidad.', 'err'); return; }
+    if (!oppId) { showModalStatus('No se ha podido identificar el pedido.', 'err'); return; }
     var siBtn = document.getElementById('doModalSi');
     var noBtn = document.getElementById('doModalNo');
     if (siBtn) siBtn.disabled = true;

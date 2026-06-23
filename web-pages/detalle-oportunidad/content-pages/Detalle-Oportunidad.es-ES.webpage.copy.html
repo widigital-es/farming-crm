@@ -200,18 +200,18 @@
   <nav class="do-bc">
     <a href="/Oportunidades">{{ oppListTitle | escape }}</a>
     <span class="sep">/</span>
-    <span class="cur">Resumen de la oportunidad</span>
+    <span class="cur">Resumen de mi pedido</span>
   </nav>
 
   <div class="do-top">
-    <h1 class="do-title">Resumen de la oportunidad</h1>
-    <a class="do-btn do-btn-primary" href="/cpq">Nueva oportunidad</a>
+    <h1 class="do-title">Resumen de mi pedido</h1>
+    <a class="do-btn do-btn-primary" href="/cpq">Nuevo pedido</a>
   </div>
 
   <div class="do-summary">
     <div class="col">
       <div class="val">{{ o.wi_idoportunidad | default: '—' | escape }}</div>
-      <div class="lbl">Oportunidad</div>
+      <div class="lbl">Pedido</div>
     </div>
     <div class="col">
       <div class="val">{{ o.wi_fase.label | default: '—' | escape }}</div>
@@ -245,7 +245,7 @@
       {% if o.wi_fase.value == 1 %}
       <button type="button" id="doEliminar" class="do-btn do-btn-ghost"
               data-opp-id="{{ o.wi_oportunidadfarmingid }}">Eliminar Borrador</button>
-      <a class="do-btn do-btn-primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar oportunidad</a>
+      <a class="do-btn do-btn-primary" href="/resumen?edit={{ o.wi_oportunidadfarmingid }}">Editar pedido</a>
       {% endif %}
     </div>
   </div>
@@ -333,7 +333,7 @@
 <div id="doModal" class="do-modal-overlay do-hidden" role="dialog" aria-modal="true" aria-labelledby="doModalTitle" aria-hidden="true">
   <div class="do-modal" tabindex="-1">
     <h3 id="doModalTitle" class="do-modal-title">¿Eliminar este borrador?</h3>
-    <p class="do-modal-body">La oportunidad se marcará como rechazada por el cliente. No se eliminará el registro.</p>
+    <p class="do-modal-body">El pedido se marcará como rechazado por el cliente. No se eliminará el registro.</p>
     <div id="doModalStatus" class="do-modal-status" style="display:none;"></div>
     <div class="do-modal-actions">
       <button type="button" id="doModalNo" class="do-btn do-btn-ghost">No</button>
@@ -348,8 +348,8 @@
   <nav class="do-bc">
     <a href="/Oportunidades">{{ oppListTitle | escape }}</a>
     <span class="sep">/</span>
-    <span class="cur">Resumen de la oportunidad</span>
+    <span class="cur">Resumen de mi pedido</span>
   </nav>
-  <div class="do-notfound">No se ha encontrado la oportunidad solicitada.</div>
+  <div class="do-notfound">No se ha encontrado el pedido solicitado.</div>
 </div>
 {% endif %}

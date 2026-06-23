@@ -164,7 +164,7 @@
     // relabel the primary action. Pre-fill the comment box from the opp once.
     if (isEdit) {
       var sub = document.querySelector('.rsm-sub');
-      if (sub) sub.textContent = 'Editando una oportunidad existente. Los cambios actualizarán el mismo pedido.';
+      if (sub) sub.textContent = 'Editando un pedido existente. Los cambios actualizarán el mismo pedido.';
       var crearBtn = document.getElementById('rsmCrear');
       if (crearBtn) crearBtn.textContent = 'Solicitar Pedido';
       var presupBtn = document.getElementById('rsmPresupuesto');
@@ -283,7 +283,7 @@
 
   // CREATE path: POST a new opportunity + its line items.
   function crearNueva(fase, s, comentario, token) {
-    showStatus('Creando oportunidad...');
+    showStatus('Creando pedido...');
     var oppPayload = {
       'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
       'wi_fase': fase
@@ -293,8 +293,8 @@
     if (CONTACTO_ID) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
     return apiCreate(SET_OPP, oppPayload, token).then(function (res) {
       var oppId = res.id || (res.data && res.data.wi_oportunidadfarmingid);
-      if (!oppId) throw new Error('Oportunidad creada pero no se obtuvo su id.');
-      showStatus('Oportunidad creada. Creando líneas...');
+      if (!oppId) throw new Error('Pedido creado pero no se obtuvo su id.');
+      showStatus('Pedido creado. Creando líneas...');
       var lines = buildLines(s);
       return createLines(lines, '/' + SET_OPP + '(' + oppId + ')', token).then(function () { return lines.length; });
     });
@@ -303,7 +303,7 @@
   // EDIT path: PATCH the existing opportunity, then reconcile its line items
   // (delete the current set, create the new one). No new opportunity is made.
   function actualizarExistente(fase, s, comentario, token, oppId) {
-    showStatus('Actualizando oportunidad...');
+    showStatus('Actualizando pedido...');
     // Mirror the create payload exactly (the create path does NOT set
     // wi_precioproductobase / wi_preciofinal / wi_preciolineitems — those are
     // populated server-side from wi_ProductoBaseF + the line items — so we
@@ -314,7 +314,7 @@
     }
     oppPayload.wi_comentarios = comentario || null;
     return apiPatch(SET_OPP, oppId, oppPayload, token).then(function () {
-      showStatus('Oportunidad actualizada. Reconciliando líneas...');
+      showStatus('Pedido actualizado. Reconciliando líneas...');
       // Fetch the opp's current line items so we can delete them before re-creating.
       var url = '/_api/' + SET_LINE + '?$select=wi_productlineitemsid&$filter=_wi_oportunidad_value eq ' + oppId;
       return apiGet(url);
@@ -394,8 +394,8 @@
         : crearNueva(fase, s, comentario, token);
     }).then(function (count) {
       var msg = isEdit
-        ? '✅ Oportunidad actualizada con ' + count + ' líneas.'
-        : '✅ Oportunidad y ' + count + ' líneas creadas correctamente.';
+        ? '✅ Pedido actualizado con ' + count + ' líneas.'
+        : '✅ Pedido y ' + count + ' líneas creadas correctamente.';
       showStatus(msg, 'ok');
       // hide both action buttons to avoid double-submit; offer a fresh start
       document.getElementById('rsmCrear').style.display = 'none';
@@ -428,8 +428,8 @@
       return;
     }
     var confirmMsg = isEdit
-      ? '¿Actualizar esta oportunidad y sus líneas?'
-      : '¿Crear la oportunidad y las líneas del pedido?';
+      ? '¿Actualizar este pedido y sus líneas?'
+      : '¿Crear el pedido y las líneas del pedido?';
     openModal(confirmMsg, function () {
       ejecutarCrear(fase, s, isEdit, oppId);
     });
