@@ -65,6 +65,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    // Landing on the Opcionales step unlocks Resumen (no checkbox required).
+    // Sets state.__opcReached, persists to sessionStorage, fires cfg:changed so
+    // the stepper re-renders and the Resumen tab becomes clickable.
+    window.CFG.markOpcReached();
     document.querySelectorAll('#cfgList .cfg-opt').forEach(function (opt) {
       var inp = opt.querySelector('input'), ps = opt.querySelector('.cfg-opt-price');
       var pr = Number(inp.getAttribute('data-price') || 0);
