@@ -98,7 +98,11 @@
 
 <div class="pp-wrap">
   <div class="pp-top">
-    <h1 class="pp-title">Oportunidades</h1>
+    {% comment %} Own page heading: use this page's NAME (adx_name) so a studio
+       rename shows here automatically. The rename set adx_name = "Mis Pedidos"
+       but left adx_title as the legacy "Oportunidades", so we read adx_name and
+       fall back to the title, then a hardcoded label. {% endcomment %}
+    <h1 class="pp-title">{{ page.adx_name | default: page.title | default: 'Mis pedidos' | escape }}</h1>
     <div class="pp-actions">
       <a class="pp-btn pp-ghost" href="/productos-en-stock">Productos en stock</a>
       <a class="pp-btn pp-new" href="/cpq">Nueva oportunidad</a>

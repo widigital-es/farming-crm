@@ -135,12 +135,34 @@
 
   <div class="home-cards">
 
+    {% comment %} Dynamic page label: resolve the listing page's current NAME so
+       a studio rename propagates here automatically. We look the page up by its
+       stable root GUID (immune to partial-URL / title churn) and read adx_name
+       -- which is what the studio rename actually changed ("Mis Pedidos");
+       adx_title was left as the legacy "Oportunidades". We fall back to
+       adx_title, then a hardcoded label, if the query returns nothing. The page
+       is hidden from the sitemap, so sitemap[...] is unreliable; a fetchxml on
+       the adx_webpage root record is the dependable lookup. The /Oportunidades
+       href is left intact -- that partial URL still routes to the page. {% endcomment %}
+    {% fetchxml oppPage %}
+    <fetch top="1">
+      <entity name="adx_webpage">
+        <attribute name="adx_name" />
+        <attribute name="adx_title" />
+        <filter type="and">
+          <condition attribute="adx_webpageid" operator="eq" value="48d3eb85-a348-7c23-07d5-af362e829b3c" />
+        </filter>
+      </entity>
+    </fetch>
+    {% endfetchxml %}
+    {% assign oppPageRec = oppPage.results.entities.first %}
+    {% assign oppTitle = oppPageRec.adx_name | default: oppPageRec.adx_title | default: 'Mis pedidos' %}
     <div class="home-card">
-      <img class="home-card-img" src="/Diseno-sin-titulo-1.jpg" alt="Mis oportunidades">
+      <img class="home-card-img" src="/Diseno-sin-titulo-1.jpg" alt="{{ oppTitle | escape }}">
       <div class="home-card-body">
-        <h2>Mis oportunidades</h2>
+        <h2>{{ oppTitle | escape }}</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consulta el estado de tus oportunidades comerciales y avanza en su gestión desde un único lugar. Sed do eiusmod tempor incididunt ut labore.</p>
-        <a class="home-card-btn" href="/Oportunidades">Ver oportunidades</a>
+        <a class="home-card-btn" href="/Oportunidades">Ver {{ oppTitle | downcase | escape }}</a>
       </div>
     </div>
 

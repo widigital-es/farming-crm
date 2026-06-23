@@ -1,5 +1,27 @@
 {% assign oid = request.params.id %}
 
+{% comment %} Dynamic label for the listing-page breadcrumb: resolve that page's
+   current NAME so a studio rename propagates here. Cross-page reference
+   (page.title would be THIS page's title), looked up by the listing page's
+   stable root GUID and reading adx_name -- which is what the studio rename
+   changed ("Mis Pedidos"); adx_title was left as the legacy "Oportunidades".
+   Falls back to adx_title then a hardcoded label. The target page is hidden
+   from the sitemap, so fetchxml on the root adx_webpage record is the reliable
+   lookup. The /Oportunidades href still routes to the page. {% endcomment %}
+{% fetchxml oppPage %}
+<fetch top="1">
+  <entity name="adx_webpage">
+    <attribute name="adx_name" />
+    <attribute name="adx_title" />
+    <filter type="and">
+      <condition attribute="adx_webpageid" operator="eq" value="48d3eb85-a348-7c23-07d5-af362e829b3c" />
+    </filter>
+  </entity>
+</fetch>
+{% endfetchxml %}
+{% assign oppListRec = oppPage.results.entities.first %}
+{% assign oppListTitle = oppListRec.adx_name | default: oppListRec.adx_title | default: 'Mis pedidos' %}
+
 {% fetchxml opp %}
 <fetch top="1">
   <entity name="wi_oportunidadfarming">
@@ -176,7 +198,7 @@
 
 <div class="do-wrap">
   <nav class="do-bc">
-    <a href="/Oportunidades">Mis oportunidades</a>
+    <a href="/Oportunidades">{{ oppListTitle | escape }}</a>
     <span class="sep">/</span>
     <span class="cur">Resumen de la oportunidad</span>
   </nav>
@@ -324,7 +346,7 @@
 {% else %}
 <div class="do-wrap">
   <nav class="do-bc">
-    <a href="/Oportunidades">Mis oportunidades</a>
+    <a href="/Oportunidades">{{ oppListTitle | escape }}</a>
     <span class="sep">/</span>
     <span class="cur">Resumen de la oportunidad</span>
   </nav>
