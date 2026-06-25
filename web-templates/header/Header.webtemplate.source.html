@@ -1,5 +1,13 @@
 {% assign defaultlang = settings['LanguageLocale/Code'] | default: 'en-us' %}
 {% assign homeurl = website.adx_partialurl %}
+
+<!-- Hoja compartida del portal (tokens + componentes): fuente única de verdad.
+     Se carga aquí, en el Header, porque website.adx_headerwebtemplateid apunta a
+     este template y se renderiza en TODAS las páginas (todos los page-templates
+     tienen usewebsiteheaderandfooter = true). Un único punto global -> sin doble
+     carga y sin tocar el "Default studio template" (marcado "do not modify"). -->
+<link rel="stylesheet" type="text/css" href="/farming.css" />
+
 <style>
   /* Let the logo fill the full header height (remove navbar vertical padding) */
   .static-top.navbar { padding-top: 0 !important; padding-bottom: 0 !important; }

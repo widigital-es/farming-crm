@@ -100,34 +100,34 @@
 {% assign fabrec = fabq.results.entities.first %}
 
 <style>
-  .do-wrap { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem 1rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; }
+  .do-wrap { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem 1rem; font-family: var(--fm-font); color: var(--fm-ink); }
 
   /* breadcrumb */
-  .do-bc { font-size: 0.9rem; color: #9aa3b2; margin: 0 0 1.4rem; }
-  .do-bc a { color: #9aa3b2 !important; text-decoration: none !important; }
-  .do-bc a:hover { color: #009FD9 !important; }
+  .do-bc { font-size: 0.9rem; color: var(--fm-muted-2); margin: 0 0 1.4rem; }
+  .do-bc a { color: var(--fm-muted-2) !important; text-decoration: none !important; }
+  .do-bc a:hover { color: var(--fm-brand) !important; }
   .do-bc .sep { margin: 0 0.4rem; }
-  .do-bc .cur { color: #45506a; }
+  .do-bc .cur { color: var(--fm-text); }
 
   /* title row */
   .do-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
-  .do-title { font-size: 2.2rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
+  .do-title { font-size: 2.2rem; font-weight: 700; color: var(--fm-ink); margin: 0; letter-spacing: -0.01em; }
 
   /* pill buttons */
   .do-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.5rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; font-family: inherit; }
-  .do-btn-primary { background: #009FD9; color: #fff !important; border: 2px solid #5BC2EC; }
-  .do-btn-primary:hover { background: #0080B5; border-color: #5BC2EC; color: #fff !important; }
-  .do-btn-ghost { background: #fff; color: #009FD9 !important; border: 1px solid #b3e3f5; }
-  .do-btn-ghost:hover { background: #f0fafe; border-color: #009FD9; color: #009FD9 !important; }
+  .do-btn-primary { background: var(--fm-brand); color: #fff !important; border: 2px solid #5BC2EC; }
+  .do-btn-primary:hover { background: var(--fm-brand-700); border-color: #5BC2EC; color: #fff !important; }
+  .do-btn-ghost { background: #fff; color: var(--fm-brand) !important; border: 1px solid #b3e3f5; }
+  .do-btn-ghost:hover { background: #f0fafe; border-color: var(--fm-brand); color: var(--fm-brand) !important; }
 
   /* summary bar */
   .do-summary { display: grid; grid-template-columns: repeat(6, 1fr); align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; margin-bottom: 2.2rem; }
-  .do-summary .val { color: #15233b; font-size: 1.05rem; font-weight: 700; line-height: 1.2; word-break: break-word; }
-  .do-summary .lbl { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.35rem; }
+  .do-summary .val { color: var(--fm-ink); font-size: 1.05rem; font-weight: 700; line-height: 1.2; word-break: break-word; }
+  .do-summary .lbl { color: var(--fm-muted-2); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.35rem; }
 
   /* section heading + actions */
   .do-secrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }
-  .do-sectitle { font-size: 1.45rem; font-weight: 700; color: #15233b; margin: 0; }
+  .do-sectitle { font-size: 1.45rem; font-weight: 700; color: var(--fm-ink); margin: 0; }
   .do-secactions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
 
   /* two-column body */
@@ -145,44 +145,44 @@
   .do-prod-ph { font-size: 2.4rem; color: #c2c8d2; }
   .do-prod-ph-hidden { display: none; }
   .do-prod-info { flex: 1 1 auto; min-width: 0; }
-  .do-prod-title { font-size: 1.3rem; font-weight: 700; color: #15233b; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.01em; }
+  .do-prod-title { font-size: 1.3rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 1rem; text-transform: uppercase; letter-spacing: 0.01em; }
   .do-meta { margin: 0 0 0.85rem; }
-  .do-meta .k { color: #9aa3b2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-  .do-meta .v { color: #1f2a44; font-size: 1rem; font-weight: 600; margin-top: 0.15rem; }
+  .do-meta .k { color: var(--fm-muted-2); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .do-meta .v { color: var(--fm-ink-3); font-size: 1rem; font-weight: 600; margin-top: 0.15rem; }
   @media (max-width: 560px) { .do-prod { flex-direction: column; } .do-prod-img { flex-basis: auto; max-width: 100%; width: 100%; } }
 
-  .do-desc-title { font-size: 1.05rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; }
-  .do-desc { font-size: 0.93rem; color: #45506a; line-height: 1.6; }
+  .do-desc-title { font-size: 1.05rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; }
+  .do-desc { font-size: 0.93rem; color: var(--fm-text); line-height: 1.6; }
   .do-desc p { margin: 0 0 0.7rem; }
 
-  .do-com-title { font-size: 1.15rem; font-weight: 700; color: #15233b; margin: 0 0 0.8rem; }
-  .do-com { font-size: 0.95rem; color: #45506a; line-height: 1.6; white-space: pre-wrap; }
-  .do-com-empty { color: #9aa3b2; font-style: italic; }
+  .do-com-title { font-size: 1.15rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.8rem; }
+  .do-com { font-size: 0.95rem; color: var(--fm-text); line-height: 1.6; white-space: pre-wrap; }
+  .do-com-empty { color: var(--fm-muted-2); font-style: italic; }
 
   /* config panel (right) */
   .do-cfg { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); overflow: hidden; }
-  .do-cfg-head { padding: 1.1rem 1.5rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: #009FD9; }
+  .do-cfg-head { padding: 1.1rem 1.5rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--fm-brand); }
   .do-cfg-lines { padding: 0.2rem 1.5rem; }
-  .do-cfg-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1rem 0; border-bottom: 1px solid #f0f2f5; }
+  .do-cfg-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1rem 0; border-bottom: 1px solid var(--fm-divider); }
   .do-cfg-line:last-child { border-bottom: none; }
   .do-cfg-info { flex: 1 1 auto; min-width: 0; }
-  .do-cfg-step { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #9aa3b2; }
-  .do-cfg-name { font-size: 1.02rem; font-weight: 600; color: #1f2a44; margin-top: 0.12rem; word-break: break-word; }
-  .do-cfg-price { flex: 0 0 auto; font-size: 1rem; font-weight: 700; color: #15233b; white-space: nowrap; }
-  .do-cfg-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.5rem; background: #f6fbfe; border-top: 2px solid #15233b; }
-  .do-cfg-total .t-lbl { font-size: 1rem; font-weight: 800; color: #15233b; text-transform: uppercase; letter-spacing: 0.04em; }
-  .do-cfg-total .t-amt { font-size: 1.7rem; font-weight: 800; color: #009FD9; }
-  .do-cfg-empty { color: #9aa3b2; font-size: 0.95rem; padding: 1.6rem 1.5rem; text-align: center; }
+  .do-cfg-step { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fm-muted-2); }
+  .do-cfg-name { font-size: 1.02rem; font-weight: 600; color: var(--fm-ink-3); margin-top: 0.12rem; word-break: break-word; }
+  .do-cfg-price { flex: 0 0 auto; font-size: 1rem; font-weight: 700; color: var(--fm-ink); white-space: nowrap; }
+  .do-cfg-total { display: flex; justify-content: space-between; align-items: center; padding: 1.3rem 1.5rem; background: #f6fbfe; border-top: 2px solid var(--fm-ink); }
+  .do-cfg-total .t-lbl { font-size: 1rem; font-weight: 800; color: var(--fm-ink); text-transform: uppercase; letter-spacing: 0.04em; }
+  .do-cfg-total .t-amt { font-size: 1.7rem; font-weight: 800; color: var(--fm-brand); }
+  .do-cfg-empty { color: var(--fm-muted-2); font-size: 0.95rem; padding: 1.6rem 1.5rem; text-align: center; }
 
-  .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: #9aa3b2; font-size: 1rem; }
+  .do-notfound { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; padding: 2.5rem; text-align: center; color: var(--fm-muted-2); font-size: 1rem; }
 
   /* confirmation modal (mirrors the stock page pattern) */
   .do-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
   .do-modal-overlay.do-hidden { display: none; }
-  .do-modal { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,35,59,0.28); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: 'Space Grotesk', sans-serif; color: #15233b; animation: doModalIn 0.18s ease-out; }
+  .do-modal { background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,35,59,0.28); width: 100%; max-width: 440px; padding: 1.7rem 1.7rem 1.4rem; font-family: var(--fm-font); color: var(--fm-ink); animation: doModalIn 0.18s ease-out; }
   @keyframes doModalIn { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .do-modal-title { font-size: 1.25rem; font-weight: 700; color: #15233b; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
-  .do-modal-body { font-size: 0.95rem; color: #45506a; line-height: 1.5; margin: 0 0 1.5rem; }
+  .do-modal-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink); margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+  .do-modal-body { font-size: 0.95rem; color: var(--fm-text); line-height: 1.5; margin: 0 0 1.5rem; }
   .do-modal-actions { display: flex; justify-content: flex-end; gap: 0.7rem; flex-wrap: wrap; }
   .do-modal-status { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
   .do-modal-status.err { background: #fdeceb; color: #b3261e; border: 1px solid #f5c6c2; }
@@ -281,7 +281,7 @@
           </div>
         </div>
         {% if desc and desc != '' %}
-        <div style="margin-top:1.4rem;border-top:1px solid #f0f2f5;padding-top:1.3rem;">
+        <div style="margin-top:1.4rem;border-top:1px solid var(--fm-divider);padding-top:1.3rem;">
           <h4 class="do-desc-title">Descripción</h4>
           <div class="do-desc">{{ desc | escape | newline_to_br }}</div>
         </div>

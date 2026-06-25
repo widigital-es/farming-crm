@@ -38,15 +38,15 @@
 {% include 'Configurador Core' %}
 
 <style>
-  .pb-detail { background:#fff; border:1px solid #eceef1; border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.05); padding:1.4rem 1.6rem; }
+  .pb-detail { background:#fff; border:1px solid var(--fm-border); border-radius:14px; box-shadow:0 2px 14px rgba(0,0,0,0.05); padding:1.4rem 1.6rem; }
   .pb-modelos { margin-top:1.5rem; }
-  .pb-detail-title { font-size:1.4rem; font-weight:700; color:#1a2b4a; margin:0 0 1.1rem; }
+  .pb-detail-title { font-size:1.4rem; font-weight:700; color:var(--fm-ink-2); margin:0 0 1.1rem; }
   .pb-detail-row { display:flex; gap:1.6rem; align-items:flex-start; }
   .pb-detail-img { flex:0 0 320px; max-width:320px; border:1px solid #e0e3e9; border-radius:10px; overflow:hidden; background:#fff; }
   .pb-detail-img img { width:100%; height:auto; display:block; }
   .pb-detail-text { flex:1 1 auto; min-width:0; font-size:0.93rem; color:#374151; line-height:1.55; }
   .pb-detail-desc { margin-bottom:1.1rem; }
-  .pb-detail-carac-title { font-size:1.05rem; font-weight:700; color:#1a2b4a; margin:0 0 0.5rem; }
+  .pb-detail-carac-title { font-size:1.05rem; font-weight:700; color:var(--fm-ink-2); margin:0 0 0.5rem; }
   .pb-detail-carac { font-size:0.9rem; color:#374151; line-height:1.55; }
   .pb-detail-carac ul, .pb-detail-carac ol { margin:0; padding-left:1.25rem; }
   .pb-detail-carac li { margin-bottom:0.3rem; }
@@ -68,7 +68,7 @@
               <img src="https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Fabricantes/{{ prod.wi_fabricante.name | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}/{{ prod.wi_nombreproducto | replace: ' ', '%20' }}.png"
                    alt="{{ prod.wi_nombreproducto | escape }}"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-              <span style="display:none;font-size:2rem;color:#9aa3b2;text-align:center;padding:2rem 0;" aria-hidden="true">&#9881;</span>
+              <span style="display:none;font-size:2rem;color:var(--fm-muted-2);text-align:center;padding:2rem 0;" aria-hidden="true">&#9881;</span>
             </div>
             <div class="pb-detail-text">
               <div class="pb-detail-desc">{{ prod.wi_descripcion | escape }}</div>

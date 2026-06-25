@@ -14,41 +14,12 @@
 {% endfetchxml %}
 
 <style>
-  .pp-wrap { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
-  .pp-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
-  .pp-title { font-size: 2.4rem; font-weight: 700; color: #15233b; margin: 0; letter-spacing: -0.01em; }
-  .pp-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
-
-  /* Custom dropdown that matches the "Gestión Comercial" header menu: white
-     rounded panel, soft shadow, translucent brand-blue hover. Trigger keeps the
-     same height/size as the old native select. */
-  .pp-filter { position: relative; }
-  .pp-filter-trigger { -webkit-appearance: none; -moz-appearance: none; appearance: none; display: inline-flex; align-items: center; box-sizing: border-box; min-width: 200px; padding: 0.62rem 2.4rem 0.62rem 1rem; border: 1px solid #d4d8e0; border-radius: 99px; background: #fff; color: #45506a; font-size: 0.95rem; line-height: 1.2; cursor: pointer; font-family: inherit; text-align: left; width: 100%; }
-  .pp-filter::after { content: ''; position: absolute; right: 1rem; top: 50%; width: 9px; height: 9px; border-right: 2px solid #8a93a6; border-bottom: 2px solid #8a93a6; transform: translateY(-65%) rotate(45deg); pointer-events: none; transition: transform 0.15s ease; }
-  .pp-filter.open::after { transform: translateY(-35%) rotate(-135deg); }
-  .pp-filter-trigger:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
-  .pp-filter-menu { position: absolute; z-index: 50; top: calc(100% + 8px); left: 0; min-width: 100%; max-height: 320px; overflow-y: auto; background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; box-shadow: 0 10px 26px rgba(0,0,0,0.16); padding: 6px; display: none; }
-  .pp-filter.open .pp-filter-menu { display: block; animation: ppDropIn 0.18s ease-out; }
-  .pp-filter-opt { display: block; width: 100%; box-sizing: border-box; text-align: left; background: transparent; border: 0; color: #2A2C2E; font-family: inherit; font-size: 0.95rem; font-weight: 500; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; white-space: nowrap; transition: background-color 0.15s ease, color 0.15s ease; }
-  .pp-filter-opt:hover, .pp-filter-opt:focus, .pp-filter-opt.active { background-color: rgba(0,159,217,0.14); color: #2A2C2E; outline: none; }
-  @keyframes ppDropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-
-  .pp-search { position: relative; }
-  .pp-search input { width: 280px; max-width: 100%; box-sizing: border-box; padding: 0.62rem 1rem 0.62rem 2.5rem; border: 1px solid #d4d8e0; border-radius: 99px; font-size: 0.95rem; color: #1f2a44; }
-  .pp-search input:focus { outline: none; border-color: #009FD9; box-shadow: 0 0 0 3px rgba(0,159,217,0.15); }
-  .pp-search::before { content: ''; position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; background: url('https://farmingpalencia.sharepoint.com/sites/CRMLibrary/CRM_DEV/Tools/Search%20(1).svg') no-repeat center / contain; opacity: 0.55; }
-
-  .pp-new { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.4rem; border-radius: 999px; background: #009FD9; color: #fff !important; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; border: 1px solid #009FD9; transition: background 0.15s ease; }
-  .pp-new:hover { background: #0080B5; border-color: #0080B5; color: #fff !important; }
-
-  .pp-list { display: flex; flex-direction: column; gap: 1rem; }
+  /* Reglas .pp-* compartidas en web-files/farming.css (cargada global vía Header).
+     Aquí solo lo propio de Peticiones: tarjeta de 4 columnas y el botón Nueva
+     petición. El @media queda aquí (tras farming.css) para ganar la cascada en móvil. */
+  .pp-new { display: inline-flex; align-items: center; justify-content: center; padding: 0.62rem 1.4rem; border-radius: 999px; background: var(--fm-brand); color: #fff !important; font-size: 0.95rem; font-weight: 700; text-decoration: none !important; border: 1px solid var(--fm-brand); transition: background 0.15s ease; }
+  .pp-new:hover { background: var(--fm-brand-700); border-color: var(--fm-brand-700); color: #fff !important; }
   .pp-card { display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.1fr; align-items: start; gap: 1rem; background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.4rem 1.75rem; }
-  .pp-code { font-size: 1.35rem; font-weight: 700; color: #15233b; line-height: 1.1; }
-  .pp-estado { color: #45506a; font-size: 0.95rem; margin-top: 0.35rem; }
-  .pp-detalle { display: inline-block; margin-top: 0.45rem; color: #009FD9 !important; font-size: 0.95rem; text-decoration: underline !important; }
-  .pp-val { color: #1f2a44; font-size: 1rem; }
-  .pp-lbl { color: #9aa3b2; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.3rem; }
-  .pp-empty { color: #9aa3b2; font-size: 1rem; padding: 2.5rem 0; text-align: center; }
 
   @media (max-width: 820px) {
     .pp-card { grid-template-columns: 1fr 1fr; row-gap: 1rem; }

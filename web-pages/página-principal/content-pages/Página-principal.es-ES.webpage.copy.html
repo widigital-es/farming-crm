@@ -1,6 +1,6 @@
 <style>
   /* ===== Home (Inicio) redesign ===== */
-  .home-wrap { font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif; max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
+  .home-wrap { font-family: var(--fm-font); max-width: 1180px; margin: 0 auto; padding: 0 1rem 3.5rem; }
 
   /* Clip any horizontal overshoot from the hero's full-bleed breakout so the
      page never shows a horizontal scrollbar. The footer/header are plain
@@ -42,7 +42,7 @@
     position: relative;
     z-index: 1;
     color: #ffffff;
-    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+    font-family: var(--fm-font);
     font-weight: 700;
     font-size: clamp(2.2rem, 5vw, 3.6rem);
     line-height: 1.1;
@@ -54,7 +54,7 @@
   /* Intro line */
   .home-intro {
     text-align: center;
-    color: #1f2a44;
+    color: var(--fm-ink-3);
     font-size: clamp(1.05rem, 2.2vw, 1.35rem);
     line-height: 1.5;
     max-width: 820px;
@@ -85,14 +85,14 @@
     justify-content: center;
   }
   .home-card-body h2 {
-    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+    font-family: var(--fm-font);
     font-weight: 700;
-    color: #1f2a44;
+    color: var(--fm-ink-3);
     font-size: 1.6rem;
     margin: 0 0 0.65rem;
   }
   .home-card-body p {
-    color: #45506a;
+    color: var(--fm-text);
     font-size: 1rem;
     line-height: 1.55;
     margin: 0 0 1.4rem;
@@ -102,20 +102,20 @@
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    background: #009FD9;
+    background: var(--fm-brand);
     color: #ffffff !important;
-    border: 1px solid #009FD9;
+    border: 1px solid var(--fm-brand);
     border-radius: 999px;
     font-weight: 700;
     font-size: 1rem;
     padding: 0.65rem 1.6rem;
     text-decoration: none !important;
     transition: background-color 0.15s ease, border-color 0.15s ease;
-    font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+    font-family: var(--fm-font);
   }
   .home-card-btn:hover, .home-card-btn:focus {
-    background: #0080B5;
-    border-color: #0080B5;
+    background: var(--fm-brand-700);
+    border-color: var(--fm-brand-700);
     color: #ffffff !important;
     text-decoration: none !important;
   }

@@ -30,11 +30,11 @@
 .crmEntityFormView .section-title,
 fieldset > legend,
 legend {
-  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-family: var(--fm-font) !important;
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1a2b4a;
+  color: var(--fm-ink-2);
   margin: 0 0 1rem;
   border: none; /* some themes underline <legend>; drop it for consistency */
 }
@@ -44,10 +44,10 @@ legend {
 .crmEntityFormView h5,
 .crmEntityFormView h6,
 .crmEntityFormView .tab-title {
-  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-family: var(--fm-font) !important;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #1a2b4a;
+  color: var(--fm-ink-2);
   margin: 0 0 0.6rem;
 }
 
@@ -55,14 +55,14 @@ legend {
 .crmEntityFormView label,
 .crmEntityFormView .control-label,
 .crmEntityFormView .info {
-  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-family: var(--fm-font) !important;
   font-size: 0.95rem;
   font-weight: 600;
 }
 .crmEntityFormView input,
 .crmEntityFormView select,
 .crmEntityFormView textarea {
-  font-family: 'Space Grotesk', 'Segoe UI', Arial, sans-serif !important;
+  font-family: var(--fm-font) !important;
   font-size: 0.95rem;
 }
 

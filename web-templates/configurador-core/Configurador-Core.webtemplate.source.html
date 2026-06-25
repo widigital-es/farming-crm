@@ -221,7 +221,7 @@
     padding: 0.6rem 0.15rem 0.9rem;
     font-size: 1rem;
     font-weight: 600;
-    color: #9aa3b2;
+    color: var(--fm-muted-2);
     text-decoration: none;
     background: none;
     border: none;
@@ -234,13 +234,13 @@
      the site header nav). */
   a.cfg-step:hover { color: #3b4252; text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor; text-decoration: none; }
   .cfg-step, a.cfg-step, a.cfg-step:hover, a.cfg-step:focus { text-decoration: none !important; }
-  .cfg-step.is-current { color: #1f2a44; text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor; }
+  .cfg-step.is-current { color: var(--fm-ink-3); text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor; }
   .cfg-step.is-current::after {
     content: '';
     position: absolute;
     left: 0; right: 0; bottom: -1px;
     height: 3px;
-    background: #2aa9e0;
+    background: var(--fm-brand);
     border-radius: 3px;
   }
   .cfg-step.is-disabled { color: #c2c8d2; pointer-events: none; }
@@ -258,7 +258,7 @@
   .cfg-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.25rem; }
   .cfg-card {
     display: flex; flex-direction: column;
-    border: 1px solid #eceef1; border-radius: 14px; overflow: hidden; background: #fff;
+    border: 1px solid var(--fm-border); border-radius: 14px; overflow: hidden; background: #fff;
     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-decoration: none; cursor: pointer;
@@ -268,20 +268,20 @@
   .cfg-card-img { height: 150px; background: #eef2fb center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
   .cfg-card-img img { max-width: 80%; max-height: 80%; object-fit: contain; }
   .cfg-card-body { padding: 0.9rem 1.1rem 1.1rem; }
-  .cfg-card-title { font-size: 1.05rem; font-weight: 700; color: #1a2b4a; margin: 0 0 0.6rem; }
-  .cfg-card-desc { font-size: 0.85rem; color: #6b7280; line-height: 1.4; margin: 0 0 1.1rem;
+  .cfg-card-title { font-size: 1.05rem; font-weight: 700; color: var(--fm-ink-2); margin: 0 0 0.6rem; }
+  .cfg-card-desc { font-size: 0.85rem; color: var(--fm-muted); line-height: 1.4; margin: 0 0 1.1rem;
                    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
   /* ---- option list (radios / checkboxes) ---- */
-  .cfg-panel { background: #fff; border: 1px solid #eceef1; border-radius: 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.05); overflow: hidden; }
-  .cfg-panel-head { padding: 0.9rem 1.25rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #9aa3b2; border-bottom: 1px solid #f0f2f5; background: #fafbfc; }
+  .cfg-panel { background: #fff; border: 1px solid var(--fm-border); border-radius: 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.05); overflow: hidden; }
+  .cfg-panel-head { padding: 0.9rem 1.25rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fm-muted-2); border-bottom: 1px solid var(--fm-divider); background: #fafbfc; }
   .cfg-opt { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1.25rem; border-bottom: 1px solid #f4f5f7; cursor: pointer; }
   .cfg-opt:last-child { border-bottom: none; }
   .cfg-opt:hover { background: #f7f8ff; }
   .cfg-opt input { width: 17px; height: 17px; cursor: pointer; flex: 0 0 auto; }
-  .cfg-opt-name { flex: 1 1 auto; font-size: 0.96rem; color: #1f2a44; font-weight: 600;
+  .cfg-opt-name { flex: 1 1 auto; font-size: 0.96rem; color: var(--fm-ink-3); font-weight: 600;
                   overflow: hidden; text-overflow: ellipsis; }
-  .cfg-opt-dots { flex: 1 1 auto; border-bottom: 1px dotted #d4d8e0; height: 0; margin: 0 0.25rem; }
+  .cfg-opt-dots { flex: 1 1 auto; border-bottom: 1px dotted var(--fm-border-2); height: 0; margin: 0 0.25rem; }
   .cfg-opt-price { flex: 0 0 auto; font-size: 0.92rem; color: #4b5563; font-weight: 600; white-space: nowrap; }
 
   /* ---- nav buttons ---- */
@@ -291,38 +291,38 @@
     padding: 0.6rem 1.4rem; border-radius: 999px; font-size: 0.95rem; font-weight: 700;
     cursor: pointer; text-decoration: none; border: 1px solid transparent; transition: background 0.15s ease, opacity 0.15s ease;
   }
-  .cfg-btn-primary { background: #2aa9e0; color: #fff; }
-  .cfg-btn-primary:hover { background: #1f93c7; text-decoration: none; }
+  .cfg-btn-primary { background: var(--fm-brand); color: #fff; }
+  .cfg-btn-primary:hover { background: var(--fm-brand-700); text-decoration: none; }
   .cfg-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
-  .cfg-btn-ghost { background: #fff; color: #2aa9e0; border-color: #bfe3f4; }
+  .cfg-btn-ghost { background: #fff; color: var(--fm-brand); border-color: #bfe3f4; }
   .cfg-btn-ghost:hover { background: #f0faff; text-decoration: none; }
 
-  .cfg-h2 { font-size: 1.5rem; font-weight: 700; color: #1a2b4a; margin: 0 0 1.25rem; letter-spacing: -0.01em; }
+  .cfg-h2 { font-size: 1.5rem; font-weight: 700; color: var(--fm-ink-2); margin: 0 0 1.25rem; letter-spacing: -0.01em; }
 
   /* ---- order summary ---- */
-  .cfg-sum-title { font-size: 1.25rem; font-weight: 700; color: #1a2b4a; margin: 0 0 0.9rem; }
-  .cfg-sum-card { background: #fff; border: 1px solid #eceef1; border-radius: 14px; box-shadow: 0 2px 14px rgba(0,0,0,0.05); padding: 1.1rem 1.25rem; }
-  .cfg-sum-detalle { font-size: 0.95rem; font-weight: 700; color: #1f2a44; padding-bottom: 0.6rem; border-bottom: 1px solid #eef0f3; margin-bottom: 0.6rem; }
+  .cfg-sum-title { font-size: 1.25rem; font-weight: 700; color: var(--fm-ink-2); margin: 0 0 0.9rem; }
+  .cfg-sum-card { background: #fff; border: 1px solid var(--fm-border); border-radius: 14px; box-shadow: 0 2px 14px rgba(0,0,0,0.05); padding: 1.1rem 1.25rem; }
+  .cfg-sum-detalle { font-size: 0.95rem; font-weight: 700; color: var(--fm-ink-3); padding-bottom: 0.6rem; border-bottom: 1px solid #eef0f3; margin-bottom: 0.6rem; }
   .cfg-sum-row { margin: 0.7rem 0; }
-  .cfg-sum-k { font-size: 0.85rem; font-weight: 700; color: #1f2a44; }
-  .cfg-sum-v { display: flex; align-items: baseline; gap: 0.3rem; color: #6b7280; font-size: 0.9rem; margin-top: 0.15rem; }
+  .cfg-sum-k { font-size: 0.85rem; font-weight: 700; color: var(--fm-ink-3); }
+  .cfg-sum-v { display: flex; align-items: baseline; gap: 0.3rem; color: var(--fm-muted); font-size: 0.9rem; margin-top: 0.15rem; }
   .cfg-sum-v .nm { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; }
-  .cfg-sum-v .dots { flex: 0 1 auto; border-bottom: 1px dotted #d4d8e0; min-width: 12px; height: 0.7em; }
+  .cfg-sum-v .dots { flex: 0 1 auto; border-bottom: 1px dotted var(--fm-border-2); min-width: 12px; height: 0.7em; }
   .cfg-sum-v .pr { flex: 0 0 auto; white-space: nowrap; }
-  .cfg-sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; padding-top: 0.8rem; border-top: 2px solid #1f2a44; font-weight: 800; color: #1a2b4a; }
+  .cfg-sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; padding-top: 0.8rem; border-top: 2px solid var(--fm-ink-3); font-weight: 800; color: var(--fm-ink-2); }
   .cfg-sum-total .amt { font-size: 1.15rem; }
-  .cfg-sum-empty { color: #9aa3b2; font-size: 0.9rem; }
+  .cfg-sum-empty { color: var(--fm-muted-2); font-size: 0.9rem; }
 
   /* ---- create-order fab ---- */
   .cfg-fab {
     position: fixed; right: 2rem; bottom: 2rem; z-index: 1000;
     display: inline-flex; align-items: center; gap: 0.6rem;
     padding: 0.9rem 1.6rem; border: none; border-radius: 999px;
-    background: #2aa9e0; color: #fff; font-size: 1rem; font-weight: 700;
-    box-shadow: 0 8px 24px rgba(42,169,224,0.4); cursor: pointer;
+    background: var(--fm-brand); color: #fff; font-size: 1rem; font-weight: 700;
+    box-shadow: 0 8px 24px rgba(0,159,217,0.4); cursor: pointer;
     transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
   }
-  .cfg-fab:hover:not(:disabled) { transform: translateY(-2px); background: #1f93c7; }
+  .cfg-fab:hover:not(:disabled) { transform: translateY(-2px); background: var(--fm-brand-700); }
   .cfg-fab:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
   .cfg-fab-count { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; background: rgba(255,255,255,0.25); font-size: 0.85rem; font-weight: 700; }
 
