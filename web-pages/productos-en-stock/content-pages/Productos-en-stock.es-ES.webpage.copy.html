@@ -1,5 +1,6 @@
+{% assign accountid = user.parentcustomerid.id | default: '00000000-0000-0000-0000-000000000000' %}
 {% fetchxml stock %}
-<fetch count="500">
+<fetch count="500" distinct="true">
   <entity name="wi_stock">
     <attribute name="wi_stockid" />
     <attribute name="wi_productobase" />
@@ -12,6 +13,11 @@
       <condition attribute="wi_usado" operator="ne" value="true" />
       <condition attribute="wi_usado" operator="null" />
     </filter>
+    <link-entity name="wi_cuentafabricante" from="wi_fabricante" to="wi_fabricante" link-type="inner" alias="cf">
+      <filter type="and">
+        <condition attribute="wi_cuenta" operator="eq" value="{{ accountid | xml_escape }}" />
+      </filter>
+    </link-entity>
     <order attribute="wi_name" />
   </entity>
 </fetch>
