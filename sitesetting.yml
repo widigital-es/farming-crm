@@ -128,6 +128,14 @@
   adx_name: Webapi/wi_solicituddepedidodestock/fields
   adx_sitesettingid: 1717ebd1-769c-4869-9676-3f9d5f61e649
   adx_value: '*'
+- adx_description: Enables the portal Web API for the Stock table.
+  adx_name: Webapi/wi_stock/enabled
+  adx_sitesettingid: 06fe0929-a575-4349-9e4b-4389f4469f53
+  adx_value: true
+- adx_description: Fields exposed through the Web API for the Stock table.
+  adx_name: Webapi/wi_stock/fields
+  adx_sitesettingid: d6ff0bf6-c483-45f0-b976-f200427f6bf0
+  adx_value: statecode,statuscode
 - adx_description: ''
   adx_name: Authentication/OpenAuth/Facebook/AppId
   adx_sitesettingid: aefd1005-293c-4674-8fba-01dc8077c0fd
