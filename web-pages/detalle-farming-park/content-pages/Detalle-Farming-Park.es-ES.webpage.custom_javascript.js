@@ -1,13 +1,13 @@
 (function () {
   // ---- entity set + nav property names (confirmed against farming-dev metadata) ----
   var SET_OPP = 'wi_oportunidadfarmings';            // wi_oportunidadfarming
-  var SET_SPS = 'wi_solicituddepedidodestocks';      // wi_solicituddepedidodestock
   var SET_STOCK = 'wi_stocks';                        // wi_stock
 
-  // Fase choice on the opportunity. "Solicitar Pedido" uses Solicitud de pedido = 2 (mirrors Resumen).
+  // Fase choice on the opportunity. "Solicitar stock" uses Solicitud de pedido = 2 (mirrors Resumen).
   var FASE_PEDIDO = 2;
-  // Estado de la solicitud de stock: first / "nueva"-like value = 101 (Solicitud de Stock).
-  var ESTADO_NUEVA = 101;
+  // wi_stock state when sold: statecode Inactivo = 1, statuscode Inactivo = 2.
+  var STOCK_INACTIVO_STATE = 1;
+  var STOCK_INACTIVO_STATUS = 2;
 
   // Liquid-stamped values are read from the #dpSolicitar button's data-* attributes
   // (set in dpInit), so they work for portal users — inline page-copy <script> does not run.
@@ -63,6 +63,23 @@
     });
   }
 
+  function apiPatch(set, id, payload, token) {
+    return fetch('/_api/' + set + '(' + id + ')', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json', 'Accept': 'application/json',
+        'OData-MaxVersion': '4.0', 'OData-Version': '4.0',
+        '__RequestVerificationToken': token || ''
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' (PATCH) en ' + set + ': ' + txt);
+        return txt ? JSON.parse(txt) : {};
+      });
+    });
+  }
+
   // ---- confirmation modal helpers ----
   var lastFocused = null;
 
@@ -96,38 +113,45 @@
     openModal();
   }
 
-  // Runs the existing create logic (unchanged payloads/endpoints/redirect).
+  // Creates a SINGLE wi_oportunidadfarming for this stock product, then marks the
+  // wi_stock record sold (statecode Inactivo). No wi_solicituddepedidodestock is
+  // created any more — the opportunity carries wi_productostock + wi_precio.
   function runCreate() {
     closeModal();
     if (!stockId) { showStatus('No se ha podido identificar el producto en stock.', 'err'); return; }
 
     var btn = document.getElementById('dpSolicitar');
     if (btn) btn.disabled = true;
-    showStatus('Creando solicitud...');
+    showStatus('Creando pedido...');
 
     var precio = parseFloat(String(stockPrecioRaw).replace(',', '.'));
     if (isNaN(precio)) precio = null;
 
     getToken().then(function (token) {
-      // 1) Opportunity — same cuenta/contacto stamping + fase as Resumen's "Solicitar Pedido", no line items.
-      var oppPayload = { 'wi_fase': FASE_PEDIDO };
+      // 1) Opportunity — same cuenta/contacto stamping + fase as Resumen's "Solicitar Pedido".
+      //    Linked to this stock product via wi_ProductoStock, and stamped with its price.
+      var oppPayload = {
+        'wi_fase': FASE_PEDIDO,
+        'wi_ProductoStock@odata.bind': '/' + SET_STOCK + '(' + stockId + ')'
+      };
+      if (precio != null) oppPayload.wi_precio = precio;
       if (cuentaId) oppPayload['wi_Cuenta@odata.bind'] = '/accounts(' + cuentaId + ')';
       if (contactoId) oppPayload['wi_Contacto@odata.bind'] = '/contacts(' + contactoId + ')';
 
       return apiCreate(SET_OPP, oppPayload, token).then(function () {
-        // 2) Stock request — estado default + precio + link to this stock record.
-        var spsPayload = {
-          'wi_estadodelasolicitud': ESTADO_NUEVA,
-          'wi_ProductoStock@odata.bind': '/' + SET_STOCK + '(' + stockId + ')'
-        };
-        if (precio != null) spsPayload.wi_precio = precio;
-        return apiCreate(SET_SPS, spsPayload, token);
+        // 2) Mark the stock record as sold (Inactivo) so it shows the VENDIDO stamp
+        //    and can no longer be requested.
+        showStatus('Pedido creado. Actualizando el stock...');
+        return apiPatch(SET_STOCK, stockId, {
+          'statecode': STOCK_INACTIVO_STATE,
+          'statuscode': STOCK_INACTIVO_STATUS
+        }, token);
       });
     }).then(function () {
-      showStatus('Solicitud creada correctamente. Redirigiendo...', 'ok');
+      showStatus('Pedido creado correctamente. Redirigiendo...', 'ok');
       setTimeout(function () { location.href = '/Oportunidades'; }, 1200);
     }).catch(function (err) {
-      showStatus('No se ha podido crear la solicitud: ' + err.message, 'err');
+      showStatus('No se ha podido completar la solicitud: ' + err.message, 'err');
       if (btn) btn.disabled = false;
     });
   }
@@ -144,7 +168,9 @@
       contactoId = btn.getAttribute('data-contacto') || '';
       stockId = btn.getAttribute('data-stock-id') || '';
       stockPrecioRaw = btn.getAttribute('data-precio') || '';
-      btn.addEventListener('click', solicitarStock);
+      // A sold record renders a disabled button with no data-stock-id; only wire
+      // the request flow when this is an available product.
+      if (stockId) btn.addEventListener('click', solicitarStock);
     }
 
     // Wire the custom confirmation modal.

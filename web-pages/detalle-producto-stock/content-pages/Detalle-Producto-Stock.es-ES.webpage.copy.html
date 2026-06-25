@@ -12,9 +12,14 @@
     <attribute name="wi_almacen" />
     <attribute name="wi_precio" />
     <attribute name="wi_descripcion" />
+    <attribute name="statecode" />
     {% if sid %}
     <filter type="and">
       <condition attribute="wi_stockid" operator="eq" value="{{ sid | xml_escape }}" />
+      <condition attribute="statecode" operator="in">
+        <value>0</value>
+        <value>1</value>
+      </condition>
     </filter>
     {% endif %}
     <link-entity name="wi_productobasefarming" from="wi_productobasefarmingid" to="wi_productobase" link-type="outer" alias="pbf">
@@ -102,6 +107,10 @@
   .dp-status:not(.ok):not(.err) { background: #eaf6fc; color: #0b6a92; border: 1px solid #bfe6f5; }
   .dp-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* sold state: VENDIDO stamp next to the title + greyed-out sold button */
+  .dp-vendido { display: inline-block; vertical-align: middle; margin-left: 0.6rem; transform: rotate(-6deg); padding: 0.22em 0.7em; border: 2px solid #c0392b; border-radius: 8px; color: #c0392b; background: rgba(192,57,43,0.06); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+  .dp-btn-sold { background: #c0392b !important; border-color: #c0392b !important; opacity: 1; cursor: not-allowed; }
+
   /* confirmation modal */
   .dp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
   .dp-modal-overlay.dp-hidden { display: none; }
@@ -116,6 +125,9 @@
 {% assign fab = s.wi_fabricante.name %}
 {% assign base = s.wi_productobase.name | default: s['pbf.wi_nombreproducto'] %}
 {% assign desc = s.wi_descripcion %}
+{% comment %} statecode: 0 = Activo (disponible), 1 = Inactivo (VENDIDO). {% endcomment %}
+{% assign sold = false %}
+{% if s.statecode.value == 1 %}{% assign sold = true %}{% endif %}
 
 <div class="dp-wrap">
   <nav class="dp-bc">
@@ -125,7 +137,7 @@
   </nav>
 
   <div class="dp-top">
-    <h1 class="dp-title">{{ base | default: 'Detalle del producto' | escape }}</h1>
+    <h1 class="dp-title">{{ base | default: 'Detalle del producto' | escape }}{% if sold %} <span class="dp-vendido">Vendido</span>{% endif %}</h1>
   </div>
 
   <div class="dp-cols">
@@ -212,11 +224,15 @@
       <div id="dpStatus" class="dp-status" style="display:none;"></div>
       <div class="dp-actions">
         <a class="dp-btn dp-btn-ghost" href="/productos-en-stock">Atrás</a>
+        {% if sold %}
+        <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary dp-btn-sold" disabled aria-disabled="true">Vendido</button>
+        {% else %}
         <button type="button" id="dpSolicitar" class="dp-btn dp-btn-primary"
                 data-stock-id="{{ s.wi_stockid }}"
                 data-precio="{{ s.wi_precio }}"
                 data-cuenta="{{ user.parentcustomerid.id }}"
                 data-contacto="{{ user.id }}">Solicitar stock</button>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -225,7 +241,7 @@
 <div id="dpModal" class="dp-modal-overlay dp-hidden" role="dialog" aria-modal="true" aria-labelledby="dpModalTitle" aria-hidden="true">
   <div class="dp-modal" tabindex="-1">
     <h3 id="dpModalTitle" class="dp-modal-title">¿Solicitar este producto en stock?</h3>
-    <p class="dp-modal-body">Se creará un pedido y una solicitud de pedido de stock para este producto.</p>
+    <p class="dp-modal-body">Se creará un pedido para este producto y se marcará como vendido en el stock.</p>
     <div class="dp-modal-actions">
       <button type="button" id="dpModalCancel" class="dp-btn dp-btn-ghost">Cancelar</button>
       <button type="button" id="dpModalConfirm" class="dp-btn dp-btn-primary">Solicitar</button>
