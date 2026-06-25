@@ -78,48 +78,11 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
   }
 
-  // ---- Solicitudes de stock tab: simple text search over its own card list ----
-  function solCards() { return Array.prototype.slice.call(document.querySelectorAll('#solList .pp-card')); }
-
-  window.solFilter = function () {
-    var input = document.getElementById('solSearch');
-    var q = (input ? input.value : '').toLowerCase().trim();
-    var visible = 0;
-    solCards().forEach(function (c) {
-      var show = !q || (c.getAttribute('data-search') || '').toLowerCase().indexOf(q) > -1;
-      c.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-    var empty = document.getElementById('solEmpty');
-    if (empty) empty.style.display = (visible === 0) ? 'block' : 'none';
-  };
-
-  // ---- client-side tab switching (show/hide panels, no reload) ----
-  function buildTabs() {
-    var tabs = Array.prototype.slice.call(document.querySelectorAll('.pp-tab'));
-    if (!tabs.length) return;
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        tabs.forEach(function (t) {
-          var active = (t === tab);
-          t.classList.toggle('active', active);
-          t.setAttribute('aria-selected', active ? 'true' : 'false');
-          var panel = document.getElementById(t.getAttribute('data-panel'));
-          if (panel) panel.hidden = !active;
-          // swap the controls group on the shared tab row to match the active tab
-          var ctrls = document.getElementById(t.getAttribute('data-controls'));
-          if (ctrls) ctrls.hidden = !active;
-        });
-      });
-    });
-  }
-
   function ppInit() {
-    if (!document.getElementById('ppList') && !document.getElementById('solList')) return;
-    // format prices (empty => 0 €) across both lists
+    if (!document.getElementById('ppList')) return;
+    // format prices (empty => 0 €)
     document.querySelectorAll('.pp-precio').forEach(function (el) { el.textContent = fmtEur(el.getAttribute('data-v')); });
     buildFilter();
-    buildTabs();
   }
 
   if (document.readyState !== 'loading') { ppInit(); }
