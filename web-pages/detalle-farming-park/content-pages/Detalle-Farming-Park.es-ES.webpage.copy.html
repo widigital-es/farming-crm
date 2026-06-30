@@ -50,12 +50,12 @@
   </nav>
 
   <div class="dp-top">
-    <h1 class="dp-title">{{ base | default: 'Detalle del producto' | escape }}{% if sold %} <span class="dp-vendido">Vendido</span>{% endif %}</h1>
+    <h1 class="fm-title dp-title">{{ base | default: 'Detalle del producto' | escape }}{% if sold %} <span class="dp-vendido">Vendido</span>{% endif %}</h1>
   </div>
 
   <div class="dp-cols">
     <div class="dp-left">
-      <div class="dp-card">
+      <div class="fm-surface dp-card">
         <div class="dp-prod">
           <div class="dp-prod-img">
             {% if fab and fab != '' %}
@@ -88,7 +88,7 @@
     </div>
 
     <div class="dp-right">
-      <div class="dp-cfg">
+      <div class="fm-surface dp-cfg">
         <div class="dp-cfg-head">Características</div>
         <div class="dp-cfg-lines">
           <div class="dp-cfg-line">

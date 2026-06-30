@@ -28,7 +28,7 @@
         {% if productos.results.entities.size > 0 %}
         <div class="cfg-cards">
           {% for p in productos.results.entities %}
-          <a class="cfg-card" href="#"
+          <a class="fm-surface cfg-card" href="#"
              data-id="{{ p.wi_productobasefabricanteid }}" data-label="{{ p.wi_nombreproducto | escape }}"
              onclick="cfgPickProducto(this); return false;">
             <div class="cfg-card-img" style="background:#fff;border:1px solid #e0e3e9;border-radius:10px;overflow:hidden;margin:1rem 1.1rem 0;">

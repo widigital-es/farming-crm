@@ -18,7 +18,7 @@
 
 <div class="pp-wrap" style="--pp-card-cols: 1.5fr 1fr 1.2fr 1.1fr;">
   <div class="pp-top">
-    <h1 class="pp-title">Peticiones a producto</h1>
+    <h1 class="fm-title pp-title">Peticiones a producto</h1>
     <div class="pp-controls">
       <div class="pp-filter" id="ppFilterWrap">
         <input type="hidden" id="ppEstado" value="" />
@@ -37,7 +37,7 @@
   {% if peticiones.results.entities.size > 0 %}
   <div class="pp-list" id="ppList">
     {% for p in peticiones.results.entities %}
-    <div class="pp-card"
+    <div class="fm-surface pp-card"
          data-estado="{{ p.wi_estado.label | escape }}"
          data-search="{{ p.wi_idpeticion | escape }} {{ p.wi_titulo | escape }} {{ p.wi_tipo.label | escape }} {{ p.wi_cuenta.name | escape }} {{ p.wi_estado.label | escape }}">
       <div class="pp-col pp-col-id">

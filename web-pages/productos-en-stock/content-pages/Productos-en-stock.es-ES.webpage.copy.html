@@ -51,7 +51,7 @@
         {% for s in stock.results.entities %}
         {% assign sold = false %}
         {% if s.statecode.value == 1 %}{% assign sold = true %}{% endif %}
-        <div class="stk-card{% if sold %} sold{% endif %}"
+        <div class="fm-surface stk-card{% if sold %} sold{% endif %}"
              data-fab="{{ s.wi_fabricante.name | escape }}"
              data-search="{{ s.wi_productobase.name | escape }} {{ s.wi_name | escape }} {{ s.wi_familia.name | default: s.wi_familia | escape }} {{ s.wi_fabricante.name | escape }} {{ s.wi_almacen.label | escape }}">
           <div class="stk-card-img">

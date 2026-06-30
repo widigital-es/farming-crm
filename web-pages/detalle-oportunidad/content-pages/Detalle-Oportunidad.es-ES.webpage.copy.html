@@ -115,7 +115,7 @@
   </nav>
 
   <div class="do-top">
-    <h1 class="do-title">Resumen de mi pedido</h1>
+    <h1 class="fm-title do-title">Resumen de mi pedido</h1>
     <a class="fm-btn fm-btn--primary" href="/cpq">Nuevo pedido</a>
   </div>
 
@@ -163,7 +163,7 @@
 
   <div class="do-cols">
     <div class="do-left">
-      <div class="do-card">
+      <div class="fm-surface do-card">
         <div class="do-prod">
           <div class="do-prod-img">
             {% if fabname != '' and prodfam != '' %}
@@ -199,7 +199,7 @@
         {% endif %}
       </div>
 
-      <div class="do-card">
+      <div class="fm-surface do-card">
         <h3 class="do-com-title">Comentarios realizados para el pedido</h3>
         {% if o.wi_comentarios and o.wi_comentarios != '' %}
         <div class="do-com">{{ o.wi_comentarios | escape }}</div>
@@ -210,7 +210,7 @@
     </div>
 
     <div class="do-right">
-      <div class="do-cfg">
+      <div class="fm-surface do-cfg">
         <div class="do-cfg-head">Resumen de la configuración del producto</div>
         <div class="do-cfg-lines" id="doCfgLines">
           {% comment %} PRODUCTO base price comes from the opportunity (wi_precioproductobase / wi_productobasef). {% endcomment %}

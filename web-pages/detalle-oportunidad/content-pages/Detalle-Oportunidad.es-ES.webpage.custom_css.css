@@ -13,7 +13,10 @@
 
   /* title row */
   .do-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
-  .do-title { font-size: 2.2rem; font-weight: 700; color: var(--fm-ink); margin: 0; letter-spacing: -0.01em; }
+  /* H1: lo común lo da .fm-title (farming.css). El tamaño 2.2 va con más
+     especificidad (.do-wrap .do-title) porque este custom_css carga en <head>,
+     antes que farming.css, y si no .fm-title (2.4) ganaría. */
+  .do-wrap .do-title { font-size: 2.2rem; margin: 0; }
 
   /* pill buttons */
 
@@ -33,7 +36,7 @@
   .do-right { flex: 0 0 400px; width: 400px; }
   @media (max-width: 960px) { .do-cols { flex-direction: column; } .do-right { width: 100%; flex-basis: auto; } }
 
-  .do-card { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); padding: 1.5rem 1.6rem; margin-bottom: 1.6rem; }
+  .do-card { padding: 1.5rem 1.6rem; margin-bottom: 1.6rem; }   /* superficie: .fm-surface */
 
   /* product block */
   .do-prod { display: flex; gap: 1.5rem; align-items: flex-start; }
@@ -57,7 +60,7 @@
   .do-com-empty { color: var(--fm-muted-2); font-style: italic; }
 
   /* config panel (right) */
-  .do-cfg { background: #fff; border: 1px solid #eef0f3; border-radius: 16px; box-shadow: 0 2px 14px rgba(20,35,59,0.06); overflow: hidden; }
+  .do-cfg { overflow: hidden; }   /* superficie: .fm-surface */
   .do-cfg-head { padding: 1.1rem 1.5rem; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--fm-brand); }
   .do-cfg-lines { padding: 0.2rem 1.5rem; }
   .do-cfg-line { display: flex; align-items: baseline; gap: 0.8rem; padding: 1rem 0; border-bottom: 1px solid var(--fm-divider); }

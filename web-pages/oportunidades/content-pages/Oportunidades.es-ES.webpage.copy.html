@@ -47,7 +47,7 @@
 
 <div class="pp-wrap" style="--pp-card-cols: 1.5fr 1fr 1fr 1.1fr 1fr;">
   <div class="pp-top">
-    <h1 class="pp-title">{{ pageName | escape }}</h1>
+    <h1 class="fm-title pp-title">{{ pageName | escape }}</h1>
     <div class="pp-actions">
       <a class="fm-btn fm-btn--ghost" href="/productos-en-stock">Productos en stock</a>
       <a class="fm-btn fm-btn--primary" href="/cpq">Nuevo pedido</a>
@@ -80,7 +80,7 @@
     {% assign isStock = false %}
     {% if o.wi_productostock and o.wi_productostock.id %}{% assign isStock = true %}{% endif %}
     {% if isStock %}{% assign precio = o.wi_precio %}{% else %}{% assign precio = o.wi_preciofinal %}{% endif %}
-    <div class="pp-card"
+    <div class="fm-surface pp-card"
          data-estado="{{ o.wi_fase.label | escape }}"
          data-search="{{ o.wi_idoportunidad | escape }} {{ o.wi_fase.label | escape }} {{ o.wi_cuenta.name | escape }} {{ o.wi_productobasef.name | escape }}">
       <div class="pp-col pp-col-id">

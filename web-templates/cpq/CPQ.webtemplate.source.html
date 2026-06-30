@@ -24,7 +24,7 @@
         <h2 class="cfg-h2">Selecciona la marca</h2>
         <div class="cfg-cards">
           {% for f in fabricantes.results.entities %}
-          <a class="cfg-card" href="#"
+          <a class="fm-surface cfg-card" href="#"
              data-id="{{ f.wi_fabricanteid }}" data-label="{{ f.wi_fabricante | escape }}"
              onclick="cfgPickFab(this); return false;">
             <div class="cfg-card-img" style="position:relative;background:#fff;height:180px;">
