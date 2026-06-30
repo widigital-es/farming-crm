@@ -103,6 +103,7 @@
       <div class="cfg-nav">
         <button type="button" class="fm-btn fm-btn--ghost" onclick="history.back()">Atrás</button>
         <button type="button" id="cfgNext" class="fm-btn fm-btn--primary" disabled onclick="cfgGoNext()">Siguiente</button>
+        {% include 'Configurador Guardar Borrador' %}
       </div>
       {% else %}
       <p class="cfg-sum-empty">No hay modelos para este producto.</p>

@@ -1,0 +1,117 @@
+<button type="button" class="fm-btn fm-btn--ghost" id="cfgGuardarBtn" onclick="cfgGuardarBorrador()">Guardar borrador</button>
+<script>
+(function () {
+  // Reusable "Guardar borrador" used on every configurator step (Producto Base
+  // -> Opcionales). Saves the current (partial) configuration as a
+  // Presupuesto/Borrador (wi_fase = 1) so the user can leave and finish/edit it
+  // later from Mis Pedidos. Mirrors the Resumen save (same payloads) but is
+  // self-contained so the steps don't depend on the Resumen page script.
+  if (window.cfgGuardarBorrador) return; // define once per page
+
+  var CUENTA_ID = '{{ user.parentcustomerid.id }}';
+  var CONTACTO_ID = '{{ user.id }}';
+  var SET_OPP = 'wi_oportunidadfarmings', SET_LINE = 'wi_productlineitemses', SET_PBF = 'wi_productobasefarmings';
+  var FASE_BORRADOR = 1;
+
+  // Reuses the shared .cfg-status component (configurador-core) + .cfg-toast
+  // positioner — no hardcoded colors. kind = '' | 'ok' | 'err'.
+  function toast(msg, kind) {
+    var el = document.getElementById('cfgGuardarToast');
+    if (!el) { el = document.createElement('div'); el.id = 'cfgGuardarToast'; document.body.appendChild(el); }
+    el.className = 'cfg-status cfg-toast' + (kind ? ' ' + kind : '');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function getToken() {
+    return new Promise(function (resolve) {
+      if (window.shell && typeof shell.getTokenDeferred === 'function') {
+        shell.getTokenDeferred().done(function (t) { resolve(t); }).fail(function () { resolve(null); });
+      } else { var i = document.querySelector("[name='__RequestVerificationToken']"); resolve(i ? i.value : null); }
+    });
+  }
+
+  function api(method, url, payload, token) {
+    var opt = { method: method, headers: { 'Accept': 'application/json', 'OData-MaxVersion': '4.0', 'OData-Version': '4.0', '__RequestVerificationToken': token || '' } };
+    if (payload) { opt.headers['Content-Type'] = 'application/json'; opt.headers['Prefer'] = 'return=representation'; opt.body = JSON.stringify(payload); }
+    return fetch(url, opt).then(function (res) {
+      return res.text().then(function (txt) {
+        if (!res.ok && res.status !== 204) throw new Error('HTTP ' + res.status + ': ' + txt);
+        var id = null, loc = res.headers.get('OData-EntityId') || res.headers.get('Location');
+        if (loc) { var m = loc.match(/\(([^)]+)\)/); if (m) id = m[1]; }
+        return { data: txt ? JSON.parse(txt) : {}, id: id };
+      });
+    });
+  }
+
+  function buildLines(s) {
+    var lines = [];
+    [['n1', 'Nivel 1'], ['n2', 'Nivel 2'], ['n3', 'Nivel 3'], ['n4', 'Nivel 4']].forEach(function (p) {
+      var v = s[p[0]]; if (v) lines.push({ nivel: p[1] + ' | ' + v.label, precio: Number(v.price || 0) });
+    });
+    (s.opcionales || []).forEach(function (o) { lines.push({ nivel: 'Opcional | ' + o.label, precio: Number(o.price || 0) }); });
+    return lines;
+  }
+
+  function createLines(lines, ref, token) {
+    var chain = Promise.resolve();
+    lines.forEach(function (ln) {
+      chain = chain.then(function () {
+        return api('POST', '/_api/' + SET_LINE, { 'wi_Oportunidad@odata.bind': ref, 'wi_nivel': ln.nivel, 'wi_precio': ln.precio }, token);
+      });
+    });
+    return chain;
+  }
+
+  window.cfgGuardarBorrador = function () {
+    var s = window.CFG.get();
+    if (!s.productobase || !s.productobase.id) {
+      toast('Selecciona primero un modelo (Producto Base) para guardar el borrador.', 'err');
+      return;
+    }
+    var btn = document.getElementById('cfgGuardarBtn'); if (btn) btn.disabled = true;
+    toast('Guardando borrador...');
+    var oppId = window.CFG.editId ? window.CFG.editId() : null;
+
+    getToken().then(function (token) {
+      if (oppId) {
+        // Edit existing draft: PATCH + reconcile line items.
+        var pl = {
+          'wi_fase': FASE_BORRADOR,
+          'wi_configjson': JSON.stringify(s),
+          'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
+          'wi_comentarios': (s.__comentarios || null)
+        };
+        return api('PATCH', '/_api/' + SET_OPP + '(' + oppId + ')', pl, token).then(function () {
+          return api('GET', '/_api/' + SET_LINE + '?$select=wi_productlineitemsid&$filter=_wi_oportunidad_value eq ' + oppId, null, token);
+        }).then(function (r) {
+          var chain = Promise.resolve();
+          ((r.data && r.data.value) || []).forEach(function (row) {
+            chain = chain.then(function () { return api('DELETE', '/_api/' + SET_LINE + '(' + row.wi_productlineitemsid + ')', null, token); });
+          });
+          return chain;
+        }).then(function () { return createLines(buildLines(s), '/' + SET_OPP + '(' + oppId + ')', token); });
+      }
+      // Create a new draft.
+      var np = {
+        'wi_ProductoBaseF@odata.bind': '/' + SET_PBF + '(' + s.productobase.id + ')',
+        'wi_fase': FASE_BORRADOR,
+        'wi_configjson': JSON.stringify(s)
+      };
+      if (s.__comentarios) np.wi_comentarios = s.__comentarios;
+      if (CUENTA_ID) np['wi_Cuenta@odata.bind'] = '/accounts(' + CUENTA_ID + ')';
+      if (CONTACTO_ID) np['wi_Contacto@odata.bind'] = '/contacts(' + CONTACTO_ID + ')';
+      return api('POST', '/_api/' + SET_OPP, np, token).then(function (res) {
+        var id = res.id; if (!id) throw new Error('No se obtuvo el id del borrador.');
+        if (window.CFG.setEditId) window.CFG.setEditId(id); // subsequent saves update this same draft
+        return createLines(buildLines(s), '/' + SET_OPP + '(' + id + ')', token);
+      });
+    }).then(function () {
+      toast('✅ Borrador guardado en Mis Pedidos.', 'ok');
+      setTimeout(function () { window.location.href = '/Oportunidades'; }, 1100);
+    }).catch(function (e) {
+      toast('❌ ' + e.message, 'err'); if (btn) btn.disabled = false;
+    });
+  };
+})();
+</script>

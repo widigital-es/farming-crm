@@ -335,4 +335,6 @@
   .cfg-status { margin: 0 0 1.25rem; padding: 0.8rem 1rem; border-radius: 10px; font-size: 0.95rem; font-weight: 600; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; white-space: pre-wrap; word-break: break-word; }
   .cfg-status.ok { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
   .cfg-status.err { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+  /* floating variant of .cfg-status (used by the "Guardar borrador" toast) */
+  .cfg-toast { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 3000; max-width: 360px; margin: 0; box-shadow: var(--fm-shadow-modal); }
 </style>
