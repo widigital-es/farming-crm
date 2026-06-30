@@ -1,3 +1,33 @@
+- adx_name: Restrict Read on Configurador
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+  - ee9c57b3-3b66-f111-a826-000d3add8d2c
+  adx_webpageaccesscontrolruleid: 178bd153-0bfe-207e-2df9-dcb9eef1868e
+  adx_webpageid: 77892594-2f16-42c9-9932-71815ec43cf8
+- adx_name: Restrict Read on Oportunidades
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+  - ee9c57b3-3b66-f111-a826-000d3add8d2c
+  adx_webpageaccesscontrolruleid: 246a460d-3af6-ef20-c152-c00dad41989c
+  adx_webpageid: 48d3eb85-a348-7c23-07d5-af362e829b3c
+- adx_name: Restrict Read on Farming Park
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+  - ee9c57b3-3b66-f111-a826-000d3add8d2c
+  adx_webpageaccesscontrolruleid: 26b3077d-8d29-c778-91f8-f21682a3eecd
+  adx_webpageid: b4dffa12-ef22-4e2e-8659-7744d552fff6
 - adx_name: Conceder cambio a administradores
   adx_right: 1
   adx_scope: 1
@@ -5,6 +35,26 @@
   - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
   adx_webpageaccesscontrolruleid: 6eab5f61-be0b-43e1-a29f-6409279148c5
   adx_webpageid: dd85f595-7053-4ea7-ae8b-6c6e83b3c442
+- adx_name: Restrict Read on Productos en stock
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+  - ee9c57b3-3b66-f111-a826-000d3add8d2c
+  adx_webpageaccesscontrolruleid: a0e859aa-9d78-2cb4-e50a-f3aeea8c5f39
+  adx_webpageid: f720e95d-c035-4467-bc07-3aa5f4ae3e09
+- adx_name: Restrict Read on Peticion a Producto
+  adx_right: 2
+  adx_scope: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 39f81ab9-3b66-f111-a826-7c1e5234f3f3
+  - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
+  - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+  - ee9c57b3-3b66-f111-a826-000d3add8d2c
+  adx_webpageaccesscontrolruleid: b8705339-4807-76c6-6393-5240753e00bb
+  adx_webpageid: f956e2cb-3e3e-61d6-f615-eb8161786232
 - adx_name: Conceder cambio a contenido
   adx_right: 1
   adx_scope: 1

@@ -1,12 +1,16 @@
+adx_accountrelationship: 
 adx_append: true
 adx_appendto: true
+adx_contactrelationship: 
 adx_create: true
-adx_delete: false
+adx_delete: true
 adx_entitylogicalname: wi_productlineitems
 adx_entityname: Oportunidad - Line items - Global Access
 adx_entitypermission_webrole:
+- 39f81ab9-3b66-f111-a826-7c1e5234f3f3
 - 8c1a1c1d-eedd-4cd3-b42f-216d2c2873d9
 - 9606c7f3-861d-4c1f-a30d-1b3991b9de12
+- ee9c57b3-3b66-f111-a826-000d3add8d2c
 - f7c87623-6b23-4ea0-9008-14e0bc0d388d
 adx_entitypermissionid: 09cf29e6-1dfa-4b13-938f-968cac8bf384
 adx_parententitypermission: e68442b3-7821-4460-aa43-91898242c42e

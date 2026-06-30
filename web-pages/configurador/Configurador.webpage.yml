@@ -1,14 +1,14 @@
-adx_displayorder: 5
+adx_displayorder: 14
 adx_enablerating: false
 adx_enabletracking: false
 adx_excludefromsearch: false
-adx_hiddenfromsitemap: true
+adx_hiddenfromsitemap: false
 adx_isroot: true
-adx_name: Farming Park
-adx_pagetemplateid: 8ad54f7c-ff8c-4304-9e7f-9af188b7c9a4
+adx_name: Configurador
+adx_pagetemplateid: 4121c1c0-8450-43e1-af0f-c5a8d9d650f0
 adx_parentpageid: dd85f595-7053-4ea7-ae8b-6c6e83b3c442
-adx_partialurl: farming-park
+adx_partialurl: cpq
 adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
 adx_sharedpageconfiguration: false
-adx_title: Farming Park
-adx_webpageid: b4dffa12-ef22-4e2e-8659-7744d552fff6
+adx_title: CPQ
+adx_webpageid: 77892594-2f16-42c9-9932-71815ec43cf8

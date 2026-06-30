@@ -1,16 +1,15 @@
-adx_displayorder: 5
+adx_displayorder: 4
 adx_enablerating: false
 adx_enabletracking: false
 adx_excludefromsearch: false
+adx_feedbackpolicy: 756150000
 adx_hiddenfromsitemap: true
-adx_isroot: false
-adx_name: Farming Park
+adx_isroot: true
+adx_name: Mis Pedidos
 adx_pagetemplateid: 8ad54f7c-ff8c-4304-9e7f-9af188b7c9a4
 adx_parentpageid: dd85f595-7053-4ea7-ae8b-6c6e83b3c442
-adx_partialurl: farming-park
+adx_partialurl: MisPedidos
 adx_publishingstateid: 2d61ec4e-9195-4572-b365-e60cc89687a8
-adx_rootwebpageid: b4dffa12-ef22-4e2e-8659-7744d552fff6
 adx_sharedpageconfiguration: false
-adx_title: Farming Park
-adx_webpageid: 33bca4e1-44e7-4736-ba53-596727c08969
-adx_webpagelanguageid: a0d0cb6a-df93-4eb4-a2e6-ff92d325105e
+adx_title: Oportunidades
+adx_webpageid: 48d3eb85-a348-7c23-07d5-af362e829b3c

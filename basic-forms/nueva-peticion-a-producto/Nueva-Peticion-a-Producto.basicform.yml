@@ -1,3 +1,11 @@
+adx_attachfilelabel: >-
+  [
+    {
+      "LCID": 3082,
+      "Value": ""
+    }
+  ]
+adx_attachfilemaxsize: 
 adx_attachfilestoragelocation: 756150000
 adx_captcharequired: false
 adx_containername: ''
@@ -10,6 +18,15 @@ adx_maximumnooffiles: 5
 adx_mode: 100000000
 adx_name: Nueva Peticion a Producto
 adx_onsuccess: 756150001
+adx_recordidquerystringparametername: 
+adx_redirecturl: 
 adx_redirectwebpage: f956e2cb-3e3e-61d6-f615-eb8161786232
 adx_showcaptchaforauthenticatedusers: false
 adx_storageaccountname: ''
+adx_successmessage: >-
+  [
+    {
+      "LCID": 3082,
+      "Value": ""
+    }
+  ]

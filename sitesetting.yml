@@ -1,3 +1,7 @@
+- adx_description: Enables the portal Web API for the Stock table.
+  adx_name: Webapi/wi_stock/enabled
+  adx_sitesettingid: 06fe0929-a575-4349-9e4b-4389f4469f53
+  adx_value: true
 - adx_description: ''
   adx_name: Profile/ForceSignUp
   adx_sitesettingid: 0f863d3f-145f-458e-90fd-aa3772c0b296
@@ -9,6 +13,10 @@
 - adx_name: Site/BootstrapV5Enabled
   adx_sitesettingid: 139d1d4b-cf5f-42ae-b17a-d9f9556aeec9
   adx_value: true
+- adx_description: Fields exposed through the Web API for the Solicitud de Pedido de Stock table.
+  adx_name: Webapi/wi_solicituddepedidodestock/fields
+  adx_sitesettingid: 1717ebd1-769c-4869-9676-3f9d5f61e649
+  adx_value: '*'
 - adx_description: Fields exposed through the Web API for the Product Line Items table.
   adx_name: Webapi/wi_productlineitems/fields
   adx_sitesettingid: 18f58e74-bd12-41a9-9eef-145674cf8b39
@@ -47,10 +55,10 @@
   adx_name: Authentication/LoginThrottling/MaxInvaildAttemptsFromIPAddress
   adx_sitesettingid: 2f9e3152-011b-4bc1-b32c-87dfd507db57
   adx_value: 5
-- adx_description: ''
-  adx_name: Authentication/Registration/ExternalLoginEnabled
+- adx_name: Authentication/Registration/ExternalLoginEnabled
   adx_sitesettingid: 3b4703b2-b90f-4f92-a582-c182601008bf
-  adx_value: true
+  adx_source: 0
+  adx_value: false
 - adx_description: ''
   adx_name: Authentication/OpenAuth/LinkedIn/ConsumerSecret
   adx_sitesettingid: 4720435d-3671-4f08-b472-7105105afb8c
@@ -79,15 +87,16 @@
 - adx_description: Establece si el portal puede redirigir o no al usuario a la página de perfil después de un inicio de sesión correcto. De forma predeterminada, se establece en true.
   adx_name: Authentication/Registration/ProfileRedirectEnabled
   adx_sitesettingid: 6ba30822-2299-4d21-b750-7f63bf0959ab
-  adx_value: true
+  adx_source: 0
+  adx_value: false
 - adx_description: ''
   adx_name: Authentication/Registration/InvitationEnabled
   adx_sitesettingid: 6bc974b8-fe68-4069-a151-5ad3b8d4cf90
   adx_value: true
-- adx_description: ''
-  adx_name: Profile/ShowMarketingOptionsPanel
+- adx_name: Profile/ShowMarketingOptionsPanel
   adx_sitesettingid: 6ce659b3-574e-444f-8e4d-49a38bb1999e
-  adx_value: True
+  adx_source: 0
+  adx_value: False
 - adx_description: 'The amount of time the Authentication/LoginThrottling/MaxInvaildAttemptsFromIPAddress are to be within before the IP address has to wait Authentication/LoginThrottling/IpAddressTimeoutTimeSpan. Default: 00:05:00 (5 mins)'
   adx_name: Authentication/LoginThrottling/MaxAttemptsTimeLimitTimeSpan
   adx_sitesettingid: 6d188f0f-c6b6-49ce-9274-670dbe2a6c9b
@@ -120,22 +129,6 @@
   adx_name: Webapi/wi_oportunidadfarming/fields
   adx_sitesettingid: a45fdf04-5098-4694-b719-8126d8525d08
   adx_value: '*'
-- adx_description: Enables the portal Web API for the Solicitud de Pedido de Stock table.
-  adx_name: Webapi/wi_solicituddepedidodestock/enabled
-  adx_sitesettingid: f2c356a4-4ad1-4c99-bb73-91508f795bfe
-  adx_value: true
-- adx_description: Fields exposed through the Web API for the Solicitud de Pedido de Stock table.
-  adx_name: Webapi/wi_solicituddepedidodestock/fields
-  adx_sitesettingid: 1717ebd1-769c-4869-9676-3f9d5f61e649
-  adx_value: '*'
-- adx_description: Enables the portal Web API for the Stock table.
-  adx_name: Webapi/wi_stock/enabled
-  adx_sitesettingid: 06fe0929-a575-4349-9e4b-4389f4469f53
-  adx_value: true
-- adx_description: Fields exposed through the Web API for the Stock table.
-  adx_name: Webapi/wi_stock/fields
-  adx_sitesettingid: d6ff0bf6-c483-45f0-b976-f200427f6bf0
-  adx_value: statecode,statuscode
 - adx_description: ''
   adx_name: Authentication/OpenAuth/Facebook/AppId
   adx_sitesettingid: aefd1005-293c-4674-8fba-01dc8077c0fd
@@ -177,6 +170,10 @@
   adx_name: Authentication/Registration/DenyMinors
   adx_sitesettingid: d6824b91-6761-4208-b018-b9b473eb9408
   adx_value: false
+- adx_description: Fields exposed through the Web API for the Stock table.
+  adx_name: Webapi/wi_stock/fields
+  adx_sitesettingid: d6ff0bf6-c483-45f0-b976-f200427f6bf0
+  adx_value: statecode,statuscode
 - adx_description: Un valor true o false. Si se establece en true, el portal mostrará los términos y condiciones del sitio. Los usuarios deben aceptarlos para que se consideren autenticados y puedan utilizar el sitio.
   adx_name: Authentication/Registration/TermsAgreementEnabled
   adx_sitesettingid: d7266b55-7d49-42eb-920a-1be8ceb7d331
@@ -208,9 +205,13 @@
   adx_name: Search/IndexNotesAttachments
   adx_sitesettingid: e7c826d5-2a37-479e-93ce-1f4503832245
   adx_value: false
-- adx_description: ''
-  adx_name: Authentication/Registration/Enabled
+- adx_name: Authentication/Registration/Enabled
   adx_sitesettingid: ef11d58c-2cd4-41b0-97a9-7de2351edfdd
+  adx_source: 0
+  adx_value: false
+- adx_description: Enables the portal Web API for the Solicitud de Pedido de Stock table.
+  adx_name: Webapi/wi_solicituddepedidodestock/enabled
+  adx_sitesettingid: f2c356a4-4ad1-4c99-bb73-91508f795bfe
   adx_value: true
 - adx_description: ''
   adx_name: Search/IndexQueryName
